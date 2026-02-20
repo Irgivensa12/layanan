@@ -1,0 +1,33 @@
+Menggunakan PHP Framework Codeigniter 3.1.11 dan Bootstrap v4.5.3
+
+Requirement:
+- XAMPP dengan PHP 8.0
+- Database MariaDB 10.6 (https://mariadb.com/downloads/)
+- SQLyog sebagai GUI tool
+
+Javascript Library yang digunakan:
+- Datatables: untuk keperluan tabel
+- CKEditor: untuk keperluan input <textarea> jika diperlukan
+- xlsx: export excel
+
+Satu folder di copy-paste semua kedalam folder htdocs di folder XAMPP (xampp\htdocs)
+Ubah base_url "layanan" di application/config/config.php sesuai dengan nama folder baru
+
+Setting database di application/config/database.php
+Untuk menggunakan Database, uncomment line 6 dan hapus line 7 di application/config/autoload.php
+
+Model: Query Database
+View: Tampilan yang dilihat oleh user
+Controller: Yang mengarahkan user dan Model
+
+Langkah untuk menampilkan halaman web baru:
+- Setting route di application/config/routes.php
+- Setting controller di application/controllers/Controller.php
+- Akses dengan membuka http://localhost/layanan/namaHalamanWeb
+
+Gunakan <?= base_url('Controller/menu')?> daripada http://localhost/layanan/menu untuk link ke halaman web baru, karena ini dinamis
+
+Gunakan session ($_SESSION["id_layanan"]) untuk cek apakah user login atau belum (set Session di Model login).
+Gunakan <?= $_SESSION['id_layanan']?> di View untuk menampilkan isi Session
+Bisa digunakan untuk cek permission jika diperlukan
+Cek line 4 di View/menu.php untuk contoh
