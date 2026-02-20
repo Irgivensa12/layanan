@@ -49,9 +49,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <thead style="color: black;">
                                     <tr>
                                         <th style="width:10px">No</th>
-                                        <th>Kolom 1</th>
-                                        <th>Kolom 2</th>
-                                        <th>Kolom 3</th>
+                                        <th>Tanggal</th>
+                                        <th>Penginput</th>
+                                        <th>Ringkasan</th>
+                                        <th>Status</th>
+                                        <th>Detail</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbody" name="tbody" style="color: black;">
