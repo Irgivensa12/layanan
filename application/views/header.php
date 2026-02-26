@@ -75,12 +75,13 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                    aria-expanded="true" aria-controls="collapseTwo" id="menuMenu">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Contoh Menu</span>
+                    <span>Menu Helpdesk</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
-                        <a class="collapse-item" href="menu" style="white-space: normal;">Menu</a>
+                        <a class="collapse-item" href="menu" style="white-space: normal;">List Helpdesk</a>
+                        <a class="collapse-item" href="menu" style="white-space: normal;">Input Lapor Kerusakan</a>
                     </div>
                 </div>
             </li>
