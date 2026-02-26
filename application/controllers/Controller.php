@@ -33,4 +33,12 @@ class Controller extends CI_Controller {
         $this->load->view('header');
         $this->load->view('menu');
     }
+
+     public function input()
+    {
+        $this->load->view('header');
+        $this->load->view('input');
+    }
+
+    
 }

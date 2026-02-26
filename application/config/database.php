@@ -6,10 +6,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',  //IP server
-	'username' => 'root',		//username: password: database
-	'password' => 'root1212',			//password: 
-	'database' => 'helpdesk',			//db utama yang digunakan
+	'hostname' => '202.152.149.98',  //IP server
+	'username' => 'mbkm2026',		//username: password: database
+	'password' => '4pasTiBisa',			//password: 
+	'database' => 'db_kbs_intranet',			//db utama yang digunakan
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

@@ -46,5 +46,15 @@ class model extends CI_Model
         $query = "SELECT kolom FROM tabel WHERE kolom = '".$inputAjax."'";
         return $this->db->query($query);
     }
+
+    public function insertData($table, $data)
+    {
+        return $this->db->insert($table, $data);
+    }
+
+     public function delete_form_coba($no){
+        $this->db->where('no_buku',$no);
+        $this->db->delete('buku');
+    }
 }
 

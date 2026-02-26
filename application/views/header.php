@@ -81,6 +81,8 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
                         <a class="collapse-item" href="menu" style="white-space: normal;">Menu</a>
+                        <a class="collapse-item" href="menu" style="white-space: normal;">List Helpdesk</a>
+                        <a class="collapse-item" href="input" style="white-space: normal;">Input Lapor Kerusakan</a>
                     </div>
                 </div>
             </li>
