@@ -6,9 +6,9 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',  //IP server
-	'username' => 'root',		//username: password: database
-	'password' => 'root1212',			//password: 
+	'hostname' => '202.152.149.98',  //IP server
+	'username' => 'mbkm2026',		//username: password: database
+	'password' => '4pasTiBisa',			//password
 	'database' => 'helpdesk',			//db utama yang digunakan
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
