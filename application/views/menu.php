@@ -31,7 +31,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <h1 class="h3 mb-0 text-gray-800">Daftar Menu atau Tabel</h1>
             </div>
 
-         
+
 
 
             <div class="form-group row">
@@ -52,12 +52,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <table id="tabel" class="display nowrap" style="width:100%">
                         <thead style="color: black;">
                             <tr>
-                                <th style="width:10px">No</th>
+                                <th style="width:10px">ID</th>
                                 <th>Tanggal</th>
-                                <th>Penginput</th>
+                                <th>No. Reg</th>
+                                <th>Nama User</th>
                                 <th>Ringkasan</th>
                                 <th>Status</th>
-                                <th>Detail</th>
                             </tr>
                         </thead>
                         <tbody id="tbody" name="tbody" style="color: black;">
@@ -108,10 +108,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
     // gunakan Javascript dan jQuery
     // bisa cek untuk contoh membuat form: https://getbootstrap.com/docs/4.0/components/forms/
 
-    $(document).ready(function() { // jika jalaman web selesai diload, maka jalankan script ini
-        //getContoh1();
+    var table;
 
-        $('#tabel').DataTable({ //https://datatables.net/reference/option/
+    $(document).ready(function() {
+
+        $('#menuMenu').trigger('click');
+
+        getContoh1();
+         $('#tabel').DataTable({ //https://datatables.net/reference/option/
             "scrollX": true,
             "select": true,
             "bSort": false
@@ -133,12 +137,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 for (var i = 0; i < data.length; i++) {
 
                     html += '<tr>';
-                    html += '<td>' + no + '</td>';
-                    html += '<td></td>';
-                    html += '<td></td>';
-                    html += '<td></td>';
-                    html += '</tr>';
-
+                    html += '<td>' + data[i].tikNomor + '</td>';
+                    html += '<td>' + data[i].tikTanggal + '</td>';
+                    html += '<td>' + data[i].tikUserID + '</td>';
+                    html += '<td>' + data[i].userNama + '</td>';
+                    html += '<td>' + data[i].tikRingkasan + '</td>';
+                    html += '<td>' + data[i].tiketStatus + '</td>';
+                    html += '<tr>';
                     no++;
                 }
                 $("#tbody").html(html);
@@ -178,9 +183,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
             }
         });
     }
-
-    
 </script>
+
 
 </body>
 

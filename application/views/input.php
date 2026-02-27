@@ -1,12 +1,12 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-if (!isset($_SESSION["id"])) { //jika tidak ada id
-    $this->session->set_flashdata('type', 'alert-danger');
-    $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
-    redirect();
-    exit;
-}
+// if (!isset($_SESSION["id"])) { //jika tidak ada id
+//     $this->session->set_flashdata('type', 'alert-danger');
+//     $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
+//     redirect();
+//     exit;
+// }
 
 ?>
 <!-- untuk daftar menu dst, cek header.php-->
@@ -27,21 +27,30 @@ if (!isset($_SESSION["id"])) { //jika tidak ada id
 
         <form action="<?= base_url('Insert/input') ?>" method="post" enctype="multipart/form-data" name="form" id="form">
 
+            <div class="form-group row container-fluid ">
+                <label class="col-2">ID</label>
+                <input type="tikNomor" class="form-control col-6" name="tikNomor" placeholder="Masukan ID anda">
+            </div>
+
             <div class="form-group row container-fluid">
                 <label class="col-2">Tanggal</label>
-                <input type="date" class="form-control col-2" name="tanggal">
+                <input type="date" class="form-control col-2" name="tikTanggal">
             </div>
             <div class="form-group row container-fluid ">
-                <label class="col-2">Penginput</label>
-                <input type="nama_buku" class="form-control col-6" name="nama_buku" placeholder="Judul buku">
+                <label class="col-2">No Reguluasi</label>
+                <input type="tikUserID" class="form-control col-6" name="tikUserID" placeholder="No Reg">
             </div>
             <div class="form-group row container-fluid">
-                <label class="col-2">Penulis</label>
-                <input type="penulis" class="form-control col-6" name="penulis" placeholder="Penulis">
+                <label class="col-2">Nama User</label>
+                <input type="userNama" class="form-control col-6" name="userNama" placeholder="Nama User">
             </div>
             <div class="form-group row container-fluid">
-                <label class="col-2">Penerbit</label>
-                <input type="penerbit" class="form-control col-6" name="penerbit" placeholder="Penerbit">
+                <label class="col-2">Ringkasan</label>
+                <input type="tikRingkasan" class="form-control col-6" name="tikRingkasan" placeholder="Ringkasan">
+            </div>
+            <div class="form-group row container-fluid">
+                <label class="col-2">Status</label>
+                <input type="tiketStatus" class="form-control col-6" name="tiketStatus" placeholder="Status">
             </div>
 
             <div class="container-fluid">

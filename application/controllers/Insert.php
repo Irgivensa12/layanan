@@ -22,31 +22,34 @@ class Insert extends CI_Controller {
     public function input(){
 
         $data = array(
-            'nama_buku'      => $this->input->post('nama_buku'),
-            'penulis'           => $this->input->post('penulis'),
-            'penerbit'        => $this->input->post('penerbit'),
-            'tanggal'           => $this->input->post('tanggal')
+            'tikNomor'      => $this->input->post('tikNomor'),
+            'tikTanggal'           => $this->input->post('tikTanggal'),
+            'tikUserID'           => $this->input->post('tikUserID'),
+            'userNama'           => $this->input->post('userNama'),
+            'tikRingkasan'        => $this->input->post('tikRingkasan'),
+            'tiketStatus'           => $this->input->post('tiketStatus')
         );
 
-        $this->Model->insertData('buku', $data);
+        $this->Model->insertData('tb_tiket', $data);
 
         redirect('menu');
     }
 
     public function update()
     {
-        $id = $this->input->post('no_buku');
+        $id = $this->input->post('tik_Nomor');
 
         $data = array(
-            'nama_buku'      => $this->input->post('nama_buku'),
-            'jenis_buku'     => $this->input->post('jenis_buku'),
-            'tahun_terbit'   => $this->input->post('tahun_terbit'),
-            'penulis'        => $this->input->post('penulis'),
-            'tanggal_pinjam' => $this->input->post('tanggal_pinjam')
+            'tik_Nomor'      => $this->input->post('tik_Nomor'),
+            'tikTanggal'           => $this->input->post('tikTanggal'),
+            'tikUserID'           => $this->input->post('tikUserID'),
+            'userNama'           => $this->input->post('userNama'),
+            'tikRingkasan'        => $this->input->post('tikRingkasan'),
+            'tiketStatus'           => $this->input->post('tiketStatus')
         );
 
-        $this->db->where('no_buku', $id);
-        $this->db->update('buku', $data);
+        $this->db->where('tik_Nomor', $id);
+        $this->db->update('tb_tiket', $data);
 
         redirect('menu');
     }
