@@ -9,3 +9,5 @@ $route['index'] = 'Controller/index';
 $route['logout'] = 'Controller/logout';
 
 $route['menu'] = 'Controller/menu';
+
+$route['input'] = 'Controller/input';

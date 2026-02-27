@@ -18,4 +18,41 @@ class Insert extends CI_Controller {
         $this->Model->contoh2($inputAjax);
         redirect('menu');
     }
+
+    public function input(){
+
+        $data = array(
+            'tikNomor'      => $this->input->post('tikNomor'),
+            'tikTanggal'           => $this->input->post('tikTanggal'),
+            'tikUserID'           => $this->input->post('tikUserID'),
+            'userNama'           => $this->input->post('userNama'),
+            'tikRingkasan'        => $this->input->post('tikRingkasan'),
+            'tiketStatus'           => $this->input->post('tiketStatus')
+        );
+
+        $this->Model->insertData('tb_tiket', $data);
+
+        redirect('menu');
+    }
+
+    public function update()
+    {
+        $id = $this->input->post('tik_Nomor');
+
+        $data = array(
+            'tik_Nomor'      => $this->input->post('tik_Nomor'),
+            'tikTanggal'           => $this->input->post('tikTanggal'),
+            'tikUserID'           => $this->input->post('tikUserID'),
+            'userNama'           => $this->input->post('userNama'),
+            'tikRingkasan'        => $this->input->post('tikRingkasan'),
+            'tiketStatus'           => $this->input->post('tiketStatus')
+        );
+
+        $this->db->where('tik_Nomor', $id);
+        $this->db->update('tb_tiket', $data);
+
+        redirect('menu');
+    }
+
+    
 }

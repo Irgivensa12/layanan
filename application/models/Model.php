@@ -3,48 +3,76 @@
 class model extends CI_Model
 {
     // contoh login
-    public function login(){
+    public function login()
+    {
         $id = $this->input->post('id');
         $password = $this->input->post('password');
-        
-        $query = "SELECT id, password FROM tabel WHERE id = '".$id."'";
-        $user = $this->db->query($query)->row_array();
-        
-        // jika user ditemukan
+
+        $query = "SELECT a.*, privMenuId, privAkses FROM vUser a LEFT JOIN tb_user_priv ON privUserId=userId WHERE userId='$id' AND userPass='$password'    ";
+
+        $user = $this->db->query($query)->result_array();
+
         if ($user) {
-            if (md5($password) == $user['password']){
-                $_SESSION['login'] = true;
-                $_SESSION['id_layanan'] = $user['userId'];
-				
-                $this->session->set_flashdata('type', 'alert-success');
-                $this->session->set_flashdata('pesan', '<strong>Sukses!</strong> Anda berhasil login.');
-                redirect('menu');
+
+            if (md5($password) == $firstRow['userPass']) {    
+            foreach ($user as $row) {
+
+                $this->session->set_userdata('login', true);
+                $this->session->set_userdata('userId', $row['userId']);
+                $this->session->set_userdata('userNama', $row['userNama']);
+
+                // Simpan privilege
+                if ($row['privMenuId'] == 1) {
+                    $this->session->set_userdata('tiket', $row['privAkses']);
+                }
+
+                if ($row['privMenuId'] == 24) {
+                    $this->session->set_userdata('admin', $row['privAkses']);
+                }
+
+                if ($row['privMenuId'] == 25) {
+                    $this->session->set_userdata('sarpras', $row['privAkses']);
+                }
             }
+            $this->session->set_flashdata('type', 'alert-success');
+            $this->session->set_flashdata('pesan', '<strong>Gagal!</strong> Anda Berhasil Login');
+            redirect('menu');
+
+
             // jika password salah
-            else {
-                $this->session->set_flashdata('type', 'alert-danger');
-                $this->session->set_flashdata('pesan', '<strong>Gagal!</strong> ID atau Password salah');
-                redirect();
-            }
-        }
-        // jika user tidak ditemukan
-        else {
+        } else {
             $this->session->set_flashdata('type', 'alert-danger');
             $this->session->set_flashdata('pesan', '<strong>Gagal!</strong> ID atau Password salah');
             redirect();
         }
     }
-	
+
+
+
     //contoh query biasa
-    public function contoh1(){
-        $query = "SELECT kolom FROM tabel";
+    public function contoh1()
+    {
+        $query = "SELECT tikNomor, tikTanggal, tikUserID, userNama, tikRingkasan, tiketStatus FROM tb_tiket";
         return $this->db->query($query);
     }
-	
+
+
+
     //contoh query dengan input dari AJAX
-    public function contoh2($inputAjax){
-        $query = "SELECT kolom FROM tabel WHERE kolom = '".$inputAjax."'";
+    public function contoh2($inputAjax)
+    {
+        $query = "SELECT kolom FROM tabel WHERE kolom = '" . $inputAjax . "'";
         return $this->db->query($query);
+    }
+
+    public function insertData($table, $data)
+    {
+        return $this->db->insert($table, $data);
+    }
+
+    public function delete_form_coba($no)
+    {
+        $this->db->where('no_buku', $no);
+        $this->db->delete('buku');
     }
 }
-
