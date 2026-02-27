@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -89,15 +90,58 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
-                        <a class="collapse-item" href="<?= base_url('menu/list_helpDesk') ?>">List Helpdesk</a>
-                        <a class="collapse-item" href="<?= base_url('menu/laporan_kerusakan') ?>">Laporan Kerusakan</a>
+                        <a class="collapse-item" href="menu" style="white-space: normal;">Menu</a>
+                        <a class="collapse-item" href="menu" style="white-space: normal;">List Helpdesk</a>
+                        <a class="collapse-item" href="input" style="white-space: normal;">Input Lapor Kerusakan</a>
+                        <!-- <a class="collapse-item" href="menu" style="white-space: normal;">Tiket SIM</a>
+                        <a class="collapse-item" href="menu" style="white-space: normal;">Tiket Sarprask</a>
+                        <a class="collapse-item" href="menu" style="white-space: normal;">Admink</a>
+                        <a class="collapse-item" href="menu" style="white-space: normal;">Laporan</a> -->
+                    </div>
                 </div>
-            </li>
-            <li>
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseStaff"
-                    aria-expanded="true" aria-controls="collapseStaff" id="menuStaff">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Menu Staff</span>
+
+                <!-- Tiket SIM -->
+                <?php if ($this->session->userdata('tiket') == 'Y' || $this->session->userdata('tiket') == 'N') { ?>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('tiket_sim') ?>">
+                    <i class="fas fa-fw fa-ticket-alt"></i>
+                    <span>Tiket SIM</span>
                 </a>
             </li>
+        <?php } ?>
+
+        <!-- Tiket Sarpras -->
+        <?php if ($this->session->userdata('sarpras') == 'Y') { ?>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('tiket_sarpras') ?>">
+                    <i class="fas fa-fw fa-tools"></i>
+                    <span>Tiket Sarpras</span>
+                </a>
+            </li>
+        <?php } ?>
+
+        <!-- Laporan -->
+        <?php if ($this->session->userdata('tiket') == 'Y' || $this->session->userdata('admin') == 'Y') { ?>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('laporan') ?>">
+                    <i class="fas fa-fw fa-file-alt"></i>
+                    <span>Laporan</span>
+                </a>
+            </li>
+        <?php } ?>
+
+        <!-- Admin -->
+        <?php if ($this->session->userdata('admin') == 'Y') { ?>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('admin') ?>">
+                    <i class="fas fa-fw fa-user-cog"></i>
+                    <span>Admin</span>
+                </a>
+            </li>
+        <?php } ?>
+
+        <hr class="sidebar-divider">
+
+        
+        </li>
         </ul>
