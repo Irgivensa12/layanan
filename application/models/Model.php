@@ -13,31 +13,30 @@ class model extends CI_Model
         $user = $this->db->query($query)->result_array();
 
         if ($user) {
-
+            $firstRow = $user[0]; // Ambil data user pertama untuk validasi password
             if (md5($password) == $firstRow['userPass']) {    
-            foreach ($user as $row) {
-
                 $this->session->set_userdata('login', true);
-                $this->session->set_userdata('userId', $row['userId']);
-                $this->session->set_userdata('userNama', $row['userNama']);
+                $this->session->set_userdata('userId', $firstRow['userId']);
+                $this->session->set_userdata('userNama', $firstRow['userNama']);
+                
+                foreach ($user as $row) {
 
-                // Simpan privilege
-                if ($row['privMenuId'] == 1) {
-                    $this->session->set_userdata('tiket', $row['privAkses']);
-                }
+                    // Simpan privilege
+                    if ($row['privMenuId'] == 1) {
+                        $this->session->set_userdata('tiket', $row['privAkses']);
+                    }
 
-                if ($row['privMenuId'] == 24) {
-                    $this->session->set_userdata('admin', $row['privAkses']);
-                }
+                    if ($row['privMenuId'] == 24) {
+                        $this->session->set_userdata('admin', $row['privAkses']);
+                    }
 
-                if ($row['privMenuId'] == 25) {
-                    $this->session->set_userdata('sarpras', $row['privAkses']);
-                }
+                    if ($row['privMenuId'] == 25) {
+                        $this->session->set_userdata('sarpras', $row['privAkses']);
+                    }
             }
             $this->session->set_flashdata('type', 'alert-success');
-            $this->session->set_flashdata('pesan', '<strong>Gagal!</strong> Anda Berhasil Login');
+            $this->session->set_flashdata('pesan', '<strong>Berhasil!</strong> Anda Berhasil Login');
             redirect('menu');
-
 
             // jika password salah
         } else {
@@ -46,7 +45,7 @@ class model extends CI_Model
             redirect();
         }
     }
-
+    }
 
 
     //contoh query biasa
