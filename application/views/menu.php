@@ -48,12 +48,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <table id="tabel" class="display nowrap" style="width:100%">
                                 <thead style="color: black;">
                                     <tr>
-                                        <th style="width:10px">No</th>
+                                        <th style="width:10px">ID</th>
                                         <th>Tanggal</th>
-                                        <th>Penginput</th>
+                                        <th>No. Reg</th>
+                                        <th>Nama User</th>
                                         <th>Ringkasan</th>
                                         <th>Status</th>
-                                        <th>Detail</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbody" name="tbody" style="color: black;">
@@ -129,12 +129,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     for (var i = 0; i < data.length; i++) {
                         
                         html += '<tr>';
-                        html += '<td>'+no+'</td>';
-                        html += '<td></td>';
-                        html += '<td></td>';
-                        html += '<td></td>';
+                        html += '<td>'+data[i].tikNomor+'</td>';
+                        html += '<td>'+data[i].tikTanggal+'</td>'; // untuk megambil data tanggal dari database
+                        html += '<td>'+data[i].tikUserID+'</td>'; // untuk megambil data id user dari database
+                        html += '<td>'+data[i].userNama+'</td>'; // untuk megambil data penginput dari database
+                        html += '<td>'+data[i].tikRingkasan+'</td>'; // untuk megambil data ringkasan dari database
+                        html += '<td>'+data[i].tiketStatus+'</td>'; // untuk megambil data status dari database
                         html += '</tr>';
 			
+                         // KOLOM Detail
+                        html += '<td>';
+                        html += '<a href="<"><button class="btn btn-warning btn-sm">Detail</button></a>';
+                        html += '</td>';
+                        html += '</tr>';
+
                         no++;
                     }
                     $("#tbody").html(html);

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="utf-8">
@@ -10,7 +11,7 @@
 
     <title>Layanan Sarpras & SIM</title>
     <link rel="icon" href="img/icon.png">
-    
+
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -18,30 +19,38 @@
 
     <link href="css/sb-admin-2.css" rel="stylesheet">
     <link rel="stylesheet" href="css/modal-login.css">
-    
+
     <!-- CSS jika diperlukan -->
     <style>
         textarea {
             resize: none;
         }
+
         .form-control {
             color: black !important;
             border-color: gray !important;
         }
+
         .form-group {
             color: black !important;
         }
-        thead, tbody {
+
+        thead,
+        tbody {
             color: black;
         }
-        table, th, td {
+
+        table,
+        th,
+        td {
             border: 1px solid gray !important;
             border-collapse: collapse !important;
         }
     </style>
 </head>
+
 <body id="page-top">
-    
+
     <div id="wrapper">
 
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -52,37 +61,43 @@
                 </div>
                 <div class="sidebar-brand-text mx-3">Layanan Sarpras SIM</div>
             </a>
-            
+
             <hr class="sidebar-divider my-0">
-            
+
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUser"
-                   aria-expanded="true" aria-controls="collapseUser" id="menuUser">
+                    aria-expanded="true" aria-controls="collapseUser" id="menuUser">
                     <i class="fas fa-fw fa-user"></i>
                     <span>Login sebagai USER</span> <!-- USER = nomor pegawai -->
                 </a>
                 <div id="collapseUser" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
-                        <a class="collapse-item" href="<?= base_url('Controller/logout')?>">Logout</a>
+                        <a class="collapse-item" href="<?= base_url('Controller/logout') ?>">Logout</a>
                     </div>
                 </div>
             </li>
 
             <hr class="sidebar-divider my-0">
-            
+
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                   aria-expanded="true" aria-controls="collapseTwo" id="menuMenu">
+                    aria-expanded="true" aria-controls="collapseTwo" id="menuMenu">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Menu Helpdesk</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
-                        <a class="collapse-item" href="menu" style="white-space: normal;">List Helpdesk</a>
-                        <a class="collapse-item" href="menu" style="white-space: normal;">Input Lapor Kerusakan</a>
-                    </div>
+                        <a class="collapse-item" href="<?= base_url('menu/list_helpDesk') ?>">List Helpdesk</a>
+                        <a class="collapse-item" href="<?= base_url('menu/laporan_kerusakan') ?>">Laporan Kerusakan</a>
                 </div>
+            </li>
+            <li>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseStaff"
+                    aria-expanded="true" aria-controls="collapseStaff" id="menuStaff">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Menu Staff</span>
+                </a>
             </li>
         </ul>
