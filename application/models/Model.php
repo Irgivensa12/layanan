@@ -76,7 +76,7 @@ class model extends CI_Model
         $this->db->delete('buku');
     }
 
-    public function lapor_kerusakan()
+    public function tiket_sim()
     {
         $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
         return $this->db->query($query);

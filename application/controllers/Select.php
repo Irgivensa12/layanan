@@ -26,9 +26,9 @@ class Select extends CI_Controller
         echo json_encode($data);
     }
 
-    public function lapor_kerusakan() // Function untuk menampilkan data dari tabel tb_tiket ke halaman lapor_kerusakan.php
+    public function tiket_sim() // Function untuk menampilkan data dari tabel tb_tiket ke halaman tiket_sim.php
     {
-        $data = $this->Model->lapor_kerusakan()->result_array(); // buka class lapor_kerusakan di Model
+        $data = $this->Model->tiket_sim()->result_array(); // buka class tiket_sim di Model
         echo json_encode($data);
     }
 
@@ -36,4 +36,5 @@ class Select extends CI_Controller
     {
         $data = $this->Model->dashboard()->result_array(); // buka class dashboard di Model
         echo json_encode($data);
+    }
 }

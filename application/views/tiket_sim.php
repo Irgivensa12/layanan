@@ -21,7 +21,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </button>
 
             <ul class="navbar-nav ml-auto">
-                <img src="img\kanisius.png">
+                <img src="<?= base_url('img\kanisius.png') ?>">
             </ul>
         </nav>
 
@@ -110,22 +110,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
     $(document).ready(function() {
 
         $('#menuMenu').trigger('click');
-
-        getTb_tiket(); // Memanggil function getTb_tiket() untuk menampilkan data ke tabel
         table = $('#tabel').DataTable({ //https://datatables.net/reference/option/
             "scrollX": true,
             "select": true,
             "bSort": false
         });
-        getTb_tiket(); // Memanggil function get
+        getTiket_SIM(); // Memanggil function get
     });
 
     // menggunakan AJAX untuk membuat tabel dari data tabel
     // AJAX (View) -> Controller -> Model -> dapat hasil
-    function getTb_tiket() {
+    function getTiket_SIM() {
 
         $.ajax({
-            url: "<?php echo base_url('Select/lapor_kerusakan'); ?>",
+            url: "<?php echo base_url('Select/tiket_sim'); ?>",
             method: "POST",
             dataType: "JSON",
             success: function(data) {
