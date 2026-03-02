@@ -102,6 +102,13 @@
 
                 <!-- Tiket SIM -->
             <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('Controller/dashboard') ?>">
+                    <i class="fas fa-fw fa-ticket-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <!-- Tiket SIM -->
+            <li class="nav-item">
                 <a class="nav-link" href="<?= base_url('Controller/tiket_sim') ?>">
                     <i class="fas fa-fw fa-ticket-alt"></i>
                     <span>Tiket SIM</span>
