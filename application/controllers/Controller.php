@@ -49,4 +49,10 @@ class Controller extends CI_Controller
         $this->load->view('header');
         $this->load->view('lapor_kerusakan');
     }
+
+    public function dashboard()
+    {
+        $this->load->view('header');
+        $this->load->view('dashboard');
+    }
 }

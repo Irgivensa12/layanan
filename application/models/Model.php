@@ -81,4 +81,15 @@ class model extends CI_Model
         $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
         return $this->db->query($query);
     }
+
+    public function get_dashboard_data()
+    {
+        $pelanggan = $this->db->count_all('tb_pelanggan');
+        $wishlist  = $this->db->count_all('tb_wishlist');
+
+        return [
+            'pelanggan_baru' => $pelanggan,
+            'wishlist_pelanggan' => $wishlist
+        ];
+    }
 }

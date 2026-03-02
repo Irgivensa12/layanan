@@ -31,4 +31,9 @@ class Select extends CI_Controller
         $data = $this->Model->lapor_kerusakan()->result_array(); // buka class lapor_kerusakan di Model
         echo json_encode($data);
     }
+
+    public function dashboard() // Function untuk menampilkan data dari tabel tb_tiket ke halaman dashboard.php
+    {
+        $data = $this->Model->dashboard()->result_array(); // buka class dashboard di Model
+        echo json_encode($data);
 }
