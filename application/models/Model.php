@@ -54,11 +54,9 @@ class model extends CI_Model
     //contoh query biasa
     public function contoh1()
     {
-        $query = "SELECT tikNomor, tikTanggal, tikUserID, userNama, tikRingkasan, tiketStatus FROM tb_tiket";
+        $query = "SELECT id_buku, nama_buku, email_penulis, penerbit, tanggal FROM buku";
         return $this->db->query($query);
     }
-
-
 
     //contoh query dengan input dari AJAX
     public function contoh2($inputAjax)
@@ -76,5 +74,11 @@ class model extends CI_Model
     {
         $this->db->where('no_buku', $no);
         $this->db->delete('buku');
+    }
+
+    public function lapor_kerusakan()
+    {
+        $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
+        return $this->db->query($query);
     }
 }
