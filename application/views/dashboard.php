@@ -1,14 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
-//if (!isset($_SESSION["id_crm"])) { //jika tidak ada id
-//    $this->session->set_flashdata('type', 'alert-danger');
-//    $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
-//    redirect();
-//    exit;
-//}
-
 ?>
+
 <div id="content-wrapper" class="d-flex flex-column">
 
     <div id="content">
@@ -19,20 +12,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </button>
 
             <ul class="navbar-nav ml-auto">
-                <img src="<?= base_url('img\kanisius.png') ?>">
+                <img src="<?= base_url('img/kanisius.png') ?>">
             </ul>
         </nav>
 
-        <div class="mb-4" style="padding-left: 20px;">
-            <h2 class="font-weight-bold text-dark">
-                Halo, <?= $nama; ?> 👋
-            </h2>
-            <h5 class="text-primary">
-                <?= $role; ?>
-            </h5>
-        </div>
-
         <div class="container-fluid">
+
+            <div class="mb-4">
+                <h2 class="font-weight-bold text-dark">
+                    Halo, <?= $nama; ?> 👋
+                </h2>
+                <h5 class="text-primary">
+                    <?= $role; ?>
+                </h5>
+            </div>
 
             <div class="row">
 
@@ -42,10 +35,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col mr-2">
-                                    <div class="h5 font-weight-bold text-primary text-uppercase mb-1">
+                                    <div class="h6 font-weight-bold text-primary text-uppercase mb-1">
                                         Tiket SIM
                                     </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="tiket_sim">
+                                    <div class="h4 mb-0 font-weight-bold text-gray-800" id="tiket_sim">
                                         0
                                     </div>
                                 </div>
@@ -63,15 +56,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col mr-2">
-                                    <div class="h5 font-weight-bold text-primary text-uppercase mb-1">
+                                    <div class="h6 font-weight-bold text-primary text-uppercase mb-1">
                                         Tiket Sarpras
                                     </div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="tiket_sarpras">
+                                    <div class="h4 mb-0 font-weight-bold text-gray-800" id="tiket_sarpras">
                                         0
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-ticket-alt fa-2x text-gray-300"></i>
+                                    <i class="fas fa-tools fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
@@ -79,33 +72,44 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
 
             </div>
+
         </div>
     </div>
+
     <footer class="sticky-footer bg-white">
         <div class="container my-auto">
             <div class="copyright text-center my-auto">
-                <span>© <?php echo date("Y"); ?> PT Kanisius.</span>
+                <span>© <?= date("Y"); ?> PT Kanisius.</span>
             </div>
         </div>
     </footer>
+
 </div>
+
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Script Section (SAMAKAN DENGAN tiket_sarpras) -->
+<script src="<?= base_url('vendor/jquery/jquery.min.js') ?>"></script>
+<script src="<?= base_url('vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
+<script src="<?= base_url('vendor/jquery-easing/jquery.easing.min.js') ?>"></script>
+<script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
+
 <script>
     $(document).ready(function() {
+        $('#menuMenu').trigger('click');
         loadDashboard();
     });
 
     function loadDashboard() {
-
         $.ajax({
             url: "<?= base_url('Select/dashboard') ?>",
             method: "POST",
             dataType: "JSON",
             success: function(data) {
-
-                console.log(data); // untuk debug
-
-                $('#jml_pelanggan_baru').text(data.pelanggan_baru); // isi data pelanggan baru ke dalam card Pelanggan Baru
-                $('#jml_wishlist_pelanggan').text(data.wishlist_pelanggan);
+                $('#tiket_sim').text(data.tiket_sim);
+                $('#tiket_sarpras').text(data.tiket_sarpras);
             }
         });
     }

@@ -87,22 +87,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <i class="fas fa-angle-up"></i>
 </a>
 
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-<script src="js/sb-admin-2.js"></script>
+<script src="<?= base_url('vendor/jquery/jquery.min.js') ?>"></script>
+<script src="<?= base_url('vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
+<script src="<?= base_url('vendor/jquery-easing/jquery.easing.min.js') ?>"></script>
+<script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
 
 <!-- DataTables -->
-<link rel="stylesheet" type="text/css" href="vendor/datatables/jquery.dataTables.min.css">
-<script type="text/javascript" charset="utf8" src="vendor/datatables/jquery.dataTables.min.js"></script>
-<script type="text/javascript" charset="utf8" src="vendor/datatables/dataTables.select.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?= base_url('vendor/datatables/jquery.dataTables.min.css') ?>">
+<script type="text/javascript" charset="utf8" src="<?= base_url('vendor/datatables/jquery.dataTables.min.js') ?>"></script>
+<script type="text/javascript" charset="utf8" src="<?= base_url('vendor/datatables/dataTables.select.min.js') ?>"></script>
 
 <!-- CKEditor -->
-<script src="vendor/ckeditor/ckeditor.js"></script>
-<script src="vendor/ckeditor/translations/id.js"></script>
+<script src="<?= base_url('vendor/ckeditor/ckeditor.js') ?>"></script>
+<script src="<?= base_url('vendor/ckeditor/translations/id.js') ?>"></script>
 
 <!-- xlsx -->
-<script type="text/javascript" src="vendor/xlsx/xlsx.fix.js"></script>
+<script type="text/javascript" src="<?= base_url('vendor/xlsx/xlsx.fix.js') ?>"></script>
 
 <script>
     // gunakan Javascript dan jQuery
@@ -115,7 +115,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         $('#menuMenu').trigger('click');
 
         getContoh1();
-         $('#tabel').DataTable({ //https://datatables.net/reference/option/
+        $('#tabel').DataTable({ //https://datatables.net/reference/option/
             "scrollX": true,
             "select": true,
             "bSort": false
