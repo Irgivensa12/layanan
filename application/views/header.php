@@ -103,7 +103,7 @@
                 <!-- Dashboard -->
             <li class="nav-item">
                 <a class="nav-link" href="<?= base_url('Controller/dashboard') ?>">
-                    <i class="fas fa-fw fa-ticket-alt"></i>
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </a>
             </li>

@@ -35,8 +35,17 @@ class Controller extends CI_Controller
     // http://localhost/template_penerbitan/menu
     public function menu()
     {
-        $this->load->view('header');
-        $this->load->view('menu');
+        $data['nama'] = $this->session->userdata('userNama');
+
+        if ($this->session->userdata('admin') == 'Y') {
+            $data['role'] = 'Admin';
+        } elseif ($this->session->userdata('sarpras') == 'Y') {
+            $data['role'] = 'Petugas Sarpras';
+        } else {
+            $data['role'] = 'User';
+        }
+        $this->load->view('header', $data);
+        $this->load->view('dashboard', $data); // redirect ke dashboard setelah login
     }
 
     public function input()

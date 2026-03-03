@@ -22,88 +22,56 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <img src="<?= base_url('img\kanisius.png') ?>">
             </ul>
         </nav>
+
+        <div class="mb-4" style="padding-left: 20px;">
+            <h2 class="font-weight-bold text-dark">
+                Halo, <?= $nama; ?> 👋
+            </h2>
+            <h5 class="text-primary">
+                <?= $role; ?>
+            </h5>
+        </div>
+
         <div class="container-fluid">
 
             <div class="row">
 
-                <!-- Pelanggan Baru -->
+                <!-- Tiket SIM -->
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-danger shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        Pelanggan Baru
+                                    <div class="h5 font-weight-bold text-primary text-uppercase mb-1">
+                                        Tiket SIM
                                     </div>
-                                    <div class="h4 mb-0 font-weight-bold text-gray-800" id="jml_pelanggan_baru">
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="tiket_sim">
                                         0
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-user-plus fa-2x text-gray-300"></i>
+                                    <i class="fas fa-ticket-alt fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Wishlist -->
+                <!-- Tiket Sarpras -->
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-info shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        Wishlist Pelanggan
+                                    <div class="h5 font-weight-bold text-primary text-uppercase mb-1">
+                                        Tiket Sarpras
                                     </div>
-                                    <div class="h4 mb-0 font-weight-bold text-gray-800" id="jml_wishlist_pelanggan">
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="tiket_sarpras">
                                         0
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-heart fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Registrasi -->
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-info shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        Registrasi / Perpanjang KRC
-                                    </div>
-                                    <div class="h4 mb-0 font-weight-bold text-gray-800" id="jml_registrasi">
-                                        0
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-id-card fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Masa Aktif -->
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-danger shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        Masa Aktif KRC Habis
-                                    </div>
-                                    <div class="h4 mb-0 font-weight-bold text-gray-800" id="jml_krc_habis">
-                                        0
-                                    </div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-id-card fa-2x text-gray-300"></i>
+                                    <i class="fas fa-ticket-alt fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
