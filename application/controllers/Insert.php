@@ -1,9 +1,10 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Insert extends CI_Controller {
-    
-    Public function __construct()
+class Insert extends CI_Controller
+{
+
+    public function __construct()
     {
         parent::__construct();
         $this->load->library('form_validation');
@@ -11,15 +12,17 @@ class Insert extends CI_Controller {
         $this->load->helper('date');
         $this->load->model("Model");
     }
-    
-    public function contoh2(){
+
+    public function contoh2()
+    {
         $inputAjax = $this->input->post('inputAjax');
-		
+
         $this->Model->contoh2($inputAjax);
         redirect('menu');
     }
 
-    public function input(){
+    public function input()
+    {
 
         $data = array(
             'tikNomor'      => $this->input->post('tikNomor'),
@@ -54,5 +57,21 @@ class Insert extends CI_Controller {
         redirect('menu');
     }
 
-    
+    public function tambah_tiket_sarpras()
+    {
+        echo "INSERT MASUK";
+        print_r($_POST);
+        exit;
+        $data = [
+            'tikNomor'      => $this->input->post('tikNomor'),
+            'tikTanggal'           => $this->input->post('tikTanggal'),
+            'tikUserID'           => $this->input->post('tikUserID'),
+            'userNama'           => $this->input->post('userNama'),
+            'tikRingkasan'        => $this->input->post('tikRingkasan'),
+            'tikDetail'           => $this->input->post('tikDetail'),
+        ];
+
+        $this->Model->insertData('tb_tiket', $data);
+        redirect('Controller/tiket_sarpras'); // setelah simpan, diarahkan ke halaman tiket_sarpras
+    }
 }

@@ -92,4 +92,10 @@ class model extends CI_Model
             'wishlist_pelanggan' => $wishlist
         ];
     }
+
+    public function tiket_sarpras()
+    {
+        $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
+        return $this->db->query($query);
+    }
 }

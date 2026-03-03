@@ -37,4 +37,10 @@ class Select extends CI_Controller
         $data = $this->Model->dashboard()->result_array(); // buka class dashboard di Model
         echo json_encode($data);
     }
+
+    public function tiket_sarpras() // Function untuk menampilkan data dari tabel tb_tiket ke halaman tiket_sarpras.php
+    {
+        $data = $this->Model->tiket_sarpras()->result_array(); // buka class tiket_sarpras di Model
+        echo json_encode($data);
+    }
 }

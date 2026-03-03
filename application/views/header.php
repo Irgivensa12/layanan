@@ -100,7 +100,7 @@
                     </div>
                 </div>
 
-                <!-- Tiket SIM -->
+                <!-- Dashboard -->
             <li class="nav-item">
                 <a class="nav-link" href="<?= base_url('Controller/dashboard') ?>">
                     <i class="fas fa-fw fa-ticket-alt"></i>
@@ -124,14 +124,21 @@
         <?php } ?> -->
 
             <!-- Tiket Sarpras -->
-            <?php if ($this->session->userdata('sarpras') == 'Y') { ?>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('Controller/tiket_sarpras') ?>">
+                    <i class="fas fa-fw fa-ticket-alt"></i>
+                    <span>Tiket Sarpras</span>
+                </a>
+            </li>
+            
+            <!-- <?php if ($this->session->userdata('sarpras') == 'Y') { ?>
                 <li class="nav-item">
                     <a class="nav-link" href="<?= base_url('tiket_sarpras') ?>">
                         <i class="fas fa-fw fa-tools"></i>
                         <span>Tiket Sarpras</span>
                     </a>
                 </li>
-            <?php } ?>
+            <?php } ?> -->
 
             <!-- Laporan -->
             <?php if ($this->session->userdata('tiket') == 'Y' || $this->session->userdata('admin') == 'Y') { ?>
