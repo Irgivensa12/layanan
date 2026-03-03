@@ -75,4 +75,15 @@ class Controller extends CI_Controller
         $this->load->view('header');
         $this->load->view('tambah_tiket_sarpras');
     }
+
+    public function laporan()
+    {
+        $this->load->view('header');
+        $this->load->view('laporan');
+    }
+    public function admin()
+    {
+        $this->load->view('header');
+        $this->load->view('admin');
+    }
 }

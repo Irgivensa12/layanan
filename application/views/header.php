@@ -143,7 +143,7 @@
             <!-- Laporan -->
             <?php if ($this->session->userdata('tiket') == 'Y' || $this->session->userdata('admin') == 'Y') { ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= base_url('laporan') ?>">
+                    <a class="nav-link" href="<?= base_url('Controller/laporan') ?>">
                         <i class="fas fa-fw fa-file-alt"></i>
                         <span>Laporan</span>
                     </a>
@@ -153,7 +153,7 @@
             <!-- Admin -->
             <?php if ($this->session->userdata('admin') == 'Y') { ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= base_url('admin') ?>">
+                    <a class="nav-link" href="<?= base_url('Controller/admin') ?>">
                         <i class="fas fa-fw fa-user-cog"></i>
                         <span>Admin</span>
                     </a>
