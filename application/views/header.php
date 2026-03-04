@@ -47,6 +47,13 @@
             border: 1px solid gray !important;
             border-collapse: collapse !important;
         }
+
+        /* Efek hover pada card  */
+        .card:hover { 
+            transform: scale(1.03);
+            transition: 0.2s;
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -130,7 +137,7 @@
                     <span>Tiket Sarpras</span>
                 </a>
             </li>
-            
+
             <!-- <?php if ($this->session->userdata('sarpras') == 'Y') { ?>
                 <li class="nav-item">
                     <a class="nav-link" href="<?= base_url('tiket_sarpras') ?>">

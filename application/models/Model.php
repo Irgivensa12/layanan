@@ -91,7 +91,7 @@ class model extends CI_Model
             'pelanggan_baru' => $pelanggan,
             'wishlist_pelanggan' => $wishlist
         ];
-    }
+    } // blm dipakai
 
     public function tiket_sarpras()
     {
