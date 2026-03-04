@@ -8,45 +8,47 @@ class model extends CI_Model
         $id = $this->input->post('id');
         $password = $this->input->post('password');
 
-        $query = "SELECT a.*, privMenuId, privAkses FROM vUser a LEFT JOIN tb_user_priv ON privUserId=userId WHERE userId='$id' AND userPass='$password'    ";
+        $query = "SELECT a.*, privMenuId, privAkses FROM vUser a LEFT JOIN tb_user_priv ON privUserId=userId WHERE userId='$id'";
 
         $user = $this->db->query($query)->result_array();
 
         if ($user) {
+            // ambil baris pertama untuk cek password
+            $firstRow = $user[0];
 
-            if (md5($password) == $firstRow['userPass']) {    
-            foreach ($user as $row) {
-
+            if (md5($password) == $firstRow['userPass']) {
                 $this->session->set_userdata('login', true);
-                $this->session->set_userdata('userId', $row['userId']);
-                $this->session->set_userdata('userNama', $row['userNama']);
+                $this->session->set_userdata('userId', $firstRow['userId']);
+                $this->session->set_userdata('userNama', $firstRow['userNama']);
+                foreach ($user as $row) {
 
-                // Simpan privilege
-                if ($row['privMenuId'] == 1) {
-                    $this->session->set_userdata('tiket', $row['privAkses']);
+                    // Simpan privilege
+                    if ($row['privMenuId'] == 1) {
+                        $this->session->set_userdata('tiket', $row['privAkses']);
+                    }
+
+                    if ($row['privMenuId'] == 24) {
+                        $this->session->set_userdata('admin', $row['privAkses']);
+                    }
+
+                    if ($row['privMenuId'] == 25) {
+                        $this->session->set_userdata('sarpras', $row['privAkses']);
+                    }
                 }
 
-                if ($row['privMenuId'] == 24) {
-                    $this->session->set_userdata('admin', $row['privAkses']);
-                }
+                $this->session->set_flashdata('type', 'alert-success');
+                $this->session->set_flashdata('pesan', '<strong>Berhasil!</strong> Anda Berhasil Login');
+                redirect('menu');
 
-                if ($row['privMenuId'] == 25) {
-                    $this->session->set_userdata('sarpras', $row['privAkses']);
-                }
+
+                // jika password salah
+            } else {
+                $this->session->set_flashdata('type', 'alert-danger');
+                $this->session->set_flashdata('pesan', '<strong>Gagal!</strong> ID atau Password salah');
+                redirect();
             }
-            $this->session->set_flashdata('type', 'alert-success');
-            $this->session->set_flashdata('pesan', '<strong>Gagal!</strong> Anda Berhasil Login');
-            redirect('menu');
-
-
-            // jika password salah
-        } else {
-            $this->session->set_flashdata('type', 'alert-danger');
-            $this->session->set_flashdata('pesan', '<strong>Gagal!</strong> ID atau Password salah');
-            redirect();
         }
     }
-
 
 
     //contoh query biasa
