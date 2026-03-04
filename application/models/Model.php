@@ -54,11 +54,9 @@ class model extends CI_Model
     //contoh query biasa
     public function contoh1()
     {
-        $query = "SELECT tikNomor, tikTanggal, tikUserID, userNama, tikRingkasan, tiketStatus FROM tb_tiket";
+        $query = "SELECT id_buku, nama_buku, email_penulis, penerbit, tanggal FROM buku";
         return $this->db->query($query);
     }
-
-
 
     //contoh query dengan input dari AJAX
     public function contoh2($inputAjax)
@@ -76,5 +74,28 @@ class model extends CI_Model
     {
         $this->db->where('no_buku', $no);
         $this->db->delete('buku');
+    }
+
+    public function tiket_sim()
+    {
+        $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
+        return $this->db->query($query);
+    }
+
+    public function get_dashboard_data()
+    {
+        $pelanggan = $this->db->count_all('tb_pelanggan');
+        $wishlist  = $this->db->count_all('tb_wishlist');
+
+        return [
+            'pelanggan_baru' => $pelanggan,
+            'wishlist_pelanggan' => $wishlist
+        ];
+    }
+
+    public function tiket_sarpras()
+    {
+        $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
+        return $this->db->query($query);
     }
 }
