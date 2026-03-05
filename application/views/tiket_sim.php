@@ -119,7 +119,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
         $('#menuMenu').trigger('click');
         table = $('#tabel').DataTable({ //https://datatables.net/reference/option/
-            "scrollX": true,
+            "scrollX": true, // Membuat tabel bisa discroll horizontal
+            "scrollY": "400px", // Membuat tabel bisa discroll vertikal dengan tinggi 400px
             "select": true,
             "bSort": false
         });
