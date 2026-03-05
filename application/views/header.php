@@ -49,10 +49,25 @@
         }
 
         /* Efek hover pada card  */
-        .card:hover { 
+        .card:hover {
             transform: scale(1.03);
             transition: 0.2s;
             cursor: pointer;
+        }
+
+        .dt-button.btn-success {
+            background-color: #28a745 !important;
+            border-color: #28a745 !important;
+            color: white !important;
+            font-weight: bold;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .dt-button.btn-success:hover {
+            background-color: #218838 !important;
         }
     </style>
 </head>
@@ -135,21 +150,21 @@
                 </li>
             <?php } ?> -->
 
-                <div id="collapseTiket" class="collapse"
-                    data-parent="#accordionSidebar">
+            <div id="collapseTiket" class="collapse"
+                data-parent="#accordionSidebar">
 
-                    <div class="bg-white py-2 collapse-inner rounded">
+                <div class="bg-white py-2 collapse-inner rounded">
 
-                        <a class="collapse-item" href="<?= base_url('Controller/tiket_sim') ?>">
-                            Tiket SIM
-                        </a>
+                    <a class="collapse-item" href="<?= base_url('Controller/tiket_sim') ?>">
+                        Tiket SIM
+                    </a>
 
-                        <a class="collapse-item" href="<?= base_url('Controller/tiket_sarpras') ?>">
-                            Tiket Sarpras
-                        </a>
+                    <a class="collapse-item" href="<?= base_url('Controller/tiket_sarpras') ?>">
+                        Tiket Sarpras
+                    </a>
 
-                    </div>
                 </div>
+            </div>
             </li>
 
 
