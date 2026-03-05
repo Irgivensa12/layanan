@@ -31,7 +31,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                 <!-- Tiket SIM -->
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-danger shadow h-100 py-2">
+                    <div class="card border-left-danger shadow h-100 py-2"
+                    onclick="window.location='<?= base_url('Controller/tiket_sim') ?>'" style="cursor: pointer;">
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col mr-2">
@@ -52,7 +53,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                 <!-- Tiket Sarpras -->
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card border-left-info shadow h-100 py-2"
+                    onclick="window.location='<?= base_url('Controller/tiket_sarpras') ?>'" style="cursor: pointer;">
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col mr-2">

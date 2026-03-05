@@ -43,4 +43,27 @@ class Select extends CI_Controller
         $data = $this->Model->tiket_sarpras()->result_array(); // buka class tiket_sarpras di Model
         echo json_encode($data);
     }
+
+    public function detail_tiket($tikNomor = null)
+    {
+        $this->db->select("
+        tikNomor,
+        tikTanggal,
+        tikUserID,
+        userNama,
+        tikRingkasan,
+        (CASE 
+            WHEN tikStatus='Y' THEN 'CLOSE' 
+            ELSE 'OPEN' 
+        END) AS tiketStatus
+    ");
+
+        $this->db->from('tb_tiket');
+        $this->db->join('vuser', 'tikUserID = userID', 'left');
+        $this->db->where('tikNomor', $tikNomor);
+
+        $data = $this->db->get()->row_array();
+
+        echo json_encode($data);
+    }
 }

@@ -43,14 +43,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
             </div>
 
-            <!-- Button Tambah -->
-            <!-- <div class="form-group row">
+              <!-- Button Tambah -->
+            <div class="form-group row">
                 <div class="col-sm-2">
-                    <a href="<?= base_url('Controller/tambah_tiket_sarpras') ?>" class="btn btn-primary">
+                    <a href="<?= base_url('tambah_tiket_sim') ?>" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Tambah
                     </a>
                 </div>
-            </div> -->
+            </div>
 
             <div class="row">
                 <div class="col">

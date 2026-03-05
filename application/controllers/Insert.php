@@ -72,6 +72,24 @@ class Insert extends CI_Controller
         ];
 
         $this->Model->insertData('tb_tiket', $data);
-        redirect('Controller/tiket_sarpras'); // setelah simpan, diarahkan ke halaman tiket_sarpras
+        redirect('tiket_sarpras'); // setelah simpan, diarahkan ke halaman tiket_sarpras
+    }
+
+    public function tambah_tiket_sim()
+    {
+        echo "INSERT MASUK";
+        print_r($_POST);
+        exit;
+        $data = [
+            'tikNomor'      => $this->input->post('tikNomor'),
+            'tikTanggal'           => $this->input->post('tikTanggal'),
+            'tikUserID'           => $this->input->post('tikUserID'),
+            'userNama'           => $this->input->post('userNama'),
+            'tikRingkasan'        => $this->input->post('tikRingkasan'),
+            'tikDetail'           => $this->input->post('tikDetail'),
+        ];
+
+        $this->Model->insertData('tb_tiket', $data);
+        redirect('tiket_sim'); // setelah simpan, diarahkan ke halaman tiket_sarpras
     }
 }
