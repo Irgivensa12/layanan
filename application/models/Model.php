@@ -82,6 +82,12 @@ class model extends CI_Model
         return $this->db->query($query);
     }
 
+      public function tiket_sarpras()
+    {
+        $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
+        return $this->db->query($query);
+    }
+
     public function get_dashboard_data()
     {
         $pelanggan = $this->db->count_all('tb_pelanggan');
@@ -93,9 +99,36 @@ class model extends CI_Model
         ];
     } // blm dipakai
 
-    public function tiket_sarpras()
+  
+
+     public function getTiket($role, $userID = null)
     {
-        $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
-        return $this->db->query($query);
+        $this->db->select("
+            tikNomor,
+            tikTanggal,
+            tikUserID,
+            userNama,
+            tikRingkasan,
+            (CASE 
+                WHEN tikStatus='Y' THEN 'CLOSE' 
+                ELSE 'OPEN' 
+            END) AS tiketStatus
+        ");
+
+        $this->db->from('tb_tiket');
+        $this->db->join('vuser', 'tikUserID = userID', 'left');
+
+        if ($role == 'operator') {
+
+            // OPERATOR → tanpa where
+            return $this->db->get();
+
+        } else {
+
+            // USER → pakai where tikUserID
+            $this->db->where('tikUserID', $userID);
+            return $this->db->get();
+
+        }
     }
 }

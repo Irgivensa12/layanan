@@ -92,6 +92,12 @@ class Controller extends CI_Controller
         $this->load->view('tambah_tiket_sarpras');
     }
 
+    public function tambah_tiket_sim()
+    {
+        $this->load->view('header');
+        $this->load->view('tambah_tiket_sim');
+    }
+
     public function laporan()
     {
         $this->load->view('header');
@@ -99,7 +105,30 @@ class Controller extends CI_Controller
     }
     public function admin()
     {
+        $this->session->set_userdata('admin', $row['privAkses']);
         $this->load->view('header');
         $this->load->view('admin');
+    }
+
+    public function daftar_tiket()
+    {
+        $role   = $this->session->userdata('role');
+        $userID = $this->session->userdata('userID');
+
+        if ($role == 'operator') {
+
+            $data = $this->Model->tiket_operator()->result();
+        } elseif ($role == 'sim') {
+
+            $data = $this->Model->tiket_sim($userID)->result();
+        } elseif ($role == 'sarpras') {
+
+            $data = $this->Model->tiket_sarpras($userID)->result();
+        } else {
+
+            $data = [];
+        }
+
+        echo json_encode($data);
     }
 }

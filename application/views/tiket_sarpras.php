@@ -147,7 +147,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         data[i].tikUserClose,
                         data[i].tikRingkasan,
                         data[i].tikStatus,
-                        '<button class="btn btn-primary btn-sm" onclick="getDetail(' + data[i].tikNomor + ')">Detail</button>'
+                        '<button class="btn btn-primary btn-sm" onclick="detail(' + data[i].tikNomor + ')">Detail</button>'
                         //''
                     ]);
                 }
@@ -157,6 +157,26 @@ defined('BASEPATH') or exit('No direct script access allowed');
         });
     }
 
+    $(document).on("click", ".detailBtn", function() {
+
+        var tikNomor = $(this).data("id");
+
+        $.ajax({
+            url: "<?= base_url('Select/detail_tiket/') ?>" + tikNomor,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data) {
+
+                $("#m_tikNomor").text(data.tikNomor);
+                $("#m_tikTanggal").text(data.tikTanggal);
+                $("#m_userNama").text(data.userNama);
+                $("#m_tikRingkasan").text(data.tikRingkasan);
+                $("#m_tiketStatus").text(data.tiketStatus);
+
+            }
+        });
+
+    });
     // kalau butuh input dari user
     function getContoh2() {
         var test = 'inputtan dari user';
@@ -191,6 +211,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
     }
 </script>
 
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal-body">
+
+  <p><b>No Tiket :</b> <span id="m_tikNomor"></span></p>
+  <p><b>Tanggal :</b> <span id="m_tikTanggal"></span></p>
+  <p><b>User :</b> <span id="m_userNama"></span></p>
+  <p><b>Ringkasan :</b> <span id="m_tikRingkasan"></span></p>
+  <p><b>Status :</b> <span id="m_tiketStatus"></span></p>
+
+</div>
 
 </body>
 

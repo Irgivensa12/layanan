@@ -11,6 +11,6 @@ $route['logout'] = 'Controller/logout';
 $route['menu'] = 'Controller/menu';
 
 $route['input'] = 'Controller/input';
-$route['tiket_sim'] = 'Controller/tiket_sim';
-$route['tiket_sarpras'] = 'Controller/tiket_sarpras';
 $route['tambah_tiket_sarpras'] = 'Controller/tambah_tiket_sarpras';
+
+$route['tambah_tiket_sim'] = 'Controller/tambah_tiket_sim';

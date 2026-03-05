@@ -166,6 +166,7 @@
                     </a>
                 </li>
             <?php } ?>
+            
 
             <hr class="sidebar-divider">
 
