@@ -139,32 +139,22 @@
                     <i class="fas fa-fw fa-ticket-alt"></i>
                     <span>Menu Tiket</span>
                 </a>
-            </li>
 
-            <!-- <?php if ($this->session->userdata('sarpras') == 'Y') { ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= base_url('tiket_sarpras') ?>">
-                        <i class="fas fa-fw fa-tools"></i>
-                        <span>Tiket Sarpras</span>
-                    </a>
-                </li>
-            <?php } ?> -->
+                <div id="collapseTiket" class="collapse"
+                    data-parent="#accordionSidebar">
 
-            <div id="collapseTiket" class="collapse"
-                data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
 
-                <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="<?= base_url('Controller/tiket_sim') ?>">
+                            Tiket SIM
+                        </a>
 
-                    <a class="collapse-item" href="<?= base_url('Controller/tiket_sim') ?>">
-                        Tiket SIM
-                    </a>
+                        <a class="collapse-item" href="<?= base_url('Controller/tiket_sarpras') ?>">
+                            Tiket Sarpras
+                        </a>
 
-                    <a class="collapse-item" href="<?= base_url('Controller/tiket_sarpras') ?>">
-                        Tiket Sarpras
-                    </a>
-
+                    </div>
                 </div>
-            </div>
             </li>
 
 
@@ -195,7 +185,6 @@
                     </div>
                 </div>
             </li>
-
             <!-- Admin -->
             <?php if ($this->session->userdata('admin') == 'Y') { ?>
                 <li class="nav-item">

@@ -117,7 +117,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
     $(document).ready(function() {
 
-        $('#menuMenu').trigger('click');
+        $('#menuTiket').trigger('click');
         table = $('#tabel').DataTable({ //https://datatables.net/reference/option/
             "scrollX": true,
             "scrollY": "400px", // Membuat tabel bisa discroll vertikal dengan tinggi 400px

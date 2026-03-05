@@ -101,7 +101,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 <script>
     $(document).ready(function() {
-        $('#menuMenu').trigger('click');
         loadDashboard();
     });
 

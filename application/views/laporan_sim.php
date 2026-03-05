@@ -21,14 +21,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </button>
 
             <ul class="navbar-nav ml-auto">
-                <img src="<?= base_url('img/kariban.png') ?>">
+                <img src="<?= base_url('img/kanisius.png') ?>">
             </ul>
         </nav>
 
         <div class="container-fluid">
 
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Laporan SIM (Sistem Informasi Manajemen) PT Kariban</h1>
+                <h1 class="h3 mb-0 text-gray-800">Laporan SIM (Sistem Informasi Manajemen) PT Kanisius</h1>
             </div>
 
             <div class="form-group row">
@@ -78,7 +78,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <footer class="sticky-footer bg-white">
         <div class="container my-auto">
             <div class="copyright text-center my-auto">
-                <span>© <?php echo date("Y"); ?> PT Kariban.</span>
+                <span>© <?php echo date("Y"); ?> PT Kanisius.</span>
             </div>
         </div>
     </footer>
@@ -122,8 +122,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     var table;
 
     $(document).ready(function() {
-
-        $('#menuMenu').trigger('click');
+        $('#menuLaporan').trigger('click'); // 
         table = $('#tabel').DataTable({ //https://datatables.net/reference/option/
             "scrollX": true,
             "scrollY": "400px", // Membuat tabel bisa discroll vertikal dengan tinggi 400px
