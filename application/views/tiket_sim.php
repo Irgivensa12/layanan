@@ -43,7 +43,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
             </div>
 
-              <!-- Button Tambah -->
+            <!-- Button Tambah -->
             <div class="form-group row">
                 <div class="col-sm-2">
                     <a href="<?= base_url('tambah_tiket_sim') ?>" class="btn btn-primary">
@@ -120,6 +120,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         $('#menuMenu').trigger('click');
         table = $('#tabel').DataTable({ //https://datatables.net/reference/option/
             "scrollX": true,
+            "scrollY": "400px", // Membuat tabel bisa discroll vertikal dengan tinggi 400px
             "select": true,
             "bSort": false
         });
@@ -147,8 +148,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         data[i].tikUserClose,
                         data[i].tikRingkasan,
                         data[i].tikStatus,
-                        '<button class="btn btn-primary btn-sm" onclick="getDetail(' + data[i].tikNomor + ')">Detail</button>'
-                        //''
+                        '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
+                        data[i].tikNomor + '" data-toggle="modal" data-target="#exampleModal">Detail</button>'
                     ]);
                 }
 
@@ -156,6 +157,27 @@ defined('BASEPATH') or exit('No direct script access allowed');
             }
         });
     }
+
+    $(document).on("click", ".detailBtn", function() { // Event listener untuk tombol detail
+
+        var tikNomor = $(this).data("id");
+
+        $.ajax({
+            url: "<?= base_url('Select/detail_tiket/') ?>" + tikNomor,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data) {
+
+                $("#m_tikNomor").text(data.tikNomor);
+                $("#m_tikTanggal").text(data.tikTanggal);
+                $("#m_userNama").text(data.userNama);
+                $("#m_tikRingkasan").text(data.tikRingkasan);
+                $("#m_tiketStatus").text(data.tiketStatus);
+
+            }
+        });
+
+    });
 
     // kalau butuh input dari user
     function getContoh2() {
@@ -191,6 +213,77 @@ defined('BASEPATH') or exit('No direct script access allowed');
     }
 </script>
 
+<div class="modal fade" id="exampleModal" tabindex="-1">
+    <div class="modal-dialog" style="max-width:80%; width:80%; margin:30px auto;">
+        <div class="modal-content" style="border-radius:15px;">
+
+            <div class="modal-header bg-primary text-white" style="padding:25px;">
+                <h2 class="modal-title" style="font-size:28px;">Detail Tiket</h2>
+                <button type="button" class="close text-white" data-dismiss="modal" style="font-size:32px;">
+                    &times;
+                </button>
+            </div>
+
+            <div class="modal-body" style="font-size:22px; padding:40px;">
+
+                <div class="container-fluid">
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <strong style="font-size:24px;">No Tiket</strong>
+                            <div id="m_tikNomor"
+                                style="font-size:24px; padding:20px; background:#f8f9fa; border-radius:10px; margin-top:10px;">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong style="font-size:24px;">Tanggal</strong>
+                            <div id="m_tikTanggal"
+                                style="font-size:24px; padding:20px; background:#f8f9fa; border-radius:10px; margin-top:10px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <strong style="font-size:24px;">User</strong>
+                            <div id="m_userNama"
+                                style="font-size:24px; padding:20px; background:#f8f9fa; border-radius:10px; margin-top:10px;">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong style="font-size:24px;">Status</strong>
+                            <div id="m_tiketStatus"
+                                style="font-size:24px; padding:20px; background:#f8f9fa; border-radius:10px; margin-top:10px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <strong style="font-size:24px;">Ringkasan</strong>
+                            <div id="m_tikRingkasan"
+                                style="font-size:24px; padding:25px; background:#f8f9fa; border-radius:10px; margin-top:10px; min-height:180px;">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer justify-content-center" style="padding:25px;">
+                <button type="button" class="btn btn-danger"
+                    style="font-size:22px; padding:12px 40px;"
+                    data-dismiss="modal">
+                    Tutup
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 </body>
 

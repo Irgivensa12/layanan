@@ -61,8 +61,23 @@ class Controller extends CI_Controller
 
     public function dashboard()
     {
-        $this->load->view('header');
-        $this->load->view('dashboard');
+        // Mengambil nama dari session
+        $data['nama'] = $this->session->userdata('userNama');
+
+        // Mengambil privilege dari session
+        $sarpras = $this->session->userdata('sarpras');
+        $admin   = $this->session->userdata('admin');
+
+        // Menentukan role berdasarkan privilege
+        if ($admin == 'Y') {
+            $data['role'] = 'Admin';
+        } elseif ($sarpras == 'Y') {
+            $data['role'] = 'Operator';
+        } else {
+            $data['role'] = 'Tiket';
+        }
+        $this->load->view('header', $data);
+        $this->load->view('dashboard', $data);
     }
     public function tiket_sarpras()
     {
@@ -82,14 +97,21 @@ class Controller extends CI_Controller
         $this->load->view('tambah_tiket_sim');
     }
 
-    public function laporan()
+    public function laporan_sarpras()
     {
         $this->load->view('header');
-        $this->load->view('laporan');
+        $this->load->view('laporan_sarpras');
     }
+    
+    public function laporan_sim()
+    {
+        $this->load->view('header');
+        $this->load->view('laporan_sim');
+    }
+
     public function admin()
     {
-        $this->session->set_userdata('admin', $row['privAkses']);
+        
         $this->load->view('header');
         $this->load->view('admin');
     }

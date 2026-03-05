@@ -85,7 +85,7 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo" id="menuMenu">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Contoh Menu</span>
+                    <span>Tampilan</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
@@ -107,48 +107,62 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <!-- Tiket SIM -->
+            <!-- MENU TIKET -->
             <li class="nav-item">
-                <a class="nav-link" href="<?= base_url('Controller/tiket_sim') ?>">
-                    <i class="fas fa-fw fa-ticket-alt"></i>
-                    <span>Tiket SIM</span>
-                </a>
-            </li>
-            <!-- <?php if ($this->session->userdata('tiket') == 'Y' || $this->session->userdata('tiket') == 'N') { ?>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url('tiket_sim') ?>">
-                    <i class="fas fa-fw fa-ticket-alt"></i>
-                    <span>Tiket SIM</span>
-                </a>
-            </li>
-        <?php } ?> -->
+                <a class="nav-link collapsed" href="#" data-toggle="collapse"
+                    data-target="#collapseTiket"
+                    aria-expanded="true" aria-controls="collapseTiket"
+                    id="menuTiket">
 
-            <!-- Tiket Sarpras -->
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url('Controller/tiket_sarpras') ?>">
                     <i class="fas fa-fw fa-ticket-alt"></i>
-                    <span>Tiket Sarpras</span>
+                    <span>Menu Tiket</span>
                 </a>
-            </li>
-            
-            <!-- <?php if ($this->session->userdata('sarpras') == 'Y') { ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= base_url('tiket_sarpras') ?>">
-                        <i class="fas fa-fw fa-tools"></i>
-                        <span>Tiket Sarpras</span>
-                    </a>
-                </li>
-            <?php } ?> -->
 
-            <!-- Laporan -->
-            <?php if ($this->session->userdata('tiket') == 'Y' || $this->session->userdata('admin') == 'Y') { ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= base_url('Controller/laporan') ?>">
-                        <i class="fas fa-fw fa-file-alt"></i>
-                        <span>Laporan</span>
-                    </a>
-                </li>
-            <?php } ?>
+                <div id="collapseTiket" class="collapse"
+                    data-parent="#accordionSidebar">
+
+                    <div class="bg-white py-2 collapse-inner rounded">
+
+                        <a class="collapse-item" href="<?= base_url('Controller/tiket_sim') ?>">
+                            Tiket SIM
+                        </a>
+
+                        <a class="collapse-item" href="<?= base_url('Controller/tiket_sarpras') ?>">
+                            Tiket Sarpras
+                        </a>
+
+                    </div>
+                </div>
+            </li>
+
+
+            <!-- MENU LAPORAN -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse"
+                    data-target="#collapseLaporan"
+                    aria-expanded="true" aria-controls="collapseLaporan"
+                    id="menuLaporan">
+
+                    <i class="fas fa-fw fa-file-alt"></i>
+                    <span>Menu Laporan</span>
+                </a>
+
+                <div id="collapseLaporan" class="collapse"
+                    data-parent="#accordionSidebar">
+
+                    <div class="bg-white py-2 collapse-inner rounded">
+
+                        <a class="collapse-item" href="<?= base_url('Controller/laporan_sim') ?>">
+                            Laporan SIM
+                        </a>
+
+                        <a class="collapse-item" href="<?= base_url('Controller/laporan_sarpras') ?>">
+                            Laporan Sarpras
+                        </a>
+
+                    </div>
+                </div>
+            </li>
 
             <!-- Admin -->
             <?php if ($this->session->userdata('admin') == 'Y') { ?>
@@ -159,7 +173,7 @@
                     </a>
                 </li>
             <?php } ?>
-            
+
 
             <hr class="sidebar-divider">
 

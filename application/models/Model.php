@@ -23,16 +23,12 @@ class model extends CI_Model
                 foreach ($user as $row) {
 
                     // Simpan privilege
-                    if ($row['privMenuId'] == 1) {
-                        $this->session->set_userdata('tiket', $row['privAkses']);
-                    }
-
-                    if ($row['privMenuId'] == 24) {
-                        $this->session->set_userdata('admin', $row['privAkses']);
-                    }
-
-                    if ($row['privMenuId'] == 25) {
-                        $this->session->set_userdata('sarpras', $row['privAkses']);
+                    if ($row['privMenuId'] == 24 && $row['privAkses'] == 'Y') {
+                        $this->session->set_userdata('role', 'admin');
+                    } elseif ($row['privMenuId'] == 1 && $row['privAkses'] == 'Y') {
+                        $this->session->set_userdata('role', 'operator');
+                    } elseif ($row['privMenuId'] == 25 && $row['privAkses'] == 'Y') {
+                        $this->session->set_userdata('role', 'sarpras');
                     }
                 }
 
@@ -82,7 +78,7 @@ class model extends CI_Model
         return $this->db->query($query);
     }
 
-      public function tiket_sarpras()
+    public function tiket_sarpras()
     {
         $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
         return $this->db->query($query);
@@ -99,9 +95,9 @@ class model extends CI_Model
         ];
     }
 
-  
 
-     public function getTiket($role, $userID = null)
+
+    public function getTiket($role, $userID = null)
     {
         $this->db->select("
             tikNomor,
@@ -122,13 +118,11 @@ class model extends CI_Model
 
             // OPERATOR → tanpa where
             return $this->db->get();
-
         } else {
 
             // USER → pakai where tikUserID
             $this->db->where('tikUserID', $userID);
             return $this->db->get();
-
         }
     }
 }
