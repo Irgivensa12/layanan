@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 $route['default_controller'] = 'Controller';
 $route['404_override'] = '';
@@ -9,6 +9,8 @@ $route['index'] = 'Controller/index';
 $route['logout'] = 'Controller/logout';
 
 $route['menu'] = 'Controller/menu';
+$route['tiket_sim'] = 'Controller/tiket_sim';
+$route['tiket_sarpras'] = 'Controller/tiket_sarpras';
 
 $route['input'] = 'Controller/input';
 $route['tambah_tiket_sarpras'] = 'Controller/tambah_tiket_sarpras';

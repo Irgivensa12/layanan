@@ -40,13 +40,12 @@ class Insert extends CI_Controller
 
     public function update()
     {
-        $id = $this->input->post('tik_Nomor');
+        $id = $this->input->post('tikNomor');
 
         $data = array(
-            'tik_Nomor'      => $this->input->post('tik_Nomor'),
+            'tikNomor'      => $this->input->post('tikNomor'),
             'tikTanggal'           => $this->input->post('tikTanggal'),
-            'tikUserID'           => $this->input->post('tikUserID'),
-            'userNama'           => $this->input->post('userNama'),
+            'tikUserClose'           => $this->input->post('tikUserClose'),
             'tikRingkasan'        => $this->input->post('tikRingkasan'),
             'tiketStatus'           => $this->input->post('tiketStatus')
         );
