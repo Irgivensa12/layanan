@@ -28,7 +28,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="container-fluid">
 
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Laporan</h1>
+                <h1 class="h3 mb-0 text-gray-800">Laporan Sarana dan Pra Sarana PT Kanisius</h1>
             </div>
 
             <div class="form-group row">
@@ -101,6 +101,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
         //     });
         //     getTiket_Sarpras(); // Memanggil function get
         // });
+
+        $(document).ready(function() {
+            $('#menuLaporan').trigger('click');
+        });
     </script>
 
 

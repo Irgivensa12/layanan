@@ -98,14 +98,21 @@ class Controller extends CI_Controller
         $this->load->view('tambah_tiket_sim');
     }
 
-    public function laporan()
+    public function laporan_sarpras()
     {
         $this->load->view('header');
-        $this->load->view('laporan');
+        $this->load->view('laporan_sarpras');
     }
+    
+    public function laporan_sim()
+    {
+        $this->load->view('header');
+        $this->load->view('laporan_sim');
+    }
+
     public function admin()
     {
-        $this->session->set_userdata('admin', $row['privAkses']);
+        
         $this->load->view('header');
         $this->load->view('admin');
     }

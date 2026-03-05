@@ -213,7 +213,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
     }
 </script>
 
-<!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1">
     <div class="modal-dialog" style="max-width:80%; width:80%; margin:30px auto;">
         <div class="modal-content" style="border-radius:15px;">
@@ -284,6 +283,74 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
         </div>
     </div>
+</div>
+
+<div class="modal-header bg-primary text-white" style="padding:25px;">
+    <h2 class="modal-title" style="font-size:28px;">Detail Tiket</h2>
+    <button type="button" class="close text-white" data-dismiss="modal" style="font-size:32px;">
+        &times;
+    </button>
+</div>
+
+<div class="modal-body" style="font-size:22px; padding:40px;">
+
+    <div class="container-fluid">
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <strong style="font-size:24px;">No Tiket</strong>
+                <div id="m_tikNomor"
+                    style="font-size:24px; padding:20px; background:#f8f9fa; border-radius:10px; margin-top:10px;">
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <strong style="font-size:24px;">Tanggal</strong>
+                <div id="m_tikTanggal"
+                    style="font-size:24px; padding:20px; background:#f8f9fa; border-radius:10px; margin-top:10px;">
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <strong style="font-size:24px;">User</strong>
+                <div id="m_userNama"
+                    style="font-size:24px; padding:20px; background:#f8f9fa; border-radius:10px; margin-top:10px;">
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <strong style="font-size:24px;">Status</strong>
+                <div id="m_tiketStatus"
+                    style="font-size:24px; padding:20px; background:#f8f9fa; border-radius:10px; margin-top:10px;">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <strong style="font-size:24px;">Ringkasan</strong>
+                <div id="m_tikRingkasan"
+                    style="font-size:24px; padding:25px; background:#f8f9fa; border-radius:10px; margin-top:10px; min-height:180px;">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal-footer justify-content-center" style="padding:25px;">
+    <button type="button" class="btn btn-danger"
+        style="font-size:22px; padding:12px 40px;"
+        data-dismiss="modal">
+        Tutup
+    </button>
+</div>
+
+</div>
+</div>
 </div>
 </body>
 
