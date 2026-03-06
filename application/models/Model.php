@@ -34,7 +34,7 @@ class model extends CI_Model
 
                 $this->session->set_flashdata('type', 'alert-success');
                 $this->session->set_flashdata('pesan', '<strong>Berhasil!</strong> Anda Berhasil Login');
-                redirect('menu');
+                redirect('dashboard');
 
 
                 // jika password salah

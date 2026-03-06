@@ -58,16 +58,16 @@ class Insert extends CI_Controller
 
     public function tambah_tiket_sarpras()
     {
-        echo "INSERT MASUK";
-        print_r($_POST);
-        exit;
+        //echo "INSERT MASUK"; waktu submit akan ke exit, jadi tidak lanjut ke proses insert
+        // print_r($_POST);
+        // exit;
         $data = [
             'tikNomor'      => $this->input->post('tikNomor'),
             'tikTanggal'           => $this->input->post('tikTanggal'),
             'tikUserID'           => $this->input->post('tikUserID'),
             'userNama'           => $this->input->post('userNama'),
             'tikRingkasan'        => $this->input->post('tikRingkasan'),
-            'tikDetail'           => $this->input->post('tikDetail'),
+            'tikDeskripsi'           => $this->input->post('tikDeskripsi'),
         ];
 
         $this->Model->insertData('tb_tiket', $data);
@@ -76,16 +76,16 @@ class Insert extends CI_Controller
 
     public function tambah_tiket_sim()
     {
-        echo "INSERT MASUK";
-        print_r($_POST);
-        exit;
+        //echo "INSERT MASUK";
+        //print_r($_POST);
+        //exit;
         $data = [
             'tikNomor'      => $this->input->post('tikNomor'),
             'tikTanggal'           => $this->input->post('tikTanggal'),
             'tikUserID'           => $this->input->post('tikUserID'),
             'userNama'           => $this->input->post('userNama'),
             'tikRingkasan'        => $this->input->post('tikRingkasan'),
-            'tikDetail'           => $this->input->post('tikDetail'),
+            'tikDeskripsi'           => $this->input->post('tikDeskripsi'),
         ];
 
         $this->Model->insertData('tb_tiket', $data);
