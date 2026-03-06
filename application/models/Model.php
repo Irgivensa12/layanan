@@ -43,6 +43,11 @@ class model extends CI_Model
                 $this->session->set_flashdata('pesan', '<strong>Gagal!</strong> ID atau Password salah');
                 redirect();
             }
+        } else { // jika user tidak ditemukan
+
+            $this->session->set_flashdata('type', 'alert-danger');
+            $this->session->set_flashdata('pesan', 'User tidak ditemukan');
+            redirect();
         }
     }
 

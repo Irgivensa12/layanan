@@ -1,11 +1,9 @@
 <?php
-// defined('BASEPATH') OR exit('No direct script access allowed');
-
-// if (!isset($_SESSION["id"])) { //jika tidak ada id
-//    $this->session->set_flashdata('type', 'alert-danger');
-//    $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
-//    redirect();
-//    exit;
+// if (!$this->session->userdata('userId')) { //jika tidak ada id
+//     $this->session->set_flashdata('type', 'alert-danger');
+//     $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
+//     redirect();
+//     exit;
 // }
 
 ?>
