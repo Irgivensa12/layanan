@@ -74,7 +74,7 @@ class Controller extends CI_Controller
         } elseif ($sarpras == 'Y') {
             $data['role'] = 'Operator';
         } else {
-            $data['role'] = 'Tiket';
+            $data['role'] = 'User';
         }
         $this->load->view('header', $data);
         $this->load->view('dashboard', $data);

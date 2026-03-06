@@ -66,9 +66,9 @@ class model extends CI_Model
         return $this->db->query($query);
     }
 
-    public function insertData($table, $data)
+    public function insertData($tb_tiket, $data)
     {
-        return $this->db->insert($table, $data);
+        return $this->db->insert($tb_tiket, $data);
     }
 
     public function delete_form_coba($no)
