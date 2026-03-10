@@ -21,7 +21,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             </button>
 
             <ul class="navbar-nav ml-auto">
-                <img src="<?= base_url('img/kanisius.png') ?>">
+                <img src="<?= base_url('img/kariban.png') ?>">
             </ul>
         </nav>
 
@@ -46,7 +46,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             <!-- Button Tambah
             <div class="form-group row">
                 <div class="col-sm-2">
-                    <a href="<?= base_url('tambah_tiket_sim') ?>" class="btn btn-primary">
+                    <a href="<?= base_url('tambah_tiket_sarpras') ?>" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Tambah
                     </a>
                 </div>

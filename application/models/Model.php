@@ -85,16 +85,46 @@ class model extends CI_Model
         $this->db->delete('buku');
     }
 
+    // public function tiket_sim()
+    // {
+    //     $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
+    //     return $this->db->query($query);
+    // }
+
     public function tiket_sim()
     {
-        $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
-        return $this->db->query($query);
+        $admin = $this->session->userdata('admin');
+        $user  = $this->session->userdata('userId');
+
+        if ($admin == 'Y') {
+            // admin lihat semua tiket
+            $query = $this->db->query("SELECT * FROM tb_tiket ORDER BY tikTanggal DESC");
+        } else {
+            // user hanya lihat tiket sendiri
+            $query = $this->db->query("SELECT * FROM tb_tiket 
+                                   WHERE tikUserID='$user'
+                                   ORDER BY tikTanggal DESC");
+        }
+
+        return $query;
     }
 
     public function tiket_sarpras()
     {
-        $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
-        return $this->db->query($query);
+        $admin = $this->session->userdata('admin');
+        $user  = $this->session->userdata('userId');
+
+        if ($admin == 'Y') {
+            // admin lihat semua tiket
+            $query = $this->db->query("SELECT * FROM tb_tiket ORDER BY tikTanggal DESC");
+        } else {
+            // user hanya lihat tiket sendiri
+            $query = $this->db->query("SELECT * FROM tb_tiket 
+                                   WHERE tikUserID='$user'
+                                   ORDER BY tikTanggal DESC");
+        }
+
+        return $query;
     }
 
     public function get_dashboard_data()

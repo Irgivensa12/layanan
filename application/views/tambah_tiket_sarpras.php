@@ -40,14 +40,13 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 <label class="col-2">ID</label>
                 <input type="number" class="form-control col-6" name="tikUserID" placeholder="Masukan ID Anda">
             </div>
-
             <div class="form-group row container-fluid">
                 <label class="col-2">Ringkasan</label>
                 <input type="text" class="form-control col-6" name="tikRingkasan" placeholder="Ringkasan Keluhan">
             </div>
             <div class="form-group row container-fluid">
                 <label class="col-2">Deskripsi Kerusakan</label>
-                <input type="text" class="form-control col-6" name="tikDeskripsi" placeholder="Deskripsi Kerusakan">
+                <input type="text" class="form-control col-6" name="tikDeskripsi" placeholder="Detail Kerusakan">
             </div>
 
             <div class="container-fluid">

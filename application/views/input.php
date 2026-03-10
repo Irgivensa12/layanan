@@ -7,7 +7,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
     redirect();
     exit;
 }
-
 ?>
 <!-- untuk daftar menu dst, cek header.php-->
 

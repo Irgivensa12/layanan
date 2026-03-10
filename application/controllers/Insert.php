@@ -89,6 +89,7 @@ class Insert extends CI_Controller
         ];
 
         $this->Model->insertData('tb_tiket', $data);
-        redirect('tiket_sim'); // setelah simpan, diarahkan ke halaman tiket_sarpras
+
+        redirect('tiket_sim');
     }
 }
