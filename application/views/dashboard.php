@@ -1,5 +1,11 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+if (!$this->session->userdata('userId')) { //jika tidak ada id
+    $this->session->set_flashdata('type', 'alert-danger');
+    $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
+    redirect();
+    exit;
+}
 ?>
 
 <div id="content-wrapper" class="d-flex flex-column">
@@ -101,7 +107,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 <script>
     $(document).ready(function() {
-        $('#menuMenu').trigger('click');
         loadDashboard();
     });
 

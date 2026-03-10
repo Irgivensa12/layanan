@@ -1,6 +1,12 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+if (!$this->session->userdata('userId')) { //jika tidak ada id
+    $this->session->set_flashdata('type', 'alert-danger');
+    $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
+    redirect();
+    exit;
+}
 //if (!isset($_SESSION["id_crm"])) { //jika tidak ada id
 //    $this->session->set_flashdata('type', 'alert-danger');
 //    $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
@@ -21,14 +27,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </button>
 
             <ul class="navbar-nav ml-auto">
-                <img src="<?= base_url('img/kanisius.png') ?>">
+                <img src="<?= base_url('img/kariban.png') ?>">
             </ul>
         </nav>
 
         <div class="container-fluid">
 
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Laporan Sarana dan Pra Sarana PT Kanisius</h1>
+                <h1 class="h3 mb-0 text-gray-800">Laporan Sarpras (Sarana dan Prasarana) PT Kanisius</h1>
             </div>
 
             <div class="form-group row">
@@ -42,72 +48,263 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     } ?>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <div class="mb-4">
-                    <div class="mb-4">
-                        <p>Fitur ini masih dalam pengembangan, silakan hubungi Penpen dan Chandra untuk informasi lebih lanjut :)</p>
-                    </div>
+
+            <!-- Button Tambah
+            <div class="form-group row">
+                <div class="col-sm-2">
+                    <a href="<?= base_url('tambah_tiket_sarpras') ?>" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Tambah
+                    </a>
+                </div>
+            </div> -->
+
+            <div class="row">
+                <div class="col">
+                    <table id="tabel" class="display nowrap" style="width:100%">
+                        <thead style="color: black;">
+                            <tr>
+                                <th style="width:10px">No</th>
+                                <th>Tanggal</th>
+                                <th>Penginput</th>
+                                <th>Ringkasan</th>
+                                <th>Status</th>
+                                <th>Detail</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody" name="tbody" style="color: black;">
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>© <?php echo date("Y"); ?> PT Kanisius.</span>
-                    </div>
-                </div>
-            </footer>
-
+            <br>
         </div>
-
     </div>
 
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>© <?php echo date("Y"); ?> PT Kariban.</span>
+            </div>
+        </div>
+    </footer>
 
-    <!-- Harus Menggunakan base_url karena asset dipanggil relatif terhadap URL aktif -->
-    <script src="<?= base_url('vendor/jquery/jquery.min.js') ?>"></script>
-    <script src="<?= base_url('vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
-    <script src="<?= base_url('vendor/jquery-easing/jquery.easing.min.js') ?>"></script>
-    <script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
+</div>
 
-    <!-- DataTables -->
-    <link rel="stylesheet" type="text/css" href="<?= base_url('vendor/datatables/jquery.dataTables.min.css') ?>">
-    <script type="text/javascript" charset="utf8" src="<?= base_url('vendor/datatables/jquery.dataTables.min.js') ?>"></script>
-    <script type="text/javascript" charset="utf8" src="<?= base_url('vendor/datatables/dataTables.select.min.js') ?>"></script>
+</div>
 
-    <!-- CKEditor -->
-    <script src="<?= base_url('vendor/ckeditor/ckeditor.js') ?>"></script>
-    <script src="<?= base_url('vendor/ckeditor/translations/id.js') ?>"></script>
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
 
-    <!-- xlsx -->
-    <script type="text/javascript" src="<?= base_url('vendor/xlsx/xlsx.fix.js') ?>"></script>
+<!-- Harus Menggunakan base_url karena asset dipanggil relatif terhadap URL aktif -->
+<script src="<?= base_url('vendor/jquery/jquery.min.js') ?>"></script>
+<script src="<?= base_url('vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
+<script src="<?= base_url('vendor/jquery-easing/jquery.easing.min.js') ?>"></script>
+<script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
 
-    <script>
-        // gunakan Javascript dan jQuery
-        // bisa cek untuk contoh membuat form: https://getbootstrap.com/docs/4.0/components/forms/
+<!-- DataTables -->
+<link rel="stylesheet" type="text/css" href="<?= base_url('vendor/datatables/jquery.dataTables.min.css') ?>">
+<script type="text/javascript" charset="utf8" src="<?= base_url('vendor/datatables/jquery.dataTables.min.js') ?>"></script>
+<script type="text/javascript" charset="utf8" src="<?= base_url('vendor/datatables/dataTables.select.min.js') ?>"></script>
 
-        // var table;
+<!-- DataTables untuk Export file excel -->
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
 
-        // $(document).ready(function() {
+<!-- CKEditor -->
+<script src="<?= base_url('vendor/ckeditor/ckeditor.js') ?>"></script>
+<script src="<?= base_url('vendor/ckeditor/translations/id.js') ?>"></script>
 
-        //     $('#menuMenu').trigger('click');
-        //     table = $('#tabel').DataTable({ //https://datatables.net/reference/option/
-        //         "scrollX": true,
-        //         "select": true,
-        //         "bSort": false
-        //     });
-        //     getTiket_Sarpras(); // Memanggil function get
-        // });
+<!-- xlsx -->
+<script type="text/javascript" src="<?= base_url('vendor/xlsx/xlsx.fix.js') ?>"></script>
 
-        $(document).ready(function() {
-            $('#menuLaporan').trigger('click');
+<script>
+    // gunakan Javascript dan jQuery
+    // bisa cek untuk contoh membuat form: https://getbootstrap.com/docs/4.0/components/forms/
+
+    var table;
+
+    $(document).ready(function() {
+
+        $('#menuLaporan').trigger('click');
+        table = $('#tabel').DataTable({ //https://datatables.net/reference/option/
+            "scrollX": true,
+            "scrollY": "400px", // Membuat tabel bisa discroll vertikal dengan tinggi 400px
+            "select": true,
+            "bSort": false,
+
+            dom: 'Bfrtip',
+            buttons: [{
+                extend: 'excelHtml5',
+                text: '<i class="fas fa-file-excel"></i> Download Excel',
+                title: 'Laporan_Tiket_Sarpras_PT_Kanisius',
+                className: 'btn btn-success btn-lg'
+            }]
         });
-    </script>
+        getTiket_SIM(); // Memanggil function get
+    });
 
+    // menggunakan AJAX untuk membuat tabel dari data tabel
+    // AJAX (View) -> Controller -> Model -> dapat hasil
+    function getTiket_SIM() {
 
-    </body>
+        $.ajax({
+            url: "<?php echo base_url('Select/tiket_sim'); ?>",
+            method: "POST",
+            dataType: "JSON",
+            success: function(data) {
+                console.log(data);
+                //var html = '';
+                table.clear();
 
-    </html>
+                for (var i = 0; i < data.length; i++) {
+
+                    table.row.add([
+                        data[i].tikNomor,
+                        data[i].tikTanggal,
+                        data[i].tikUserID,
+                        data[i].tikRingkasan,
+                        data[i].tikStatus,
+                        '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
+                        data[i].tikNomor + '" data-toggle="modal" data-target="#exampleModal">Detail</button>'
+                    ]);
+                }
+
+                table.draw();
+            }
+        });
+    }
+
+    $(document).on("click", ".detailBtn", function() { // Event listener untuk tombol detail
+
+        var tikNomor = $(this).data("id");
+
+        $.ajax({
+            url: "<?= base_url('Select/detail_tiket/') ?>" + tikNomor,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data) {
+
+                $("#m_tikNomor").text(data.tikNomor);
+                $("#m_tikTanggal").text(data.tikTanggal);
+                $("#m_userNama").text(data.userNama);
+                $("#m_tikRingkasan").text(data.tikRingkasan);
+                $("#m_tiketStatus").text(data.tiketStatus);
+
+            }
+        });
+
+    });
+
+    // kalau butuh input dari user
+    function getContoh2() {
+        var test = 'inputtan dari user';
+        // var test = $('#nama_input_id).val();
+
+        var url = "<?php echo base_url('Insert/contoh2?'); ?>"; //Controller Insert.php, function contoh2()
+        var urlBaru = url + "inputAjax=" + test;
+
+        var html = '';
+        var no = 1;
+
+        $.ajax({
+            url: urlBaru,
+            method: "POST",
+            dataType: "JSON",
+            async: false,
+            success: function(data) {
+                for (var i = 0; i < data.length; i++) {
+
+                    html += '<tr>';
+                    html += '<td>' + no + '</td>';
+                    html += '<td></td>';
+                    html += '<td></td>';
+                    html += '<td></td>';
+                    html += '</tr>';
+
+                    no++;
+                }
+                $("#tbody").html(html);
+            }
+        });
+    }
+</script>
+
+<div class="modal fade" id="exampleModal" tabindex="-1">
+    <div class="modal-dialog" style="max-width:80%; width:80%; margin:30px auto;">
+        <div class="modal-content" style="border-radius:15px;">
+
+            <div class="modal-header bg-primary text-white" style="padding:25px;">
+                <h2 class="modal-title" style="font-size:28px;">Detail Tiket</h2>
+                <button type="button" class="close text-white" data-dismiss="modal" style="font-size:32px;">
+                    &times;
+                </button>
+            </div>
+
+            <div class="modal-body" style="font-size:22px; padding:40px;">
+
+                <div class="container-fluid">
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <strong style="font-size:24px;">No Tiket</strong>
+                            <div id="m_tikNomor"
+                                style="font-size:24px; padding:20px; background:#f8f9fa; border-radius:10px; margin-top:10px;">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong style="font-size:24px;">Tanggal</strong>
+                            <div id="m_tikTanggal"
+                                style="font-size:24px; padding:20px; background:#f8f9fa; border-radius:10px; margin-top:10px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <strong style="font-size:24px;">User</strong>
+                            <div id="m_userNama"
+                                style="font-size:24px; padding:20px; background:#f8f9fa; border-radius:10px; margin-top:10px;">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong style="font-size:24px;">Status</strong>
+                            <div id="m_tiketStatus"
+                                style="font-size:24px; padding:20px; background:#f8f9fa; border-radius:10px; margin-top:10px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <strong style="font-size:24px;">Ringkasan</strong>
+                            <div id="m_tikRingkasan"
+                                style="font-size:24px; padding:25px; background:#f8f9fa; border-radius:10px; margin-top:10px; min-height:180px;">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer justify-content-center" style="padding:25px;">
+                <button type="button" class="btn btn-danger"
+                    style="font-size:22px; padding:12px 40px;"
+                    data-dismiss="modal">
+                    Tutup
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

@@ -1,6 +1,12 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+if (!$this->session->userdata('userId')) { //jika tidak ada id
+    $this->session->set_flashdata('type', 'alert-danger');
+    $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
+    redirect();
+    exit;
+}
 // if (!isset($_SESSION["id"])) { //jika tidak ada id
 //     $this->session->set_flashdata('type', 'alert-danger');
 //     $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
@@ -37,20 +43,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <input type="date" class="form-control col-2" name="tikTanggal">
             </div>
             <div class="form-group row container-fluid ">
-                <label class="col-2">Nama</label>
-                <input type="text" class="form-control col-6" name="tikUserID" placeholder="Masukan Nama Anda">
+                <label class="col-2">ID</label>
+                <input type="number" class="form-control col-6" name="tikUserID" placeholder="Masukan ID Anda">
             </div>
-            <div class="form-group row container-fluid">
-                <label class="col-2">Divisi</label>
-                <input type="text" class="form-control col-6" name="userNama" placeholder="Masukan Divisi Anda">
-            </div>
+           
             <div class="form-group row container-fluid">
                 <label class="col-2">Ringkasan</label>
                 <input type="text" class="form-control col-6" name="tikRingkasan" placeholder="Ringkasan Keluhan">
             </div>
             <div class="form-group row container-fluid">
                 <label class="col-2">Detail</label>
-                <input type="text" class="form-control col-6" name="tikDetail" placeholder="Detail Kerusakan">
+                <input type="text" class="form-control col-6" name="tikDeskripsi" placeholder="Detail Kerusakan">
             </div>
 
             <div class="container-fluid">

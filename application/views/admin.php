@@ -29,6 +29,27 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
                 <h1 class="h3 mb-0 text-gray-800">Halaman Admin</h1>
+                <div class="row">
+                    <div class="col">
+
+                        <table id="tabel" class="display nowrap" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>User</th>
+                                    <th>Ringkasan</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+
+                            <tbody></tbody>
+
+                        </table>
+
+                    </div>
+                </div>
             </div>
 
             <div class="form-group row">
@@ -83,7 +104,105 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <script src="<?= base_url('vendor/ckeditor/translations/id.js') ?>"></script>
 
     <!-- xlsx -->
-    <script type="text/javascript" src="<?= base_url('vendor/xlsx/xlsx.fix.js') ?>"></script>
+    <script type="text/javascript" src="<?= base_url('vendor/xlsx/xlsx.fix.js') ?>">
+        var table;
+
+        $(document).ready(function() {
+
+            table = $('#tb_tiket').DataTable({
+                "scrollX": true,
+                "bSort": false
+            });
+
+            getTiket();
+        });
+
+
+        function getTiket() {
+
+            $.ajax({
+                url: "<?= base_url('Select/tiket_sim') ?>",
+                method: "POST",
+                dataType: "JSON",
+
+                success: function(data) {
+
+                    table.clear();
+
+                    for (var i = 0; i < data.length; i++) {
+
+                        var statusBtn;
+
+                        if (data[i].tikStatus == 'Y') {
+                            statusBtn = '<button class="btn btn-warning btn-sm openBtn" data-id="' + data[i].tikNomor + '">OPEN</button>';
+                        } else {
+                            statusBtn = '<button class="btn btn-success btn-sm closeBtn" data-id="' + data[i].tikNomor + '">CLOSE</button>';
+                        }
+
+                        table.row.add([
+                            data[i].tikNomor,
+                            data[i].tikTanggal,
+                            data[i].tikUserID,
+                            data[i].tikRingkasan,
+                            data[i].tikStatus,
+                            statusBtn
+                        ]);
+
+                    }
+
+                    table.draw();
+
+                }
+
+            });
+
+        }
+
+        $(document).on("click", ".closeBtn", function() {
+
+            var tikNomor = $(this).data("id");
+
+            $.ajax({
+
+                url: "<?= base_url('Controller/update_status') ?>",
+                method: "POST",
+
+                data: {
+                    tikNomor: tikNomor,
+                    status: 'Y'
+                },
+
+                success: function() {
+                    getTiket();
+                }
+
+            });
+
+        });
+
+
+        $(document).on("click", ".openBtn", function() {
+
+            var tikNomor = $(this).data("id");
+
+            $.ajax({
+
+                url: "<?= base_url('Controller/update_status') ?>",
+                method: "POST",
+
+                data: {
+                    tikNomor: tikNomor,
+                    status: 'N'
+                },
+
+                success: function() {
+                    getTiket();
+                }
+
+            });
+
+        });
+    </script>
 
     <script>
         // gunakan Javascript dan jQuery

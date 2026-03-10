@@ -1,6 +1,12 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+if (!$this->session->userdata('userId')) { //jika tidak ada id
+    $this->session->set_flashdata('type', 'alert-danger');
+    $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
+    redirect();
+    exit;
+}
 //if (!isset($_SESSION["id_crm"])) { //jika tidak ada id
 //    $this->session->set_flashdata('type', 'alert-danger');
 //    $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
@@ -28,7 +34,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="container-fluid">
 
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Laporan SIM (Sistem Informasi Manajemen) PT Kariban</h1>
+                <h1 class="h3 mb-0 text-gray-800">Laporan SIM (Sistem Informasi Manajemen) PT Kanisius</h1>
             </div>
 
             <div class="form-group row">
@@ -123,7 +129,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
     $(document).ready(function() {
 
-        $('#menuMenu').trigger('click');
+      $('#menuLaporan').trigger('click');
         table = $('#tabel').DataTable({ //https://datatables.net/reference/option/
             "scrollX": true,
             "scrollY": "400px", // Membuat tabel bisa discroll vertikal dengan tinggi 400px
@@ -159,7 +165,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     table.row.add([
                         data[i].tikNomor,
                         data[i].tikTanggal,
-                        data[i].tikUserClose,
+                        data[i].tikUserID,
                         data[i].tikRingkasan,
                         data[i].tikStatus,
                         '<button class="btn btn-primary btn-sm detailBtn" data-id="' +

@@ -74,7 +74,7 @@ class Controller extends CI_Controller
         } elseif ($sarpras == 'Y') {
             $data['role'] = 'Operator';
         } else {
-            $data['role'] = 'Tiket';
+            $data['role'] = 'User';
         }
         $this->load->view('header', $data);
         $this->load->view('dashboard', $data);
@@ -103,7 +103,7 @@ class Controller extends CI_Controller
         $this->load->view('header');
         $this->load->view('laporan_sarpras');
     }
-    
+
     public function laporan_sim()
     {
         $this->load->view('header');
@@ -112,7 +112,7 @@ class Controller extends CI_Controller
 
     public function admin()
     {
-        
+
         $this->load->view('header');
         $this->load->view('admin');
     }
@@ -137,5 +137,17 @@ class Controller extends CI_Controller
         }
 
         echo json_encode($data);
+    }
+
+    public function update_status()
+    {
+        $tikNomor = $this->input->post('tikNomor');
+        $status   = $this->input->post('status');
+
+        $this->model->updateStatus($tikNomor, $status);
+
+        echo json_encode([
+            "status" => "success"
+        ]);
     }
 }
