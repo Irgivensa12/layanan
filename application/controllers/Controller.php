@@ -103,7 +103,7 @@ class Controller extends CI_Controller
         $this->load->view('header');
         $this->load->view('laporan_sarpras');
     }
-    
+
     public function laporan_sim()
     {
         $this->load->view('header');
@@ -112,7 +112,7 @@ class Controller extends CI_Controller
 
     public function admin()
     {
-        
+
         $this->load->view('header');
         $this->load->view('admin');
     }
@@ -137,5 +137,16 @@ class Controller extends CI_Controller
         }
 
         echo json_encode($data);
+    }
+    public function close_tiket($tikNomor)
+    {
+
+        $data = [
+            'tikStatus' => 'N', // Set status tiket menjadi 'N' (CLOSE)
+            'tikUserClose' => $this->session->userdata('userId'), // Ambil userId dari session untuk tikUserClose
+            'tikDateClose' => date('Y-m-d H:i:s') // format tanggal dan waktu saat ini
+        ];
+
+        $this->Model->update_tiket($tikNomor, $data);
     }
 }

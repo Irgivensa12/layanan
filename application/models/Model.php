@@ -8,7 +8,10 @@ class model extends CI_Model
         $id = $this->input->post('id');
         $password = $this->input->post('password');
 
-        $query = "SELECT a.*, privMenuId, privAkses FROM vUser a LEFT JOIN tb_user_priv ON privUserId=userId WHERE userId='$id'";
+        $query = "SELECT a.*, p.privMenuId, p.privAkses
+        FROM vUser a
+        LEFT JOIN tb_user_priv p ON p.privUserId = a.userId
+        WHERE a.userId = '$id'";
 
         $user = $this->db->query($query)->result_array();
 
@@ -22,16 +25,21 @@ class model extends CI_Model
                 $this->session->set_userdata('userNama', $firstRow['userNama']);
                 foreach ($user as $row) {
 
-                    // Simpan privilege
+                    // MENU ADMIN
                     if ($row['privMenuId'] == 24 && $row['privAkses'] == 'Y') {
-                        $this->session->set_userdata('role', 'admin');
-                    } elseif ($row['privMenuId'] == 1 && $row['privAkses'] == 'Y') {
-                        $this->session->set_userdata('role', 'operator');
-                    } elseif ($row['privMenuId'] == 25 && $row['privAkses'] == 'Y') {
-                        $this->session->set_userdata('role', 'sarpras');
+                        $this->session->set_userdata('admin', 'Y');
+                    }
+
+                    // MENU TIKET SIM
+                    if ($row['privMenuId'] == 1 && $row['privAkses'] == 'Y') {
+                        $this->session->set_userdata('sim', 'Y');
+                    }
+
+                    // MENU SARPRAS
+                    if ($row['privMenuId'] == 25 && $row['privAkses'] == 'Y') {
+                        $this->session->set_userdata('sarpras', 'Y');
                     }
                 }
-
                 $this->session->set_flashdata('type', 'alert-success');
                 $this->session->set_flashdata('pesan', '<strong>Berhasil!</strong> Anda Berhasil Login');
                 redirect('dashboard');
@@ -129,5 +137,20 @@ class model extends CI_Model
             $this->db->where('tikUserID', $userID);
             return $this->db->get();
         }
+    }
+    public function admin_sim()
+    {
+        $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
+        return $this->db->query($query);
+    }
+    public function admin_sarpras()
+    {
+        $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
+        return $this->db->query($query);
+    }
+    public function update_tiket($tikNomor, $data)
+    {
+        $this->db->where('tikNomor', $tikNomor);
+        $this->db->update('tb_tiket', $data);
     }
 }

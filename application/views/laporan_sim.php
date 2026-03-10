@@ -122,7 +122,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
     var table;
 
     $(document).ready(function() {
-        $('#menuLaporan').trigger('click'); // 
+        $('#menuLaporan').trigger('click'); 
         table = $('#tabel').DataTable({ //https://datatables.net/reference/option/
             "scrollX": true,
             "scrollY": "400px", // Membuat tabel bisa discroll vertikal dengan tinggi 400px
