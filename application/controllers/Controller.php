@@ -33,20 +33,20 @@ class Controller extends CI_Controller
     }
 
     // http://localhost/template_penerbitan/menu
-    // public function menu()
-    // {
-    //     $data['nama'] = $this->session->userdata('userNama');
+    public function menu()
+    {
+        $data['nama'] = $this->session->userdata('userNama');
 
-    //     if ($this->session->userdata('admin') == 'Y') {
-    //         $data['role'] = 'Admin';
-    //     } elseif ($this->session->userdata('sarpras') == 'Y') {
-    //         $data['role'] = 'Operator';
-    //     } else {
-    //         $data['role'] = 'Tiket';
-    //     }
-    //     $this->load->view('header', $data);
-    //     $this->load->view('dashboard', $data); // redirect ke dashboard setelah login
-    // }
+        if ($this->session->userdata('admin') == 'Y') {
+            $data['role'] = 'Admin';
+        } elseif ($this->session->userdata('sarpras') == 'Y') {
+            $data['role'] = 'Operator';
+        } else {
+            $data['role'] = 'Tiket SIM';
+        }
+        $this->load->view('header', $data);
+        $this->load->view('dashboard', $data); // redirect ke dashboard setelah login
+    }
 
     public function input()
     {
