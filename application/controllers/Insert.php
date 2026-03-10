@@ -66,6 +66,7 @@ class Insert extends CI_Controller
             'tikTanggal'           => $this->input->post('tikTanggal'),
             'tikUserID'           => $this->input->post('tikUserID'),
             'tikRingkasan'        => $this->input->post('tikRingkasan'),
+            'tikStatus'           => 'N',
             'tikDeskripsi'           => $this->input->post('tikDeskripsi'),
         ];
 
@@ -83,6 +84,7 @@ class Insert extends CI_Controller
             'tikTanggal'           => $this->input->post('tikTanggal'),
             'tikUserID'           => $this->input->post('tikUserID'),
             'tikRingkasan'        => $this->input->post('tikRingkasan'),
+            'tikStatus'           => 'N',
             'tikDeskripsi'           => $this->input->post('tikDeskripsi'),
         ];
 

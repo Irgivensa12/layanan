@@ -137,7 +137,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         data[i].tikTanggal,
                         data[i].tikUserID,
                         data[i].tikRingkasan,
-                        data[i].tikStatus == 'Y' ?
+                        data[i].tikStatus == 'N' ? // jika tikStatus = N, maka tampilkan tombol OPEN, jika tidak tampilkan tombol CLOSED
                         '<button class="btn btn-success btn-sm statusBtn" data-id="' + data[i].tikNomor + '">OPEN</button>' :
                         '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>',
 

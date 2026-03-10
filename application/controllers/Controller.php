@@ -142,7 +142,7 @@ class Controller extends CI_Controller
     {
 
         $data = [
-            'tikStatus' => 'N', // Set status tiket menjadi 'N' (CLOSE)
+            'tikStatus' => 'Y', // Set status tiket menjadi 'Y' (CLOSE)
             'tikUserClose' => $this->session->userdata('userId'), // Ambil userId dari session untuk tikUserClose
             'tikDateClose' => date('Y-m-d H:i:s') // format tanggal dan waktu saat ini
         ];
