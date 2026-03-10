@@ -78,7 +78,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
     <footer class="sticky-footer bg-white">
         <div class="container my-auto">
             <div class="copyright text-center my-auto">
-                <span>© <?php echo date("Y"); ?> PT Kanisius.</span>
+                <span>© <?php echo date("Y"); ?> PT Kariban.</span>
             </div>
         </div>
     </footer>
@@ -122,6 +122,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
     var table;
 
     $(document).ready(function() {
+
         $('#menuLaporan').trigger('click');
         table = $('#tabel').DataTable({ //https://datatables.net/reference/option/
             "scrollX": true,
@@ -137,15 +138,15 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 className: 'btn btn-success btn-lg'
             }]
         });
-        getTiket_Sarpras(); // Memanggil function get
+        getTiket_SIM(); // Memanggil function get
     });
 
     // menggunakan AJAX untuk membuat tabel dari data tabel
     // AJAX (View) -> Controller -> Model -> dapat hasil
-    function getTiket_Sarpras() {
+    function getTiket_SIM() {
 
         $.ajax({
-            url: "<?php echo base_url('Select/tiket_sarpras'); ?>",
+            url: "<?php echo base_url('Select/tiket_sim'); ?>",
             method: "POST",
             dataType: "JSON",
             success: function(data) {

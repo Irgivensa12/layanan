@@ -40,9 +40,9 @@ class Controller extends CI_Controller
         if ($this->session->userdata('admin') == 'Y') {
             $data['role'] = 'Admin';
         } elseif ($this->session->userdata('sarpras') == 'Y') {
-            $data['role'] = 'Operator';
+            $data['role'] = 'Petugas Sarpras';
         } else {
-            $data['role'] = 'Tiket SIM';
+            $data['role'] = 'User';
         }
         $this->load->view('header', $data);
         $this->load->view('dashboard', $data); // redirect ke dashboard setelah login
@@ -148,11 +148,12 @@ class Controller extends CI_Controller
 
         echo json_encode($data);
     }
+
     public function close_tiket($tikNomor)
     {
 
         $data = [
-            'tikStatus' => 'Y', // Set status tiket menjadi 'Y' (CLOSE)
+            'tikStatus' => 'Y', // Set status tiket menjadi 'N' (CLOSE)
             'tikUserClose' => $this->session->userdata('userId'), // Ambil userId dari session untuk tikUserClose
             'tikDateClose' => date('Y-m-d H:i:s') // format tanggal dan waktu saat ini
         ];
