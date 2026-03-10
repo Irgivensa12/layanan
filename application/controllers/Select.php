@@ -60,9 +60,9 @@ class Select extends CI_Controller
             "tiket_sim_total" => $tiket_sim_total,
             "tiket_sim_open" => $tiket_sim_open,
             "tiket_sim_close" => $tiket_sim_close,
+            "tiket_sarpras_total" => $tiket_sarpras_total,
             "tiket_sarpras_open" => $tiket_sarpras_open,
-            "tiket_sarpras_close" => $tiket_sarpras_close,
-            "tiket_sarpras_total" => $tiket_sarpras_total
+            "tiket_sarpras_close" => $tiket_sarpras_close
         ]);
     }
 

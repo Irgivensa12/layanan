@@ -150,7 +150,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                                         Sarpras OPEN
                                     </div>
                                     <div class="h4 mb-0 font-weight-bold text-gray-800"
-                                        id="sarpras_open">
+                                        id="tiket_sarpras_open">
                                         0
                                     </div>
                                 </div>
@@ -174,7 +174,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                                         Sarpras CLOSE
                                     </div>
                                     <div class="h4 mb-0 font-weight-bold text-gray-800"
-                                        id="sarpras_close">
+                                        id="tiket_sarpras_close">
                                         0
                                     </div>
                                 </div>
@@ -228,8 +228,8 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 $('#tiket_sim_close').text(data.tiket_sim_close);
 
                 $('#tiket_sarpras_total').text(data.tiket_sarpras_total);
-                $('#sarpras_open').text(data.sarpras_open);
-                $('#sarpras_close').text(data.sarpras_close);
+                $('#tiket_sarpras_open').text(data.tiket_sarpras_open);
+                $('#tiket_sarpras_close').text(data.tiket_sarpras_close);
 
             }
         });
