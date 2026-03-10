@@ -35,17 +35,20 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
             <div class="row">
 
-                <!-- Tiket SIM -->
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-danger shadow h-100 py-2"
-                        onclick="window.location='<?= base_url('tiket_sim') ?>'" style="cursor: pointer;">
+                <!-- TOTAL SIM -->
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2"
+                        onclick="window.location='<?= base_url('tiket_sim') ?>'"
+                        style="cursor:pointer; border-left:4px solid #007bff;">
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col mr-2">
-                                    <div class="h6 font-weight-bold text-primary text-uppercase mb-1">
+                                    <div class="h6 font-weight-bold text-uppercase mb-1"
+                                        style="color:#007bff;">
                                         Tiket SIM
                                     </div>
-                                    <div class="h4 mb-0 font-weight-bold text-gray-800" id="tiket_sim">
+                                    <div class="h4 mb-0 font-weight-bold text-gray-800"
+                                        id="tiket_sim_total">
                                         0
                                     </div>
                                 </div>
@@ -57,23 +60,126 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     </div>
                 </div>
 
-                <!-- Tiket Sarpras -->
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-info shadow h-100 py-2"
-                        onclick="window.location='<?= base_url('tiket_sarpras') ?>'"
-                        style="cursor: pointer;">
+                <!-- SIM OPEN -->
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2"
+                        style="border-left:4px solid #28a745;">
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col mr-2">
-                                    <div class="h6 font-weight-bold text-primary text-uppercase mb-1">
+                                    <div class="h6 font-weight-bold text-uppercase mb-1"
+                                        style="color:#28a745;">
+                                        Tiket SIM OPEN
+                                    </div>
+                                    <div class="h4 mb-0 font-weight-bold text-gray-800"
+                                        id="tiket_sim_open">
+                                        0
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-folder-open fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SIM CLOSE -->
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2"
+                        style="border-left:4px solid #8B4513;">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col mr-2">
+                                    <div class="h6 font-weight-bold text-uppercase mb-1"
+                                        style="color:#8B4513;">
+                                        Tiket SIM CLOSE
+                                    </div>
+                                    <div class="h4 mb-0 font-weight-bold text-gray-800"
+                                        id="tiket_sim_close">
+                                        0
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <!-- TOTAL SARPRAS -->
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2"
+                        onclick="window.location='<?= base_url('tiket_sarpras') ?>'"
+                        style="cursor:pointer; border-left:4px solid #007bff;">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col mr-2">
+                                    <div class="h6 font-weight-bold text-uppercase mb-1"
+                                        style="color:#007bff;">
                                         Tiket Sarpras
                                     </div>
-                                    <div class="h4 mb-0 font-weight-bold text-gray-800" id="tiket_sarpras">
+                                    <div class="h4 mb-0 font-weight-bold text-gray-800"
+                                        id="tiket_sarpras_total">
                                         0
                                     </div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-tools fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SARPRAS OPEN -->
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2"
+                        style="border-left:4px solid #28a745;">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col mr-2">
+                                    <div class="h6 font-weight-bold text-uppercase mb-1"
+                                        style="color:#28a745;">
+                                        Sarpras OPEN
+                                    </div>
+                                    <div class="h4 mb-0 font-weight-bold text-gray-800"
+                                        id="sarpras_open">
+                                        0
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-folder-open fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SARPRAS CLOSE -->
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="card shadow h-100 py-2"
+                        style="border-left:4px solid #8B4513;">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col mr-2">
+                                    <div class="h6 font-weight-bold text-uppercase mb-1"
+                                        style="color:#8B4513;">
+                                        Sarpras CLOSE
+                                    </div>
+                                    <div class="h4 mb-0 font-weight-bold text-gray-800"
+                                        id="sarpras_close">
+                                        0
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-check-circle fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
@@ -116,8 +222,15 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             method: "POST",
             dataType: "JSON",
             success: function(data) {
-                $('#tiket_sim').text(data.tiket_sim);
-                $('#tiket_sarpras').text(data.tiket_sarpras);
+
+                $('#tiket_sim_total').text(data.tiket_sim_total);
+                $('#tiket_sim_open').text(data.tiket_sim_open);
+                $('#tiket_sim_close').text(data.tiket_sim_close);
+
+                $('#tiket_sarpras_total').text(data.tiket_sarpras_total);
+                $('#sarpras_open').text(data.sarpras_open);
+                $('#sarpras_close').text(data.sarpras_close);
+
             }
         });
     }

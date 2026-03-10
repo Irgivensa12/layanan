@@ -61,14 +61,23 @@ class Controller extends CI_Controller
 
     public function dashboard()
     {
-        // Mengambil nama dari session
-        $data['nama'] = $this->session->userdata('userNama');
+        // cek login
+        if (!$this->session->userdata('userId')) {
+            redirect();
+        }
 
-        // Mengambil privilege dari session
+        // cek privilege
         $sarpras = $this->session->userdata('sarpras');
         $admin   = $this->session->userdata('admin');
 
-        // Menentukan role berdasarkan privilege
+        // jika user biasa, tidak boleh buka dashboard
+        if ($admin != 'Y' && $sarpras != 'Y') {
+            redirect('Controller/tiket_sim');
+        }
+
+        // Mengambil nama dari session
+        $data['nama'] = $this->session->userdata('userNama');
+
         if ($admin == 'Y') {
             $data['role'] = 'Admin';
         } elseif ($sarpras == 'Y') {
@@ -76,6 +85,7 @@ class Controller extends CI_Controller
         } else {
             $data['role'] = 'User';
         }
+
         $this->load->view('header', $data);
         $this->load->view('dashboard', $data);
     }
@@ -139,15 +149,15 @@ class Controller extends CI_Controller
         echo json_encode($data);
     }
 
-    public function update_status()
+    public function close_tiket($tikNomor)
     {
-        $tikNomor = $this->input->post('tikNomor');
-        $status   = $this->input->post('status');
 
-        $this->model->updateStatus($tikNomor, $status);
+        $data = [
+            'tikStatus' => 'Y', // Set status tiket menjadi 'N' (CLOSE)
+            'tikUserClose' => $this->session->userdata('userId'), // Ambil userId dari session untuk tikUserClose
+            'tikDateClose' => date('Y-m-d H:i:s') // format tanggal dan waktu saat ini
+        ];
 
-        echo json_encode([
-            "status" => "success"
-        ]);
+        $this->Model->update_tiket($tikNomor, $data);
     }
 }

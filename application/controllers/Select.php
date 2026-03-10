@@ -26,21 +26,68 @@ class Select extends CI_Controller
         echo json_encode($data);
     }
 
-    public function tiket_sim() // Function untuk menampilkan data dari tabel tb_tiket ke halaman tiket_sim.php
+     public function dashboard()
     {
-        $data = $this->Model->tiket_sim()->result_array(); // buka class tiket_sim di Model
-        echo json_encode($data);
+        // hitung tiket SIM
+        $this->db->from('tb_tiket');
+        $tiket_sim_total = $this->db->count_all_results();
+
+        // hitung tiket Sarpras (kalau tabelnya sama bisa diganti)
+        $this->db->from('tb_tiket');
+        $tiket_sarpras_total = $this->db->count_all_results();
+
+        // tiket open
+        $this->db->from('tb_tiket');
+        $this->db->where('tikStatus', 'N');
+        $tiket_sim_open = $this->db->count_all_results();
+
+        // tiket close
+        $this->db->from('tb_tiket');
+        $this->db->where('tikStatus', 'Y');
+        $tiket_sim_close = $this->db->count_all_results();
+
+        // sarpras open
+        $this->db->from('tb_tiket');
+        $this->db->where('tikStatus', 'N');
+        $tiket_sarpras_open = $this->db->count_all_results();
+
+        // sarpras close
+        $this->db->from('tb_tiket');
+        $this->db->where('tikStatus', 'Y');
+        $tiket_sarpras_close = $this->db->count_all_results();
+
+        echo json_encode([
+            "tiket_sim_total" => $tiket_sim_total,
+            "tiket_sim_open" => $tiket_sim_open,
+            "tiket_sim_close" => $tiket_sim_close,
+            "tiket_sarpras_open" => $tiket_sarpras_open,
+            "tiket_sarpras_close" => $tiket_sarpras_close,
+            "tiket_sarpras_total" => $tiket_sarpras_total
+        ]);
+
+        
     }
 
-    public function dashboard() // Function untuk menampilkan data dari tabel tb_tiket ke halaman dashboard.php
+   public function tiket_sim() // Function untuk menampilkan data dari tabel tb_tiket ke halaman tiket_sim.php
     {
-        $data = $this->Model->dashboard()->result_array(); // buka class dashboard di Model
+        $data = $this->Model->tiket_sim()->result_array(); // buka class tiket_sim di Model
         echo json_encode($data);
     }
 
     public function tiket_sarpras() // Function untuk menampilkan data dari tabel tb_tiket ke halaman tiket_sarpras.php
     {
         $data = $this->Model->tiket_sarpras()->result_array(); // buka class tiket_sarpras di Model
+        echo json_encode($data);
+    }
+
+      public function admin_sim() // Function untuk menampilkan data dari tabel tb_tiket ke halaman tiket_sarpras.php
+    {
+        $data = $this->Model->admin_sim()->result_array(); // buka class admin_sim di Model
+        echo json_encode($data);
+    }
+    public function admin_sarpras() // Function untuk menampilkan data dari tabel tb_tiket ke halaman tiket_sarpras.php
+    {
+        $data = $this->Model->admin_sarpras()->result_array(); // buka class admin_sarpras di Model
         echo json_encode($data);
     }
 
@@ -66,4 +113,8 @@ class Select extends CI_Controller
 
         echo json_encode($data);
     }
+
+  
+
+  
 }
