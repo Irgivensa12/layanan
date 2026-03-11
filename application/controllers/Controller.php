@@ -105,6 +105,7 @@ class Controller extends CI_Controller
     public function tambah_tiket_sim()
     {
         $data['no_tiket'] = $this->Model->generate_no_tiket();
+        $data['userId'] = $this->session->userdata('userId');
         $this->load->view('header');
         $this->load->view('tambah_tiket_sim', $data);
     }
