@@ -165,7 +165,7 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse"
             data-target="#collapseTiket"
             aria-expanded="true" aria-controls="collapseTiket"
-            id="menuTiket">
+            >
 
             <i class="fas fa-fw fa-ticket-alt"></i>
             <span>Menu Tiket</span>
