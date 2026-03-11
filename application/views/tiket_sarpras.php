@@ -59,7 +59,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                             <tr>
                                 <th style="width:10px">No</th>
                                 <th>Tanggal</th>
-                                <th>Penginput</th>
                                 <th>Ringkasan</th>
                                 <th>Status</th>
                                 <th>Detail</th>
@@ -145,7 +144,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     table.row.add([
                         data[i].tikNomor,
                         data[i].tikTanggal,
-                        data[i].tikUserID,
                         data[i].tikRingkasan,
                         data[i].tikStatus,
                         '<button class="btn btn-primary btn-sm detailBtn" data-id="' +

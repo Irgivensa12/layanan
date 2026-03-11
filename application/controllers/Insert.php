@@ -76,8 +76,11 @@ class Insert extends CI_Controller
 
     public function tambah_tiket_sim()
     {
+        // generate ulang nomor tiket
+        $no_tiket = $this->Model->generate_no_tiket();
+
         $data = [
-            'tikNomor'      => $this->input->post('tikNomor'),
+            'tikNomor'      => $no_tiket,
             'tikTanggal'    => $this->input->post('tikTanggal'),
             'tikUserID'     => $this->input->post('tikUserID'),
             'tikRingkasan'  => $this->input->post('tikRingkasan'),

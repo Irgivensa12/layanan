@@ -29,7 +29,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
             <div class="form-group row container-fluid ">
                 <label class="col-2">Nomor Tiket</label>
-                <input type="text" class="form-control col-6" name="tikNomor" placeholder="Masukan Nomor Tiket">
+                <input type="text" class="form-control col-6" name="tikNomor" value="<?= $no_tiket ?>" readonly placeholder="Masukan Nomor Tiket">
             </div>
 
             <div class="form-group row container-fluid">

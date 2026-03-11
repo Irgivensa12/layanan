@@ -79,6 +79,16 @@ class model extends CI_Model
         return $this->db->insert($tb_tiket, $data);
     }
 
+    public function generate_no_tiket() // Untuk memuat nomor tiket baru dengan format HD-001, HD-002, dst (auto increment)
+    {
+        $query = $this->db->query("
+        SELECT CONCAT('HD-', COUNT(*) + 1) AS no_tiket
+        FROM tb_tiket
+    ");
+
+        return $query->row()->no_tiket;
+    }
+
     public function delete_form_coba($no)
     {
         $this->db->where('no_buku', $no);
