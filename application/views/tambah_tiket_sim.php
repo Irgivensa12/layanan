@@ -1,15 +1,13 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-if (!$this->session->userdata('userId')) { //jika tidak ada id
+if (!$this->session->userdata('userId')) {
     $this->session->set_flashdata('type', 'alert-danger');
     $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
     redirect();
     exit;
 }
-
 ?>
-<!-- untuk daftar menu dst, cek header.php-->
 
 <div id="content-wrapper" class="d-flex flex-column">
 
@@ -23,43 +21,118 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             <ul class="navbar-nav ml-auto">
                 <img src="<?= base_url('img/kanisius.png') ?>">
             </ul>
-        </nav> <!-- navbar-->
+        </nav>
 
-        <form action="<?= base_url('Insert/tambah_tiket_sim') ?>" method="post" enctype="multipart/form-data" name="form" id="form">
+        <div class="container" style="max-width:900px;">
 
-            <div class="form-group row container-fluid ">
-                <label class="col-2">Nomor Tiket</label>
-                <input type="text" class="form-control col-6" name="tikNomor" value="<?= $no_tiket ?>" readonly placeholder="Masukan Nomor Tiket">
-            </div>
+            <h3 class="text-center font-weight-bold mb-4">
+                DATA LAYANAN SIM & SARPRAS
+            </h3>
 
-            <div class="form-group row container-fluid">
-                <label class="col-2">Tanggal</label>
-                <input type="date" class="form-control col-2" name="tikTanggal">
-            </div>
-            <div class="form-group row container-fluid ">
-                <label class="col-2">ID</label>
-                <input type="text" class="form-control col-6" name="tikUserID" value="<?= $userId?>" readonly placeholder="Masukan ID Anda">
-            </div>
-            
-            <div class="form-group row container-fluid">
-                <label class="col-2">Ringkasan</label>
-                <input type="text" class="form-control col-6" name="tikRingkasan" placeholder="Ringkasan Keluhan">
-            </div>
-            <div class="form-group row container-fluid">
-                <label class="col-2">Deskripsi Kerusakan</label>
-                <input type="text" class="form-control col-6" name="tikDeskripsi" placeholder="Deskripsi Kerusakan">
-            </div>
+            <form action="<?= base_url('Insert/tambah_tiket_sim') ?>" method="post">
 
-            <div class="container-fluid">
-                <button type="submit" class="btn btn-primary">Simpan</button>
-            </div>
+                <div class="card shadow p-4">
 
-        </form>
+                    <!-- Nomor Tiket -->
+                    <div class="form-group row mb-4 align-items-center">
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                            Nomor Tiket
+                        </label>
 
+                        <div class="col-md-9">
+                            <input type="text"
+                                class="form-control"
+                                name="tikNomor"
+                                placeholder="Masukan Nomor Tiket"
+                                style="height:50px;font-size:16px;">
+                        </div>
+                    </div>
 
+                    <!-- Tanggal -->
+                    <div class="form-group row mb-4 align-items-center">
+
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                            Tanggal
+                        </label>
+
+                        <div class="col-md-5">
+                            <input type="date"
+                                class="form-control"
+                                name="tikTanggal"
+                                style="height:50px;font-size:16px;">
+                        </div>
+
+                    </div>
+
+                    <!-- ID Karyawan -->
+                    <div class="form-group row mb-4 align-items-center">
+
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                            ID Karyawan
+                        </label>
+
+                        <div class="col-md-9">
+                            <input type="number"
+                                class="form-control"
+                                name="userId"
+                                value="<?= $this->session->userdata('userId'); ?>"
+                                readonly
+                                style="height:50px;font-size:16px;">
+                        </div>
+
+                    </div>
+
+                    <!-- Ringkasan -->
+                    <div class="form-group row mb-4 align-items-center">
+
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                            Ringkasan
+                        </label>
+
+                        <div class="col-md-9">
+                            <input type="text"
+                                class="form-control"
+                                name="tikRingkasan"
+                                placeholder="Ringkasan Keluhan"
+                                style="height:50px;font-size:16px;">
+                        </div>
+
+                    </div>
+
+                    <!-- Deskripsi -->
+                    <div class="form-group row mb-4">
+
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-2">
+                            Deskripsi Kerusakan
+                        </label>
+
+                        <div class="col-md-9">
+                            <textarea
+                                class="form-control"
+                                name="tikDeskripsi"
+                                rows="5"
+                                placeholder="Deskripsi Kerusakan"
+                                style="font-size:16px;padding:12px;">
+</textarea>
+                        </div>
+
+                    </div>
+
+                    <div class="text-left mt-3">
+                        <button type="submit"
+                            class="btn btn-primary"
+                            style="padding:10px 30px;font-size:16px;">
+                            Simpan
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
     </div>
 
-    <footer class="sticky-footer bg-white">
+    <footer class="sticky-footer bg-white mt-4">
         <div class="container my-auto">
             <div class="copyright text-center my-auto">
                 <span>© <?php echo date("Y"); ?> PT Kanisius.</span>
@@ -69,7 +142,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
 </div>
 
-</div>
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
 </a>
@@ -78,31 +150,3 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 <script src="<?= base_url('vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
 <script src="<?= base_url('vendor/jquery-easing/jquery.easing.min.js') ?>"></script>
 <script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
-
-<!-- DataTables -->
-<link rel="stylesheet" type="text/css" href="<?= base_url('vendor/datatables/jquery.dataTables.min.css') ?>">
-<script type="text/javascript" charset="utf8" src="<?= base_url('vendor/datatables/jquery.dataTables.min.js') ?>"></script>
-<script type="text/javascript" charset="utf8" src="<?= base_url('vendor/datatables/dataTables.select.min.js') ?>"></script>
-
-<!-- CKEditor -->
-<script src="<?= base_url('vendor/ckeditor/ckeditor.js') ?>"></script>
-<script src="<?= base_url('vendor/ckeditor/translations/id.js') ?>"></script>
-
-<!-- xlsx -->
-<script type="text/javascript" src="<?= base_url('vendor/xlsx/xlsx.fix.js') ?>"></script>
-
-<!-- <script>
-        // gunakan Javascript dan jQuery
-        // bisa cek untuk contoh membuat form: https://getbootstrap.com/docs/4.0/components/forms/
-		
-        $(document).ready(function() { // jika jalaman web selesai diload, maka jalankan script ini
-            $('#menuMenu').trigger('click'); //buka "Contoh Menu" (id: menuMenu) pada header
-            
-            getContoh1();
-            
-            $('#tabel').DataTable({ //https://datatables.net/reference/option/
-                "scrollX": true,
-                "select": true,
-                "bSort": false
-            });
-        }); -->

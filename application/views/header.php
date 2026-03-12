@@ -151,20 +151,21 @@
                 </div>
             </div> -->
 
-        <!-- Dashboard -->
-        <?php if ($this->session->userdata('admin') == 'Y' || $this->session->userdata('sarpras') == 'Y') { ?>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url('Controller/dashboard') ?>">
-                    <i class="fas fa-fw fa-home"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-        <?php } ?>
-        <!-- MENU TIKET -->
+            <!-- Dashboard -->
+            <?php if ($this->session->userdata('admin') == 'Y' || $this->session->userdata('sarpras') == 'Y') { ?>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse"
-                data-target="#collapseTiket"
-                aria-expanded="true" aria-controls="collapseTiket">
+            <a class="nav-link" href="<?= base_url('Controller/dashboard') ?>">
+                <i class="fas fa-fw fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+    <?php } ?>
+    <!-- MENU TIKET -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse"
+            data-target="#collapseTiket"
+            aria-expanded="true" aria-controls="collapseTiket"
+            >
 
                 <i class="fas fa-fw fa-ticket-alt"></i>
                 <span>Menu Tiket</span>

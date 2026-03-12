@@ -97,6 +97,7 @@ class Select extends CI_Controller
         tikUserID,
         userNama,
         tikRingkasan,
+        tikDeskripsi,
         (CASE 
             WHEN tikStatus='Y' THEN 'CLOSE' 
             ELSE 'OPEN' 
