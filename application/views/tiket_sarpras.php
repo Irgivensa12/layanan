@@ -28,7 +28,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         <div class="container-fluid">
 
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">List Semua Kerusakan</h1>
+                <h1 class="h3 mb-0 text-gray-800">List Semua Kerusakan SARPRAS</h1>
             </div>
 
             <div class="form-group row">
@@ -141,9 +141,19 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
                 for (var i = 0; i < data.length; i++) {
 
+                    // Membuat tanggal format Indonesia
+                    var tanggal_db = new Date(data[i].tikTanggal); // Mengubah string tanggal dari database menjadi objek Date
+
+                    var options = { // Opsi untuk format tanggal Indonesia
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+
+                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia
                     table.row.add([
                         data[i].tikNomor,
-                        data[i].tikTanggal,
+                        tanggal_benar,
                         data[i].tikRingkasan,
                         data[i].tikStatus,
                         '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
@@ -165,9 +175,18 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             type: "GET",
             dataType: "JSON",
             success: function(data) {
+                // Format tanggal Indonesia
+                var tanggal_db = new Date(data.tikTanggal);
+
+                var options = {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
+                var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
                 $("#m_tikNomor").text(data.tikNomor);
-                $("#m_tikTanggal").text(data.tikTanggal);
+                $("#m_tikTanggal").text(tanggal_benar);
                 $("#m_userNama").text(data.userNama);
                 $("#m_tikRingkasan").text(data.tikRingkasan);
                 $("#m_tiketStatus").text(data.tiketStatus);
