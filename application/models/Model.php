@@ -86,6 +86,16 @@ class model extends CI_Model
         $this->db->delete('buku');
     }
 
+    public function generate_no_tiket() // Untuk memuat nomor tiket baru dengan format HD-001, HD-002, dst (auto increment)
+    {
+        $query = $this->db->query("
+        SELECT CONCAT('HD-', COUNT(*) + 1) AS no_tiket
+        FROM tb_tiket
+    ");
+
+        return $query->row()->no_tiket;
+    }
+
     // public function tiket_sim()
     // {
     //     $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
@@ -186,4 +196,6 @@ class model extends CI_Model
         $this->db->where('tikNomor', $tikNomor);
         $this->db->update('tb_tiket', $data);
     }
+
+
 }

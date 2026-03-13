@@ -38,13 +38,14 @@ if (!$this->session->userdata('userId')) {
                         <label class="col-md-3 font-weight-bold text-md-right pr-4">
                             Nomor Tiket
                         </label>
-
+                       
                         <div class="col-md-9">
                             <input type="text"
                                 class="form-control"
                                 name="tikNomor"
-                                placeholder="Masukan Nomor Tiket"
-                                style="height:50px;font-size:16px;">
+                                value="<?= $no_tiket ?>" 
+                                readonly
+                              >
                         </div>
                     </div>
 

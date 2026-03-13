@@ -61,7 +61,7 @@ class Insert extends CI_Controller
         // echo "INSERT MASUK";
         // print_r($_POST);
         // exit;
-       $data = [
+        $data = [
             'tikNomor'      => $this->input->post('tikNomor'),
             'tikTanggal'    => $this->input->post('tikTanggal'),
             'tikUserID'     => $this->input->post('tikUserID'),
@@ -76,12 +76,14 @@ class Insert extends CI_Controller
 
     public function tambah_tiket_sim()
     {
+
+        $data['no_tiket'] = $this->Model->generate_no_tiket();
         $data = [
-            'tikNomor'      => $this->input->post('tikNomor'),
+            'tikNomor'      => $no_tiket,
             'tikTanggal'    => $this->input->post('tikTanggal'),
             'tikUserID'     => $this->input->post('tikUserID'),
             'tikRingkasan'  => $this->input->post('tikRingkasan'),
-             'tikStatus'  => 'N',
+            'tikStatus'  => 'N',
             'tikDeskripsi'  => $this->input->post('tikDeskripsi')
         ];
 

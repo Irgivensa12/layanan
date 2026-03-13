@@ -162,9 +162,21 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
                 for (var i = 0; i < data.length; i++) {
 
+                    // Membuat tanggal format Indonesia
+                    var tanggal_db = new Date(data[i].tikTanggal); // Mengubah string tanggal dari database menjadi objek Date
+
+                    var options = { // Opsi untuk format tanggal Indonesia
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+
+                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia
+
                     table.row.add([
                         data[i].tikNomor,
-                        data[i].tikTanggal,
+                        tanggal_benar,
+
                         data[i].tikUserID,
                         data[i].tikRingkasan,
                         data[i].tikStatus,
@@ -187,12 +199,23 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             type: "GET",
             dataType: "JSON",
             success: function(data) {
+                // Format tanggal Indonesia
+                var tanggal_db = new Date(data.tikTanggal);
+
+                var options = {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
+
+                var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
                 $("#m_tikNomor").text(data.tikNomor);
-                $("#m_tikTanggal").text(data.tikTanggal);
+                $("#m_tikTanggal").text(tanggal_benar);
                 $("#m_userNama").text(data.userNama);
                 $("#m_tikRingkasan").text(data.tikRingkasan);
                 $("#m_tiketStatus").text(data.tiketStatus);
+                $('#m_tikDeskripsi').html(data.tikDeskripsi);
 
             }
         });
@@ -232,73 +255,133 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         });
     }
 </script>
-
 <div class="modal fade" id="exampleModal" tabindex="-1">
-    <div class="modal-dialog" style="max-width:80%; width:80%; margin:30px auto;">
+    <div class="modal-dialog" style="max-width:75%; width:75%; margin:40px auto;">
         <div class="modal-content" style="border-radius:15px;">
 
-            <div class="modal-header bg-primary text-white" style="padding:25px;">
-                <h2 class="modal-title" style="font-size:28px;">Detail Tiket</h2>
-                <button type="button" class="close text-white" data-dismiss="modal" style="font-size:32px;">
-                    &times;
-                </button>
+            <!-- HEADER -->
+            <div class="modal-header bg-primary text-white">
+                <h4 class="modal-title" style="font-size:26px;">
+                    DATA LAYANAN SIM & SARPRAS
+                </h4>
+                <button type="button" class="close text-white" data-dismiss="modal" style="font-size:30px;">&times;</button>
             </div>
 
-            <div class="modal-body" style="font-size:22px; padding:40px;">
+            <!-- BODY -->
+            <div class="modal-body" style="font-size:20px; padding:40px;">
 
                 <div class="container-fluid">
 
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <strong style="font-size:24px;">No Tiket</strong>
-                            <div id="m_tikNomor"
-                                style="font-size:24px; padding:20px; background:#f8f9fa; border-radius:10px; margin-top:10px;">
-                            </div>
-                        </div>
+                    <!-- Nomor Tiket -->
+                    <div class="form-group row align-items-center mb-4">
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                            Nomor Tiket
+                        </label>
 
-                        <div class="col-md-6">
-                            <strong style="font-size:24px;">Tanggal</strong>
-                            <div id="m_tikTanggal"
-                                style="font-size:24px; padding:20px; background:#f8f9fa; border-radius:10px; margin-top:10px;">
+                        <div class="col-md-9">
+                            <div id="m_tikNomor" class="form-control d-flex align-items-center"
+                                style="height:55px;font-size:20px;">
                             </div>
                         </div>
                     </div>
 
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <strong style="font-size:24px;">User</strong>
-                            <div id="m_userNama"
-                                style="font-size:24px; padding:20px; background:#f8f9fa; border-radius:10px; margin-top:10px;">
+
+                    <!-- Tanggal -->
+                    <div class="form-group row align-items-center mb-4">
+
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                            Tanggal
+                        </label>
+
+                        <div class="col-md-9">
+
+                            <div id="m_tikTanggal" class="form-control d-flex align-items-center"
+                                style="height:55px;font-size:20px;width:300px;">
                             </div>
                         </div>
 
-                        <div class="col-md-6">
-                            <strong style="font-size:24px;">Status</strong>
-                            <div id="m_tiketStatus"
-                                style="font-size:24px; padding:20px; background:#f8f9fa; border-radius:10px; margin-top:10px;">
-                            </div>
-                        </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <strong style="font-size:24px;">Ringkasan</strong>
-                            <div id="m_tikRingkasan"
-                                style="font-size:24px; padding:25px; background:#f8f9fa; border-radius:10px; margin-top:10px; min-height:180px;">
+
+                    <!-- User -->
+                    <div class="form-group row align-items-center mb-4">
+
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                            User
+                        </label>
+
+                        <div class="col-md-9">
+                            <div id="m_userNama" class="form-control d-flex align-items-center"
+                                style="height:55px;font-size:20px;">
                             </div>
                         </div>
+
+                    </div>
+
+
+                    <!-- Status -->
+                    <div class="form-group row align-items-center mb-4">
+
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                            Status
+                        </label>
+
+                        <div class="col-md-9">
+                            <div id="m_tiketStatus" class="form-control d-flex align-items-center"
+                                style="height:55px;font-size:20px;width:200px;">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Ringkasan -->
+                    <div class="form-group row mb-4">
+
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-3">
+                            Ringkasan
+                        </label>
+
+                        <div class="col-md-9">
+                            <div id="m_tikRingkasan" class="form-control"
+                                style="font-size:20px;padding:20px;min-height:120px;">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Deskripsi -->
+                    <div class="form-group row">
+
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-3">
+                            Deskripsi Kerusakan
+                        </label>
+
+                        <div class="col-md-9">
+                            <div id="m_tikDeskripsi" class="form-control"
+                                style="font-size:20px;padding:20px;min-height:200px;">
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
 
             </div>
 
-            <div class="modal-footer justify-content-center" style="padding:25px;">
-                <button type="button" class="btn btn-danger"
-                    style="font-size:22px; padding:12px 40px;"
+            <!-- FOOTER -->
+            <div class="modal-footer justify-content-center">
+
+                <button type="button"
+                    class="btn btn-danger"
+                    style="font-size:20px;padding:10px 40px;"
                     data-dismiss="modal">
+
                     Tutup
+
                 </button>
+
             </div>
 
         </div>
