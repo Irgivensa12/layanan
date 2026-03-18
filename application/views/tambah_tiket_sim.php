@@ -76,7 +76,7 @@ if (!$this->session->userdata('userId')) {
                         <div class="col-md-9">
                             <input type="number"
                                 class="form-control"
-                                name="userId"
+                                name="tikUserID"
                                 value="<?= $this->session->userdata('userId'); ?>"
                                 readonly
                                 style="height:50px;font-size:16px;">
