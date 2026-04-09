@@ -173,38 +173,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         });
     }
 
-   $(document).on("click", ".detailBtn", function() { // Event listener untuk tombol detail
-
-    var tikNomor = $(this).data("id");
-
-    $.ajax({
-        url: "<?= base_url('Select/detail_tiket/') ?>" + tikNomor,
-        type: "GET",
-        dataType: "JSON",
-        success: function(data) {
-
-            // Format tanggal Indonesia
-            var tanggal_db = new Date(data.tikTanggal);
-
-            var options = {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            };
-
-            var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
-
-            $("#m_tikNomor").text(data.tikNomor);
-            $("#m_tikTanggal").text(tanggal_benar); // ← sudah pakai format Indonesia
-            $("#m_userNama").text(data.userNama);
-            $("#m_tikRingkasan").text(data.tikRingkasan);
-            $("#m_tiketStatus").text(data.tiketStatus);
-            $('#m_tikDeskripsi').html(data.tikDeskripsi);
-
-        }
-    });
-
-});
+  
 
     // kalau butuh input dari user
     function getContoh2() {

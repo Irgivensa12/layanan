@@ -38,23 +38,23 @@ class Insert extends CI_Controller
         redirect('menu');
     }
 
-    public function update()
-    {
-        $id = $this->input->post('tikNomor');
+    // public function update()
+    // {
+    //     $id = $this->input->post('tikNomor');
 
-        $data = array(
-            'tikNomor'      => $this->input->post('tikNomor'),
-            'tikTanggal'           => $this->input->post('tikTanggal'),
-            'tikUserClose'           => $this->input->post('tikUserClose'),
-            'tikRingkasan'        => $this->input->post('tikRingkasan'),
-            'tiketStatus'           => $this->input->post('tiketStatus')
-        );
+    //     $data = array(
+    //         'tikNomor'      => $this->input->post('tikNomor'),
+    //         'tikTanggal'           => $this->input->post('tikTanggal'),
+    //         'tikUserClose'           => $this->input->post('tikUserClose'),
+    //         'tikRingkasan'        => $this->input->post('tikRingkasan'),
+    //         'tiketStatus'           => $this->input->post('tiketStatus')
+    //     );
 
-        $this->db->where('tik_Nomor', $id);
-        $this->db->update('tb_tiket', $data);
+    //     $this->db->where('tik_Nomor', $id);
+    //     $this->db->update('tb_tiket', $data);
 
-        redirect('menu');
-    }
+    //     redirect('menu');
+    // }
 
     public function tambah_tiket_sarpras()
     {
@@ -74,21 +74,23 @@ class Insert extends CI_Controller
         redirect('tiket_sarpras'); // setelah simpan, diarahkan ke halaman tiket_sarpras
     }
 
-    public function tambah_tiket_sim()
-    {
+        public function tambah_tiket_sim()
+        {
 
-        $data['no_tiket'] = $this->Model->generate_no_tiket();
-        $data = [
-            'tikNomor'      => $no_tiket,
-            'tikTanggal'    => $this->input->post('tikTanggal'),
-            'tikUserID'     => $this->input->post('tikUserID'),
-            'tikRingkasan'  => $this->input->post('tikRingkasan'),
-            'tikStatus'  => 'N',
-            'tikDeskripsi'  => $this->input->post('tikDeskripsi')
-        ];
+            $no_tiket = $this->Model->generate_no_tiket();
+            $data = [
+                'tikNomor'      => $no_tiket,
+                'tikTanggal'    => $this->input->post('tikTanggal'),
+                'tikUserID'     => $this->input->post('tikUserID'),
+                'tikRingkasan'  => $this->input->post('tikRingkasan'),
+                'tikStatus'  => 'N',
+                'tikDeskripsi'  => $this->input->post('tikDeskripsi')
+            ];
 
-        $this->Model->insertData('tb_tiket', $data);
+            $this->Model->insertData('tb_tiket', $data);
 
-        redirect('tiket_sim');
-    }
+            redirect('tiket_sim');
+        }
+
+        
 }
