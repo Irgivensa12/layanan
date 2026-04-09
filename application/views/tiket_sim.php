@@ -7,12 +7,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
     redirect();
     exit;
 }
-//if (!isset($_SESSION["id_crm"])) { //jika tidak ada id
-//    $this->session->set_flashdata('type', 'alert-danger');
-//    $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
-//    redirect();
-//    exit;
-//}
 
 ?>
 <!-- untuk daftar menu dst, cek header.php-->
@@ -65,7 +59,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                             <tr>
                                 <th style="width:10px">No</th>
                                 <th>Tanggal</th>
-
                                 <th>Ringkasan</th>
                                 <th>Status</th>
                                 <th>Detail</th>
@@ -122,7 +115,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
     var table;
 
     $(document).ready(function() {
-
         $('#menuTiket').trigger('click');
         table = $('#tabel').DataTable({ //https://datatables.net/reference/option/
             "scrollX": true,
@@ -150,6 +142,9 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     // Membuat tanggal format Indonesia
                     var tanggal_db = new Date(data[i].tikTanggal); // Mengubah string tanggal dari database menjadi objek Date
 
+                    // Membuat tanggal format Indonesia
+                    var tanggal_db = new Date(data[i].tikTanggal); // Mengubah string tanggal dari database menjadi objek Date
+
                     var options = { // Opsi untuk format tanggal Indonesia
                         year: 'numeric',
                         month: 'long',
@@ -173,7 +168,37 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         });
     }
 
-  
+    $(document).on("click", ".detailBtn", function() { // Event listener untuk tombol detail
+
+    var tikNomor = $(this).data("id");
+
+    $.ajax({
+        url: "<?= base_url('Select/detail_tiket/') ?>" + tikNomor,
+        type: "GET",
+        dataType: "JSON",
+        success: function(data) {
+
+            // Format tanggal Indonesia
+            var tanggal_db = new Date(data.tikTanggal);
+
+            var options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
+
+            $("#m_tikNomor").text(data.tikNomor);
+            $("#m_tikTanggal").text(tanggal_benar); 
+            $("#m_userNama").text(data.userNama);
+            $("#m_tikRingkasan").text(data.tikRingkasan);
+            $("#m_tiketStatus").text(data.tiketStatus);
+            $('#m_tikDeskripsi').html(data.tikDeskripsi);
+
+        }
+    });
+
+});
 
     // kalau butuh input dari user
     function getContoh2() {
@@ -208,6 +233,8 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         });
     }
 </script>
+
+<!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1">
     <div class="modal-dialog" style="max-width:75%; width:75%; margin:40px auto;">
         <div class="modal-content" style="border-radius:15px;">

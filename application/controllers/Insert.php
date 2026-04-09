@@ -58,11 +58,10 @@ class Insert extends CI_Controller
 
     public function tambah_tiket_sarpras()
     {
-        // echo "INSERT MASUK";
-        // print_r($_POST);
-        // exit;
+        // generate ulang nomor tiket
+        $no_tiket = $this->Model->generate_no_tiket();
         $data = [
-            'tikNomor'      => $this->input->post('tikNomor'),
+            'tikNomor'      => $no_tiket,
             'tikTanggal'    => $this->input->post('tikTanggal'),
             'tikUserID'     => $this->input->post('tikUserID'),
             'tikRingkasan'  => $this->input->post('tikRingkasan'),
@@ -74,8 +73,19 @@ class Insert extends CI_Controller
         redirect('tiket_sarpras'); // setelah simpan, diarahkan ke halaman tiket_sarpras
     }
 
-        public function tambah_tiket_sim()
-        {
+    public function tambah_tiket_sim()
+    {
+        // generate ulang nomor tiket
+        $no_tiket = $this->Model->generate_no_tiket();
+
+        $data = [
+            'tikNomor'      => $no_tiket,
+            'tikTanggal'    => $this->input->post('tikTanggal'),
+            'tikUserID'     => $this->input->post('tikUserID'),
+            'tikRingkasan'  => $this->input->post('tikRingkasan'),
+            'tikStatus'  => 'N',
+            'tikDeskripsi'  => $this->input->post('tikDeskripsi')
+        ];
 
             $no_tiket = $this->Model->generate_no_tiket();
             $data = [

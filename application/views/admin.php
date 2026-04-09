@@ -139,14 +139,13 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         month: 'long',
                         day: 'numeric'
                     };
-
-                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia
+                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia 
                     table.row.add([
                         data[i].tikNomor,
                         tanggal_benar,
                         data[i].tikUserID,
                         data[i].tikRingkasan,
-                        data[i].tikStatus == 'N' ?
+                        data[i].tikStatus == 'N' ? // jika tikStatus = N, maka tampilkan tombol OPEN, jika tidak tampilkan tombol CLOSED
                         '<button class="btn btn-success btn-sm statusBtn" data-id="' + data[i].tikNomor + '">OPEN</button>' :
                         '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>',
 
@@ -176,9 +175,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     month: 'long',
                     day: 'numeric'
                 };
-
                 var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
-
                 $("#m_tikNomor").text(data.tikNomor);
                 $("#m_tikTanggal").text(tanggal_benar);
                 $("#m_userNama").text(data.userNama);
@@ -285,7 +282,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         </label>
 
                         <div class="col-md-9">
-
                             <div id="m_tikTanggal" class="form-control d-flex align-items-center"
                                 style="height:55px;font-size:20px;width:300px;">
                             </div>

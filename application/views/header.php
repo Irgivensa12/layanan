@@ -167,81 +167,81 @@
             aria-expanded="true" aria-controls="collapseTiket"
             >
 
-            <i class="fas fa-fw fa-ticket-alt"></i>
-            <span>Menu Tiket</span>
-        </a>
-
-        <div id="collapseTiket" class="collapse"
-            data-parent="#accordionSidebar">
-
-            <div class="bg-white py-2 collapse-inner rounded">
-
-                <a class="collapse-item" href="<?= base_url('Controller/tiket_sim') ?>">
-                    Tiket SIM
-                </a>
-
-                <a class="collapse-item" href="<?= base_url('Controller/tiket_sarpras') ?>">
-                    Tiket Sarpras
-                </a>
-
-            </div>
-        </div>
-    </li>
-
-
-    <?php
-    $admin   = $this->session->userdata('admin');
-    $sarpras = $this->session->userdata('sarpras');
-
-    if ($admin == 'Y' || $sarpras == 'Y') {
-    ?>
-
-        <!-- MENU LAPORAN -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse"
-                data-target="#collapseLaporan"
-                aria-expanded="true" aria-controls="collapseLaporan">
-
-                <i class="fas fa-fw fa-file"></i>
-                <span>Laporan</span>
+                <i class="fas fa-fw fa-ticket-alt"></i>
+                <span>Menu Tiket</span>
             </a>
 
-            <div id="collapseLaporan" class="collapse"
+            <div id="collapseTiket" class="collapse"
                 data-parent="#accordionSidebar">
 
                 <div class="bg-white py-2 collapse-inner rounded">
 
-                    <a class="collapse-item" href="<?= base_url('Controller/laporan_sim') ?>">
-                        Laporan SIM
+                    <a class="collapse-item" href="<?= base_url('Controller/tiket_sim') ?>">
+                        Tiket SIM
                     </a>
 
-                    <a class="collapse-item" href="<?= base_url('Controller/laporan_sarpras') ?>">
-                        Laporan Sarpras
+                    <a class="collapse-item" href="<?= base_url('Controller/tiket_sarpras') ?>">
+                        Tiket Sarpras
                     </a>
 
                 </div>
             </div>
         </li>
 
-    <?php
-    } else {
-        // jika login sebagai USER biasa, menu laporan tidak ditampilkan
-    }
-    ?>
 
-    <!-- Admin -->
-    <?php if ($this->session->userdata('admin') == 'Y') { ?>
-        <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('Controller/admin') ?>">
-                <i class="fas fa-fw fa-user-cog"></i>
-                <span>Admin</span>
-            </a>
+        <?php
+        $admin   = $this->session->userdata('admin');
+        $sarpras = $this->session->userdata('sarpras');
+
+        if ($admin == 'Y' || $sarpras == 'Y') {
+        ?>
+
+            <!-- MENU LAPORAN -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse"
+                    data-target="#collapseLaporan"
+                    aria-expanded="true" aria-controls="collapseLaporan">
+
+                    <i class="fas fa-fw fa-file"></i>
+                    <span>Laporan</span>
+                </a>
+
+                <div id="collapseLaporan" class="collapse"
+                    data-parent="#accordionSidebar">
+
+                    <div class="bg-white py-2 collapse-inner rounded">
+
+                        <a class="collapse-item" href="<?= base_url('Controller/laporan_sim') ?>">
+                            Laporan SIM
+                        </a>
+
+                        <a class="collapse-item" href="<?= base_url('Controller/laporan_sarpras') ?>">
+                            Laporan Sarpras
+                        </a>
+
+                    </div>
+                </div>
+            </li>
+
+        <?php
+        } else {
+            // jika login sebagai USER biasa, menu laporan tidak ditampilkan
+        }
+        ?>
+
+        <!-- Admin -->
+        <?php if ($this->session->userdata('admin') == 'Y') { ?>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('Controller/admin') ?>">
+                    <i class="fas fa-fw fa-user-cog"></i>
+                    <span>Admin</span>
+                </a>
+            </li>
+        <?php } ?>
+
+
+        <hr class="sidebar-divider">
+
+
         </li>
-    <?php } ?>
-
-
-    <hr class="sidebar-divider">
-
-
-    </li>
     </ul>

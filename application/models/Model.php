@@ -40,7 +40,6 @@ class model extends CI_Model
                         $this->session->set_userdata('sarpras', 'Y');
                     }
                 }
-
                 $this->session->set_flashdata('type', 'alert-success');
                 $this->session->set_flashdata('pesan', '<strong>Berhasil!</strong> Anda Berhasil Login');
                 redirect('dashboard');
@@ -78,6 +77,16 @@ class model extends CI_Model
     public function insertData($tb_tiket, $data)
     {
         return $this->db->insert($tb_tiket, $data);
+    }
+
+    public function generate_no_tiket() // Untuk memuat nomor tiket baru dengan format HD-001, HD-002, dst (auto increment)
+    {
+        $query = $this->db->query("
+        SELECT CONCAT('HD-', COUNT(*) + 1) AS no_tiket
+        FROM tb_tiket
+    ");
+
+        return $query->row()->no_tiket;
     }
 
     public function delete_form_coba($no)
@@ -127,12 +136,12 @@ class model extends CI_Model
 
         if ($admin == 'Y') {
             // admin lihat semua tiket
-            $query = $this->db->query("SELECT * FROM tb_tiket ORDER BY tikTanggal DESC");
+            $query = $this->db->query("SELECT * FROM tb_layanan ORDER BY layTanggal DESC");
         } else {
             // user hanya lihat tiket sendiri
-            $query = $this->db->query("SELECT * FROM tb_tiket 
-                                   WHERE tikUserID='$user'
-                                   ORDER BY tikTanggal DESC");
+            $query = $this->db->query("SELECT * FROM tb_layanan 
+                                   WHERE layUserID='$user'
+                                   ORDER BY layTanggal DESC");
         }
 
         return $query;
@@ -179,7 +188,6 @@ class model extends CI_Model
             return $this->db->get();
         }
     }
-
     public function admin_sim()
     {
         $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
@@ -190,7 +198,6 @@ class model extends CI_Model
         $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
         return $this->db->query($query);
     }
-
     public function update_tiket($tikNomor, $data)
     {
         $this->db->where('tikNomor', $tikNomor);

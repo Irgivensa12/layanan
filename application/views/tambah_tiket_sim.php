@@ -43,9 +43,10 @@ if (!$this->session->userdata('userId')) {
                             <input type="text"
                                 class="form-control"
                                 name="tikNomor"
-                                value="<?= $no_tiket ?>" 
+                                value="<?= $no_tiket ?>"
                                 readonly
-                              >
+                                placeholder="Masukan Nomor Tiket"
+                                style="height:50px;font-size:16px;">
                         </div>
                     </div>
 

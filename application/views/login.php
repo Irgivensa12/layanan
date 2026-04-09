@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 
 //if (isset($_SESSION["id"])) { //jika ada id
@@ -11,6 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="utf-8">
@@ -47,23 +48,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Login Akun</h1>
                                     </div>
-                                    
-                                    <?php if(isset($_SESSION["pesan"])){ ?>
-                                    <div class="alert <?= $_SESSION['type']?> alert-dismissible">
-                                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                        <?= $_SESSION['pesan']?>
 
-                                    </div>
-                                    <?php unset($_SESSION['pesan']); } ?>
-                                    
-                                    <form class="user" action="<?= base_url('Controller/login')?>" method="post">
+                                    <?php if (isset($_SESSION["pesan"])) { ?>
+                                        <div class="alert <?= $_SESSION['type'] ?> alert-dismissible">
+                                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                            <?= $_SESSION['pesan'] ?>
+
+                                        </div>
+                                    <?php unset($_SESSION['pesan']);
+                                    } ?>
+
+                                    <form class="user" action="<?= base_url('Controller/login') ?>" method="post">
                                         <div class="form-group">
                                             <input type="text" class="form-control form-control-user" id="id" name="id" placeholder="ID Karyawan" required>
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-user" id="password" name ="password" placeholder="Password" required>
+                                            <input type="password" class="form-control form-control-user" id="password" name="password" placeholder="Password" required>
                                         </div>
-                                        
+
                                         <input type="submit" class="btn btn-primary btn-user btn-block" value="Login">
                                     </form>
                                     <hr>
@@ -90,4 +92,5 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
 
 </body>
+
 </html>

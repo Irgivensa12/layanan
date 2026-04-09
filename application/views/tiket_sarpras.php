@@ -7,12 +7,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
     redirect();
     exit;
 }
-//if (!isset($_SESSION["id_crm"])) { //jika tidak ada id
-//    $this->session->set_flashdata('type', 'alert-danger');
-//    $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
-//    redirect();
-//    exit;
-//}
 
 ?>
 <!-- untuk daftar menu dst, cek header.php-->
@@ -63,12 +57,13 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     <table id="tabel" class="display nowrap" style="width:100%">
                         <thead style="color: black;">
                             <tr>
-                                <th style="width:10px">No</th>
-                                <th>Tanggal</th>
-                                <th>Penginput</th>
-                                <th>Ringkasan</th>
-                                <th>Status</th>
-                                <th>Detail</th>
+                                <th style="width:10px">Layanan ID</th>
+                                <th>Layanan Tanggal</th>
+                                <th>Layanan User ID</th>
+                                <th>Layanan Divisi ID</th>
+                                <th>Layaan Hal</th>
+                                <th>Layanan Diskripsi</th>
+                                <th>Layanan Status</th>
                             </tr>
                         </thead>
                         <tbody id="tbody" name="tbody" style="color: black;">
@@ -158,14 +153,25 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
                     var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia
 
+                    // Membuat tanggal format Indonesia
+                    var tanggal_db = new Date(data[i].tikTanggal); // Mengubah string tanggal dari database menjadi objek Date
+
+                    var options = { // Opsi untuk format tanggal Indonesia
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+
                     table.row.add([
-                        data[i].tikNomor,
-                        data[i].tikTanggal,
-                        data[i].tikUserID,
-                        data[i].tikRingkasan,
-                        data[i].tikStatus,
+                        data[i].layID,
+                        data[i].layTanggal,
+                        data[i].layUserID,
+                        data[i].layDivisiID,
+                        data[i].layHal,
+                        data[i].layDiskripsi,
+                        data[i].layStatus,
                         '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
-                        data[i].tikNomor + '" data-toggle="modal" data-target="#exampleModal">Detail</button>'
+                        data[i].layID + '" data-toggle="modal" data-target="#exampleModal">Detail</button>'
                     ]);
                 }
 
@@ -183,6 +189,15 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             type: "GET",
             dataType: "JSON",
             success: function(data) {
+                // Format tanggal Indonesia
+                var tanggal_db = new Date(data.tikTanggal);
+
+                var options = {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
+                var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
                 // Format tanggal Indonesia
                 var tanggal_db = new Date(data.tikTanggal);
@@ -279,7 +294,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         </label>
 
                         <div class="col-md-9">
-
                             <div id="m_tikTanggal" class="form-control d-flex align-items-center"
                                 style="height:55px;font-size:20px;width:300px;">
                             </div>

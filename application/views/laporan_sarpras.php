@@ -7,12 +7,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
     redirect();
     exit;
 }
-//if (!isset($_SESSION["id_crm"])) { //jika tidak ada id
-//    $this->session->set_flashdata('type', 'alert-danger');
-//    $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
-//    redirect();
-//    exit;
-//}
 
 ?>
 <!-- untuk daftar menu dst, cek header.php-->
@@ -27,7 +21,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             </button>
 
             <ul class="navbar-nav ml-auto">
-                <img src="<?= base_url('img/kariban.png') ?>">
+                <img src="<?= base_url('img/kanisius.png') ?>">
             </ul>
         </nav>
 
@@ -84,7 +78,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
     <footer class="sticky-footer bg-white">
         <div class="container my-auto">
             <div class="copyright text-center my-auto">
-                <span>© <?php echo date("Y"); ?> PT Kariban.</span>
+                <span>© <?php echo date("Y"); ?> PT Kanisius.</span>
             </div>
         </div>
     </footer>
@@ -170,13 +164,10 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         month: 'long',
                         day: 'numeric'
                     };
-
                     var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia
-
                     table.row.add([
                         data[i].tikNomor,
                         tanggal_benar,
-
                         data[i].tikUserID,
                         data[i].tikRingkasan,
                         data[i].tikStatus,
@@ -207,7 +198,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     month: 'long',
                     day: 'numeric'
                 };
-
                 var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
                 $("#m_tikNomor").text(data.tikNomor);
@@ -255,6 +245,8 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         });
     }
 </script>
+
+<!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1">
     <div class="modal-dialog" style="max-width:75%; width:75%; margin:40px auto;">
         <div class="modal-content" style="border-radius:15px;">
@@ -294,7 +286,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         </label>
 
                         <div class="col-md-9">
-
                             <div id="m_tikTanggal" class="form-control d-flex align-items-center"
                                 style="height:55px;font-size:20px;width:300px;">
                             </div>
