@@ -126,12 +126,12 @@ class model extends CI_Model
 
         if ($admin == 'Y') {
             // admin lihat semua tiket
-            $query = $this->db->query("SELECT * FROM tb_tiket ORDER BY tikTanggal DESC");
+            $query = $this->db->query("SELECT * FROM tb_layanan ORDER BY layTanggal DESC");
         } else {
             // user hanya lihat tiket sendiri
-            $query = $this->db->query("SELECT * FROM tb_tiket 
-                                   WHERE tikUserID='$user'
-                                   ORDER BY tikTanggal DESC");
+            $query = $this->db->query("SELECT * FROM tb_layanan 
+                                   WHERE layUserID='$user'
+                                   ORDER BY layTanggal DESC");
         }
 
         return $query;

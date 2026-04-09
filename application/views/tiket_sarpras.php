@@ -57,11 +57,13 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     <table id="tabel" class="display nowrap" style="width:100%">
                         <thead style="color: black;">
                             <tr>
-                                <th style="width:10px">No</th>
-                                <th>Tanggal</th>
-                                <th>Ringkasan</th>
-                                <th>Status</th>
-                                <th>Detail</th>
+                                <th style="width:10px">Layanan ID</th>
+                                <th>Layanan Tanggal</th>
+                                <th>Layanan User ID</th>
+                                <th>Layanan Divisi ID</th>
+                                <th>Layaan Hal</th>
+                                <th>Layanan Diskripsi</th>
+                                <th>Layanan Status</th>
                             </tr>
                         </thead>
                         <tbody id="tbody" name="tbody" style="color: black;">
@@ -150,14 +152,16 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         day: 'numeric'
                     };
 
-                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia
                     table.row.add([
-                        data[i].tikNomor,
-                        tanggal_benar,
-                        data[i].tikRingkasan,
-                        data[i].tikStatus,
+                        data[i].layID,
+                        data[i].layTanggal,
+                        data[i].layUserID,
+                        data[i].layDivisiID,
+                        data[i].layHal,
+                        data[i].layDiskripsi,
+                        data[i].layStatus,
                         '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
-                        data[i].tikNomor + '" data-toggle="modal" data-target="#exampleModal">Detail</button>'
+                        data[i].layID + '" data-toggle="modal" data-target="#exampleModal">Detail</button>'
                     ]);
                 }
 
