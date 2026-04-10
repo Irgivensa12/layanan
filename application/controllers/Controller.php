@@ -124,11 +124,17 @@ class Controller extends CI_Controller
         $this->load->view('laporan_sim');
     }
 
-    public function admin()
+    public function admin_sim()
     {
 
         $this->load->view('header');
-        $this->load->view('admin');
+        $this->load->view('admin_sim');
+    }
+
+    public function admin_sarpras()
+    {
+        $this->load->view('header');
+        $this->load->view('admin_sarpras');
     }
 
     public function daftar_tiket()

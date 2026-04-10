@@ -17,3 +17,5 @@ $route['tambah_tiket_sarpras'] = 'Controller/tambah_tiket_sarpras';
 
 $route['tambah_tiket_sim'] = 'Controller/tambah_tiket_sim';
 $route['dashboard'] = 'Controller/dashboard';
+$route['admin_sim'] = 'Controller/admin_sim';
+$route['admin_sarpras'] = 'Controller/admin_sarpras';

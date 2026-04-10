@@ -60,7 +60,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                                 <th style="width:10px">No</th>
                                 <th>Tanggal</th>
                                 <th>User ID</th>
-                                <th>Layanan Divisi ID</th>
                                 <th>Keluhan</th>
                                 <th>Deskripsi</th>
                                 <th>Status</th>
@@ -143,7 +142,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
                 for (var i = 0; i < data.length; i++) {
                     // Membuat tanggal format Indonesia
-                    var tanggal_db = new Date(data[i].tikTanggal); // Mengubah string tanggal dari database menjadi objek Date
+                    var tanggal_db = new Date(data[i].layTanggal); // Mengubah string tanggal dari database menjadi objek Date
 
                     var options = { // Opsi untuk format tanggal Indonesia
                         year: 'numeric',
@@ -154,7 +153,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia
 
                     // Membuat tanggal format Indonesia
-                    var tanggal_db = new Date(data[i].tikTanggal); // Mengubah string tanggal dari database menjadi objek Date
+                    var tanggal_db = new Date(data[i].layTanggal); // Mengubah string tanggal dari database menjadi objek Date
 
                     var options = { // Opsi untuk format tanggal Indonesia
                         year: 'numeric',
@@ -164,9 +163,8 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
                     table.row.add([
                         data[i].layID,
-                        data[i].layTanggal,
+                        tanggal_benar,
                         data[i].layUserID,
-                        data[i].layDivisiID,
                         data[i].layHal,
                         data[i].layDiskripsi,
                         data[i].layStatus,
@@ -262,7 +260,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             <!-- HEADER -->
             <div class="modal-header bg-primary text-white">
                 <h4 class="modal-title" style="font-size:26px;">
-                    DATA LAYANAN SIM & SARPRAS
+                    DATA LAYANAN SARPRAS
                 </h4>
                 <button type="button" class="close text-white" data-dismiss="modal" style="font-size:30px;">&times;</button>
             </div>

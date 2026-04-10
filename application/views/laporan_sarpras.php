@@ -146,7 +146,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
     function getTiket_SIM() {
 
         $.ajax({
-            url: "<?php echo base_url('Select/tiket_sim'); ?>",
+            url: "<?php echo base_url('Select/tiket_sarpras'); ?>",
             method: "POST",
             dataType: "JSON",
             success: function(data) {
@@ -157,7 +157,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 for (var i = 0; i < data.length; i++) {
 
                     // Membuat tanggal format Indonesia
-                    var tanggal_db = new Date(data[i].tikTanggal); // Mengubah string tanggal dari database menjadi objek Date
+                    var tanggal_db = new Date(data[i].layTanggal); // Mengubah string tanggal dari database menjadi objek Date
 
                     var options = { // Opsi untuk format tanggal Indonesia
                         year: 'numeric',
@@ -166,13 +166,14 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     };
                     var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia
                     table.row.add([
-                        data[i].tikNomor,
+                        data[i].layID,
                         tanggal_benar,
-                        data[i].tikUserID,
-                        data[i].tikRingkasan,
-                        data[i].tikStatus,
+                        data[i].layUserID,
+                        data[i].layHal,
+                        data[i].layDiskripsi,
+                        data[i].layStatus,
                         '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
-                        data[i].tikNomor + '" data-toggle="modal" data-target="#exampleModal">Detail</button>'
+                        data[i].layID + '" data-toggle="modal" data-target="#exampleModal">Detail</button>'
                     ]);
                 }
 
@@ -191,7 +192,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             dataType: "JSON",
             success: function(data) {
                 // Format tanggal Indonesia
-                var tanggal_db = new Date(data.tikTanggal);
+                var tanggal_db = new Date(data.layTanggal);
 
                 var options = {
                     year: 'numeric',

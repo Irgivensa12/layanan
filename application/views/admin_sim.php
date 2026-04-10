@@ -28,7 +28,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         <div class="container-fluid">
 
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Halaman Admin</h1>
+                <h1 class="h3 mb-0 text-gray-800">Halaman Admin SIM</h1>
             </div>
 
             <div class="form-group row">
@@ -107,7 +107,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
     var table;
 
     $(document).ready(function() {
-        $('#admin').trigger('click');
+        $('#admin').trigger('onclick');
         table = $('#tabel').DataTable({ //https://datatables.net/reference/option/
             "scrollX": true,
             "scrollY": "400px", // Membuat tabel bisa discroll vertikal dengan tinggi 400px

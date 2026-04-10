@@ -151,21 +151,20 @@
                 </div>
             </div> -->
 
-            <!-- Dashboard -->
-            <?php if ($this->session->userdata('admin') == 'Y' || $this->session->userdata('sarpras') == 'Y') { ?>
+        <!-- Dashboard -->
+        <?php if ($this->session->userdata('admin') == 'Y' || $this->session->userdata('sarpras') == 'Y') { ?>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('Controller/dashboard') ?>">
+                    <i class="fas fa-fw fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+        <?php } ?>
+        <!-- MENU TIKET -->
         <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('Controller/dashboard') ?>">
-                <i class="fas fa-fw fa-home"></i>
-                <span>Dashboard</span>
-            </a>
-        </li>
-    <?php } ?>
-    <!-- MENU TIKET -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse"
-            data-target="#collapseTiket"
-            aria-expanded="true" aria-controls="collapseTiket"
-            >
+            <a class="nav-link collapsed" href="#" data-toggle="collapse"
+                data-target="#collapseTiket"
+                aria-expanded="true" aria-controls="collapseTiket">
 
                 <i class="fas fa-fw fa-ticket-alt"></i>
                 <span>Menu Tiket</span>
@@ -230,15 +229,31 @@
         ?>
 
         <!-- Admin -->
-        <?php if ($this->session->userdata('admin') == 'Y') { ?>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url('Controller/admin') ?>">
-                    <i class="fas fa-fw fa-user-cog"></i>
-                    <span>Admin</span>
-                </a>
-            </li>
-        <?php } ?>
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse"
+                data-target="#collapseAdmin"
+                aria-expanded="true" aria-controls="collapseAdmin">
 
+                <i class="fas fa-fw fa-ticket-alt"></i>
+                <span>Admin</span>
+            </a>
+
+            <div id="collapseAdmin" class="collapse"
+                data-parent="#accordionSidebar">
+
+                <div class="bg-white py-2 collapse-inner rounded">
+
+                    <a class="collapse-item" href="<?= base_url('Controller/admin_sim') ?>">
+                        Tiket SIM
+                    </a>
+
+                    <a class="collapse-item" href="<?= base_url('Controller/admin_sarpras') ?>">
+                        Tiket Sarpras
+                    </a>
+
+                </div>
+            </div>
+        </li>
 
         <hr class="sidebar-divider">
 
