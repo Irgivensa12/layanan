@@ -26,7 +26,7 @@ if (!$this->session->userdata('userId')) {
         <div class="container" style="max-width:900px;">
 
             <h3 class="text-center font-weight-bold mb-4">
-                DATA LAYANAN SIM & SARPRAS
+                DATA LAYANAN SIM 
             </h3>
 
             <form action="<?= base_url('Insert/tambah_tiket_sim') ?>" method="post">
@@ -38,7 +38,7 @@ if (!$this->session->userdata('userId')) {
                         <label class="col-md-3 font-weight-bold text-md-right pr-4">
                             Nomor Tiket
                         </label>
-
+                       
                         <div class="col-md-9">
                             <input type="text"
                                 class="form-control"
@@ -143,6 +143,8 @@ if (!$this->session->userdata('userId')) {
     </footer>
 
 </div>
+
+
 
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>

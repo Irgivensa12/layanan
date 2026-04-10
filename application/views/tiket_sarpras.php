@@ -142,6 +142,16 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 table.clear();
 
                 for (var i = 0; i < data.length; i++) {
+                    // Membuat tanggal format Indonesia
+                    var tanggal_db = new Date(data[i].tikTanggal); // Mengubah string tanggal dari database menjadi objek Date
+
+                    var options = { // Opsi untuk format tanggal Indonesia
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+
+                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia
 
                     // Membuat tanggal format Indonesia
                     var tanggal_db = new Date(data[i].tikTanggal); // Mengubah string tanggal dari database menjadi objek Date
@@ -189,6 +199,17 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 };
                 var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
+                // Format tanggal Indonesia
+                var tanggal_db = new Date(data.tikTanggal);
+
+                var options = {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
+
+                var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
+
                 $("#m_tikNomor").text(data.tikNomor);
                 $("#m_tikTanggal").text(tanggal_benar);
                 $("#m_userNama").text(data.userNama);
@@ -234,9 +255,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
     }
 </script>
 
-
-
-<!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1">
     <div class="modal-dialog" style="max-width:75%; width:75%; margin:40px auto;">
         <div class="modal-content" style="border-radius:15px;">
@@ -368,6 +386,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         </div>
     </div>
 </div>
+
 </body>
 
 </html>

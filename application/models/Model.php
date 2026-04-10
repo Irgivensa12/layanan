@@ -74,9 +74,14 @@ class model extends CI_Model
         return $this->db->query($query);
     }
 
-    public function insertData($tb_tiket, $data)
+    public function insertData_sim($tb_tiket, $data)
     {
         return $this->db->insert($tb_tiket, $data);
+    }
+
+    public function insertData_layanan($tb_layanan, $data)
+    {
+        return $this->db->insert($tb_layanan, $data);
     }
 
     public function generate_no_tiket() // Untuk memuat nomor tiket baru dengan format HD-001, HD-002, dst (auto increment)
@@ -89,11 +94,23 @@ class model extends CI_Model
         return $query->row()->no_tiket;
     }
 
+    public function generate_no_layanan()
+    {
+        $query = $this->db->query("
+        SELECT CONCAT('26-', LPAD(COUNT(*) + 1, 3, '0')) AS no_layanan
+        FROM tb_layanan
+    ");
+
+        return $query->row()->no_layanan;
+    }
+
     public function delete_form_coba($no)
     {
         $this->db->where('no_buku', $no);
         $this->db->delete('buku');
     }
+
+
 
     // public function tiket_sim()
     // {
@@ -126,7 +143,7 @@ class model extends CI_Model
 
         if ($admin == 'Y') {
             // admin lihat semua tiket
-            $query = $this->db->query("SELECT * FROM tb_layanan ORDER BY layTanggal DESC");
+            $query = $this->db->query("SELECT * FROM tb_layanan ORDER BY layStatus DESC");
         } else {
             // user hanya lihat tiket sendiri
             $query = $this->db->query("SELECT * FROM tb_layanan 
@@ -185,12 +202,17 @@ class model extends CI_Model
     }
     public function admin_sarpras()
     {
-        $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
+        $query = "SELECT layID, layTanggal, layUserID, pegNama, layHal, layDiskripsi, layTarget, layPetugas1, layPetugas2, layPetugas3, layPetugas4, layPetugas5, layStatus, layCreateUserID, layCloseUserID, layCloseTanggal, FROM tb_layanan";
         return $this->db->query($query);
     }
     public function update_tiket($tikNomor, $data)
     {
         $this->db->where('tikNomor', $tikNomor);
         $this->db->update('tb_tiket', $data);
+    }
+    public function update_tiket_lay($tikNomor, $data)
+    {
+        $this->db->where('layID', $layID);
+        $this->db->update('tb_layanan', $data);
     }
 }

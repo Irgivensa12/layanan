@@ -139,6 +139,8 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 table.clear();
 
                 for (var i = 0; i < data.length; i++) {
+                    // Membuat tanggal format Indonesia
+                    var tanggal_db = new Date(data[i].tikTanggal); // Mengubah string tanggal dari database menjadi objek Date
 
                     // Membuat tanggal format Indonesia
                     var tanggal_db = new Date(data[i].tikTanggal); // Mengubah string tanggal dari database menjadi objek Date
@@ -150,7 +152,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     };
 
                     var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia
-
                     table.row.add([
                         data[i].tikNomor,
                         tanggal_benar,
@@ -273,6 +274,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         </label>
 
                         <div class="col-md-9">
+                         
                             <div id="m_tikTanggal" class="form-control d-flex align-items-center"
                                 style="height:55px;font-size:20px;width:300px;">
                             </div>
