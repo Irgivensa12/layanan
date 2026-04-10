@@ -26,7 +26,7 @@ if (!$this->session->userdata('userId')) {
         <div class="container" style="max-width:900px;">
 
             <h3 class="text-center font-weight-bold mb-4">
-                DATA LAYANAN SIM & SARPRAS
+                DATA LAYANAN SIM 
             </h3>
 
             <form action="<?= base_url('Insert/tambah_tiket_sim') ?>" method="post">

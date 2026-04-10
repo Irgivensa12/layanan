@@ -26,7 +26,7 @@ if (!$this->session->userdata('userId')) {
         <div class="container" style="max-width:900px;">
 
             <h3 class="text-center font-weight-bold mb-4">
-                DATA LAYANAN SIM & SARPRAS
+                DATA LAYANAN SARPRAS
             </h3>
 
             <form action="<?= base_url('Insert/tambah_tiket_sarpras') ?>" method="post">
@@ -36,14 +36,14 @@ if (!$this->session->userdata('userId')) {
                     <!-- Nomor Tiket -->
                     <div class="form-group row mb-4 align-items-center">
                         <label class="col-md-3 font-weight-bold text-md-right pr-4">
-                            Nomor Tiket
+                            Nomor ID Layanan
                         </label>
 
                         <div class="col-md-9">
                             <input type="text"
                                 class="form-control"
-                                name="tikNomor"
-                                value="<?= $no_tiket ?>"
+                                name="layID"
+                                value="<?= $no_layanan ?>"
                                 readonly
                                 placeholder="Masukan Nomor Tiket"
                                 style="height:50px;font-size:16px;">
@@ -88,7 +88,7 @@ if (!$this->session->userdata('userId')) {
                     <div class="form-group row mb-4 align-items-center">
 
                         <label class="col-md-3 font-weight-bold text-md-right pr-4">
-                            Ringkasan
+                            Keluhan
                         </label>
 
                         <div class="col-md-9">
@@ -105,7 +105,7 @@ if (!$this->session->userdata('userId')) {
                     <div class="form-group row mb-4">
 
                         <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-2">
-                            Deskripsi Kerusakan
+                            Deskripsi Keluhan
                         </label>
 
                         <div class="col-md-9">

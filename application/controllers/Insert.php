@@ -59,17 +59,19 @@ class Insert extends CI_Controller
     public function tambah_tiket_sarpras()
     {
         // generate ulang nomor tiket
-        $no_tiket = $this->Model->generate_no_tiket();
+        $no_layanan = $this->Model->generate_no_layanan();
         $data = [
-            'tikNomor'      => $no_tiket,
-            'tikTanggal'    => $this->input->post('tikTanggal'),
-            'tikUserID'     => $this->input->post('tikUserID'),
-            'tikRingkasan'  => $this->input->post('tikRingkasan'),
-            'tikStatus'  => 'N',
-            'tikDeskripsi'  => $this->input->post('tikDeskripsi')
+            'layID'      => $no_layanan,
+            'layTanggal'    => $this->input->post('layTanggal'),
+            'layUserID'     => $this->input->post('layUserID'),
+            'layDivisiID'  => $this->input->post('layDivisiID'),
+            'layHal'  => $this->input->post('layHal'),
+            'layDiskripsi'  => $this->input->post('layDiskripsi'),
+            'layStatus'  => 'N',
+            
         ];
 
-        $this->Model->insertData('tb_tiket', $data);
+        $this->Model->insertData_layanan('tb_layanan', $data);
         redirect('tiket_sarpras'); // setelah simpan, diarahkan ke halaman tiket_sarpras
     }
 
@@ -87,17 +89,7 @@ class Insert extends CI_Controller
             'tikDeskripsi'  => $this->input->post('tikDeskripsi')
         ];
 
-            $no_tiket = $this->Model->generate_no_tiket();
-            $data = [
-                'tikNomor'      => $no_tiket,
-                'tikTanggal'    => $this->input->post('tikTanggal'),
-                'tikUserID'     => $this->input->post('tikUserID'),
-                'tikRingkasan'  => $this->input->post('tikRingkasan'),
-                'tikStatus'  => 'N',
-                'tikDeskripsi'  => $this->input->post('tikDeskripsi')
-            ];
-
-            $this->Model->insertData('tb_tiket', $data);
+            $this->Model->insertData_sim('tb_tiket', $data);
 
             redirect('tiket_sim');
         }

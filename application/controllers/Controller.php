@@ -98,7 +98,7 @@ class Controller extends CI_Controller
 
     public function tambah_tiket_sarpras()
     {
-        $data['no_tiket'] = $this->Model->generate_no_tiket();
+        $data['no_layanan'] = $this->Model->generate_no_layanan();
         $data['userId'] = $this->session->userdata('userId');
         $this->load->view('header');
         $this->load->view('tambah_tiket_sarpras', $data);
