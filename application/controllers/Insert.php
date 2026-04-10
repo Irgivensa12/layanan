@@ -69,7 +69,7 @@ class Insert extends CI_Controller
             'tikDeskripsi'  => $this->input->post('tikDeskripsi')
         ];
 
-        $this->Model->insertData('tb_tiket', $data);
+        $this->Model->insertData_sim('tb_layanan', $data);
         redirect('tiket_sarpras'); // setelah simpan, diarahkan ke halaman tiket_sarpras
     }
 

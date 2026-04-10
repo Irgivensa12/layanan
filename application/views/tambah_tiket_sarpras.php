@@ -26,7 +26,7 @@ if (!$this->session->userdata('userId')) {
         <div class="container" style="max-width:900px;">
 
             <h3 class="text-center font-weight-bold mb-4">
-                DATA LAYANAN SIM & SARPRAS
+                DATA LAYANAN SARPRAS
             </h3>
 
             <form action="<?= base_url('Insert/tambah_tiket_sarpras') ?>" method="post">
@@ -36,7 +36,7 @@ if (!$this->session->userdata('userId')) {
                     <!-- Nomor Tiket -->
                     <div class="form-group row mb-4 align-items-center">
                         <label class="col-md-3 font-weight-bold text-md-right pr-4">
-                            Nomor Tiket
+                            Nomor Layanan ID
                         </label>
 
                         <div class="col-md-9">
@@ -45,7 +45,7 @@ if (!$this->session->userdata('userId')) {
                                 name="tikNomor"
                                 value="<?= $no_tiket ?>"
                                 readonly
-                                placeholder="Masukan Nomor Tiket"
+                                placeholder="Masukan Layanan ID"
                                 style="height:50px;font-size:16px;">
                         </div>
                     </div>

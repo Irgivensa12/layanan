@@ -57,13 +57,13 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     <table id="tabel" class="display nowrap" style="width:100%">
                         <thead style="color: black;">
                             <tr>
-                                <th style="width:10px">Layanan ID</th>
-                                <th>Layanan Tanggal</th>
-                                <th>Layanan User ID</th>
+                                <th style="width:10px">No</th>
+                                <th>Tanggal</th>
+                                <th>User ID</th>
                                 <th>Layanan Divisi ID</th>
-                                <th>Layaan Hal</th>
-                                <th>Layanan Diskripsi</th>
-                                <th>Layanan Status</th>
+                                <th>Keluhan</th>
+                                <th>Deskripsi</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody id="tbody" name="tbody" style="color: black;">
