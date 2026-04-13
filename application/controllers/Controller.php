@@ -67,23 +67,18 @@ class Controller extends CI_Controller
         }
 
         // cek privilege
-        $sarpras = $this->session->userdata('sarpras');
+        $pengguna = $this->session->userdata('sarpras');
         $admin   = $this->session->userdata('admin');
-
-        // jika user biasa, tidak boleh buka dashboard
-        if ($admin != 'Y' && $sarpras != 'Y') {
-            redirect('Controller/tiket_sim');
-        }
 
         // Mengambil nama dari session
         $data['nama'] = $this->session->userdata('userNama');
 
         if ($admin == 'Y') {
             $data['role'] = 'Admin';
-        } elseif ($sarpras == 'Y') {
-            $data['role'] = 'Operator';
+        } elseif ($pengguna == 'Y') {
+            $data['role'] = 'Operator'; // belum terpakai 
         } else {
-            $data['role'] = 'User';
+            $data['role'] = 'Pengguna';
         }
 
         $this->load->view('header', $data);

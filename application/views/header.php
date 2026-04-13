@@ -229,6 +229,7 @@
         ?>
 
         <!-- Admin -->
+        <?php if ($this->session->userdata('admin') == 'Y') { ?>
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse"
                 data-target="#collapseAdmin"
@@ -254,7 +255,7 @@
                 </div>
             </div>
         </li>
-
+        <?php } ?>
         <hr class="sidebar-divider">
 
 
