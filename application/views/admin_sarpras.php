@@ -63,6 +63,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                                 <th>Keluhan</th>
                                 <th>Deskripsi</th>
                                 <th>Status</th>
+                                <th style="width:100px">Detail</th>
                             </tr>
                         </thead>
                         <tbody id="tbody" name="tbody" style="color: black;">
@@ -183,12 +184,12 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         var tikNomor = $(this).data("id");
 
         $.ajax({
-            url: "<?= base_url('Select/detail_tiket/') ?>" + tikNomor,
+            url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + tikNomor,
             type: "GET",
             dataType: "JSON",
             success: function(data) {
                 // Format tanggal Indonesia
-                var tanggal_db = new Date(data.tikTanggal);
+                var tanggal_db = new Date(data.layTanggal);
 
                 var options = {
                     year: 'numeric',
@@ -198,7 +199,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
                 // Format tanggal Indonesia
-                var tanggal_db = new Date(data.tikTanggal);
+                var tanggal_db = new Date(data.layTanggal);
 
                 var options = {
                     year: 'numeric',
@@ -208,13 +209,13 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
                 var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
-                $("#m_tikNomor").text(data.tikNomor);
-                $("#m_tikTanggal").text(tanggal_benar);
+                // Menampilkan data ke dalam modal
+                $("#m_layID").text(data.layID); 
+                $("#m_layTanggal").text(tanggal_benar);
                 $("#m_userNama").text(data.userNama);
-                $("#m_tikRingkasan").text(data.tikRingkasan);
-                $("#m_tiketStatus").text(data.tiketStatus);
-                $('#m_tikDeskripsi').html(data.tikDeskripsi);
-
+                $("#m_layHal").text(data.layHal);
+                $("#m_layStatus").text(data.layStatus);
+                $('#m_layDiskripsi').html(data.layDiskripsi);
             }
         });
 
@@ -268,119 +269,140 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             <!-- BODY -->
             <div class="modal-body" style="font-size:20px; padding:40px;">
 
-                <div class="container-fluid">
+                <div class="row">
+                    <!-- Kolom kiri untuk informasi tiket -->
+                    <div class="col-md-6">
+                        <!-- Nomor Tiket -->
+                        <div class="form-group row align-items-center mb-4">
+                            <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                                Nomor Tiket
+                            </label>
 
-                    <!-- Nomor Tiket -->
-                    <div class="form-group row align-items-center mb-4">
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
-                            Nomor Tiket
-                        </label>
-
-                        <div class="col-md-9">
-                            <div id="m_tikNomor" class="form-control d-flex align-items-center"
-                                style="height:55px;font-size:20px;">
+                            <div class="col-md-9">
+                                <div id="m_layID" class="form-control d-flex align-items-center"
+                                    style="height:55px;font-size:20px;">
+                                </div>
                             </div>
                         </div>
+
+
+                        <!-- Tanggal -->
+                        <div class="form-group row align-items-center mb-4">
+
+                            <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                                Tanggal
+                            </label>
+
+                            <div class="col-md-9">
+                                <div id="m_layTanggal" class="form-control d-flex align-items-center"
+                                    style="height:55px;font-size:20px;width:300px;">
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <!-- User -->
+                        <div class="form-group row align-items-center mb-4">
+
+                            <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                                User
+                            </label>
+
+                            <div class="col-md-9">
+                                <div id="m_userNama" class="form-control d-flex align-items-center"
+                                    style="height:55px;font-size:20px;">
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <!-- Status -->
+                        <div class="form-group row align-items-center mb-4">
+
+                            <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                                Status
+                            </label>
+
+                            <div class="col-md-9">
+                                <div id="m_layStatus" class="form-control d-flex align-items-center"
+                                    style="height:55px;font-size:20px;width:200px;">
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <!-- Ringkasan -->
+                        <div class="form-group row mb-4">
+
+                            <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-3">
+                                Ringkasan
+                            </label>
+
+                            <div class="col-md-9">
+                                <div id="m_layHal" class="form-control"
+                                    style="font-size:20px;padding:20px;min-height:120px;">
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <!-- Deskripsi -->
+                        <div class="form-group row">
+
+                            <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-3">
+                                Deskripsi Kerusakan
+                            </label>
+
+                            <div class="col-md-9">
+                                <div id="m_layDiskripsi" class="form-control"
+                                    style="font-size:20px;padding:20px;min-height:200px;">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!-- KANAN: PENANGGUNG JAWAB -->
+                    <div class="col-md-6">
+
+                        <h5 class="mb-3">Penanggung Jawab</h5>
+
+                        <div id="petugas-container">
+
+                            <div class="form-group">
+                                <label>Petugas 1</label>
+                                <select name="petugas[]" class="form-control">
+                                    <option value="">-- Pilih Petugas --</option>
+                                    <option value="1">Petugas A</option>
+                                    <option value="2">Petugas B</option>
+                                    <option value="3">Petugas C</option>
+                                </select>
+                            </div>
+
+                        </div>
+
                     </div>
 
+                    <!-- FOOTER -->
+                    <div class="modal-footer justify-content-center">
 
-                    <!-- Tanggal -->
-                    <div class="form-group row align-items-center mb-4">
+                        <button type="button"
+                            class="btn btn-danger"
+                            style="font-size:20px;padding:10px 40px;"
+                            data-dismiss="modal">
 
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
-                            Tanggal
-                        </label>
+                            Tutup
 
-                        <div class="col-md-9">
-                            <div id="m_tikTanggal" class="form-control d-flex align-items-center"
-                                style="height:55px;font-size:20px;width:300px;">
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                    <!-- User -->
-                    <div class="form-group row align-items-center mb-4">
-
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
-                            User
-                        </label>
-
-                        <div class="col-md-9">
-                            <div id="m_userNama" class="form-control d-flex align-items-center"
-                                style="height:55px;font-size:20px;">
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                    <!-- Status -->
-                    <div class="form-group row align-items-center mb-4">
-
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
-                            Status
-                        </label>
-
-                        <div class="col-md-9">
-                            <div id="m_tiketStatus" class="form-control d-flex align-items-center"
-                                style="height:55px;font-size:20px;width:200px;">
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                    <!-- Ringkasan -->
-                    <div class="form-group row mb-4">
-
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-3">
-                            Ringkasan
-                        </label>
-
-                        <div class="col-md-9">
-                            <div id="m_tikRingkasan" class="form-control"
-                                style="font-size:20px;padding:20px;min-height:120px;">
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                    <!-- Deskripsi -->
-                    <div class="form-group row">
-
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-3">
-                            Deskripsi Kerusakan
-                        </label>
-
-                        <div class="col-md-9">
-                            <div id="m_tikDeskripsi" class="form-control"
-                                style="font-size:20px;padding:20px;min-height:200px;">
-                            </div>
-                        </div>
+                        </button>
 
                     </div>
 
                 </div>
-
             </div>
-
-            <!-- FOOTER -->
-            <div class="modal-footer justify-content-center">
-
-                <button type="button"
-                    class="btn btn-danger"
-                    style="font-size:20px;padding:10px 40px;"
-                    data-dismiss="modal">
-
-                    Tutup
-
-                </button>
-
-            </div>
-
         </div>
     </div>
 </div>
