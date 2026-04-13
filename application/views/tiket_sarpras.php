@@ -63,6 +63,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                                 <th>Keluhan</th>
                                 <th>Deskripsi</th>
                                 <th>Status</th>
+                                <th style="width:100px">Detail</th>
                             </tr>
                         </thead>
                         <tbody id="tbody" name="tbody" style="color: black;">
@@ -180,15 +181,15 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
     $(document).on("click", ".detailBtn", function() { // Event listener untuk tombol detail
 
-        var tikNomor = $(this).data("id");
+        var tikNomor = $(this).data("id"); // Mengambil data-id dari tombol yang diklik
 
         $.ajax({
-            url: "<?= base_url('Select/detail_tiket/') ?>" + tikNomor,
+            url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + tikNomor,
             type: "GET",
             dataType: "JSON",
             success: function(data) {
                 // Format tanggal Indonesia
-                var tanggal_db = new Date(data.tikTanggal);
+                var tanggal_db = new Date(data.layTanggal);
 
                 var options = {
                     year: 'numeric',
@@ -197,23 +198,13 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 };
                 var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
-                // Format tanggal Indonesia
-                var tanggal_db = new Date(data.tikTanggal);
-
-                var options = {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                };
-
-                var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
-
-                $("#m_tikNomor").text(data.tikNomor);
-                $("#m_tikTanggal").text(tanggal_benar);
+                // Menampilkan data ke dalam modal
+                $("#m_layID").text(data.layID); 
+                $("#m_layTanggal").text(tanggal_benar);
                 $("#m_userNama").text(data.userNama);
-                $("#m_tikRingkasan").text(data.tikRingkasan);
-                $("#m_tiketStatus").text(data.tiketStatus);
-                $('#m_tikDeskripsi').html(data.tikDeskripsi);
+                $("#m_layHal").text(data.layHal);
+                $("#m_layStatus").text(data.layStatus);
+                $('#m_layDiskripsi').html(data.layDiskripsi);
 
             }
         });
@@ -277,7 +268,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_tikNomor" class="form-control d-flex align-items-center"
+                            <div id="m_layID" class="form-control d-flex align-items-center"
                                 style="height:55px;font-size:20px;">
                             </div>
                         </div>
@@ -292,7 +283,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_tikTanggal" class="form-control d-flex align-items-center"
+                            <div id="m_layTanggal" class="form-control d-flex align-items-center"
                                 style="height:55px;font-size:20px;width:300px;">
                             </div>
                         </div>
@@ -324,7 +315,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_tiketStatus" class="form-control d-flex align-items-center"
+                            <div id="m_layStatus" class="form-control d-flex align-items-center"
                                 style="height:55px;font-size:20px;width:200px;">
                             </div>
                         </div>
@@ -340,7 +331,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_tikRingkasan" class="form-control"
+                            <div id="m_layHal" class="form-control"
                                 style="font-size:20px;padding:20px;min-height:120px;">
                             </div>
                         </div>
@@ -356,7 +347,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_tikDeskripsi" class="form-control"
+                            <div id="m_layDiskripsi" class="form-control"
                                 style="font-size:20px;padding:20px;min-height:200px;">
                             </div>
                         </div>

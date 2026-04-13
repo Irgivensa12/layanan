@@ -112,4 +112,26 @@ class Select extends CI_Controller
 
         echo json_encode($data);
     }
+    public function detail_tiket_sarpras($tikNomor = null)
+    {
+        $this->db->select("
+        layID,
+        layTanggal,
+        layUserID,
+        layHal,
+        layDiskripsi,
+        (CASE 
+            WHEN layStatus='Y' THEN 'CLOSE' 
+            ELSE 'OPEN' 
+        END) AS tiketStatus
+    ");
+
+        $this->db->from('tb_layanan');
+        $this->db->join('vuser', 'layUserID = userID', 'left');
+        $this->db->where('layID', $tikNomor);
+
+        $data = $this->db->get()->row_array();
+
+        echo json_encode($data);
+    }
 }

@@ -142,9 +142,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     // Membuat tanggal format Indonesia
                     var tanggal_db = new Date(data[i].tikTanggal); // Mengubah string tanggal dari database menjadi objek Date
 
-                    // Membuat tanggal format Indonesia
-                    var tanggal_db = new Date(data[i].tikTanggal); // Mengubah string tanggal dari database menjadi objek Date
-
                     var options = { // Opsi untuk format tanggal Indonesia
                         year: 'numeric',
                         month: 'long',
