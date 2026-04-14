@@ -261,7 +261,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             <!-- HEADER -->
             <div class="modal-header bg-primary text-white">
                 <h4 class="modal-title" style="font-size:26px;">
-                    DATA LAYANAN SIM & SARPRAS
+                    DATA LAYANAN SARPRAS
                 </h4>
                 <button type="button" class="close text-white" data-dismiss="modal" style="font-size:30px;">&times;</button>
             </div>
