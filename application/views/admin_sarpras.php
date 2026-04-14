@@ -28,7 +28,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         <div class="container-fluid">
 
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">List Semua Kerusakan SARPRAS</h1>
+                <h1 class="h3 mb-0 text-gray-800">List Semua Keluhan SARPRAS</h1>
             </div>
 
             <div class="form-group row">
@@ -210,7 +210,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
                 // Menampilkan data ke dalam modal
-                $("#m_layID").text(data.layID); 
+                $("#m_layID").text(data.layID);
                 $("#m_layTanggal").text(tanggal_benar);
                 $("#m_userNama").text(data.userNama);
                 $("#m_layHal").text(data.layHal);
@@ -255,154 +255,106 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 </script>
 
 <div class="modal fade" id="exampleModal" tabindex="-1">
-    <div class="modal-dialog" style="max-width:75%; width:75%; margin:40px auto;">
+    <div class="modal-dialog modal-lg" style="max-width:700px;">
         <div class="modal-content" style="border-radius:15px;">
 
             <!-- HEADER -->
-            <div class="modal-header bg-primary text-white">
-                <h4 class="modal-title" style="font-size:26px;">
-                    DATA LAYANAN SIM & SARPRAS
+            <div class="modal-header bg-primary text-white justify-content-center">
+                <h4 class="modal-title text-center w-100" style="font-size:26px;">
+                    DATA LAYANAN SARPRAS
                 </h4>
-                <button type="button" class="close text-white" data-dismiss="modal" style="font-size:30px;">&times;</button>
+                <button type="button" class="close text-white position-absolute"
+                    style="right:20px; font-size:30px;" data-dismiss="modal">
+                    &times;
+                </button>
             </div>
 
-            <!-- BODY -->
-            <div class="modal-body" style="font-size:20px; padding:40px;">
+            <!-- BODY (SCROLLABLE) -->
+            <div class="modal-body"
+                style="max-height:75vh; overflow-y:auto; padding:30px; font-size:20px;">
 
-                <div class="row">
-                    <!-- Kolom kiri untuk informasi tiket -->
-                    <div class="col-md-6">
-                        <!-- Nomor Tiket -->
-                        <div class="form-group row align-items-center mb-4">
-                            <label class="col-md-3 font-weight-bold text-md-right pr-4">
-                                Nomor Tiket
-                            </label>
-
-                            <div class="col-md-9">
-                                <div id="m_layID" class="form-control d-flex align-items-center"
-                                    style="height:55px;font-size:20px;">
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <!-- Tanggal -->
-                        <div class="form-group row align-items-center mb-4">
-
-                            <label class="col-md-3 font-weight-bold text-md-right pr-4">
-                                Tanggal
-                            </label>
-
-                            <div class="col-md-9">
-                                <div id="m_layTanggal" class="form-control d-flex align-items-center"
-                                    style="height:55px;font-size:20px;width:300px;">
-                                </div>
-                            </div>
-
-                        </div>
-
-
-                        <!-- User -->
-                        <div class="form-group row align-items-center mb-4">
-
-                            <label class="col-md-3 font-weight-bold text-md-right pr-4">
-                                User
-                            </label>
-
-                            <div class="col-md-9">
-                                <div id="m_userNama" class="form-control d-flex align-items-center"
-                                    style="height:55px;font-size:20px;">
-                                </div>
-                            </div>
-
-                        </div>
-
-
-                        <!-- Status -->
-                        <div class="form-group row align-items-center mb-4">
-
-                            <label class="col-md-3 font-weight-bold text-md-right pr-4">
-                                Status
-                            </label>
-
-                            <div class="col-md-9">
-                                <div id="m_layStatus" class="form-control d-flex align-items-center"
-                                    style="height:55px;font-size:20px;width:200px;">
-                                </div>
-                            </div>
-
-                        </div>
-
-
-                        <!-- Ringkasan -->
-                        <div class="form-group row mb-4">
-
-                            <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-3">
-                                Ringkasan
-                            </label>
-
-                            <div class="col-md-9">
-                                <div id="m_layHal" class="form-control"
-                                    style="font-size:20px;padding:20px;min-height:120px;">
-                                </div>
-                            </div>
-
-                        </div>
-
-
-                        <!-- Deskripsi -->
-                        <div class="form-group row">
-
-                            <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-3">
-                                Deskripsi Kerusakan
-                            </label>
-
-                            <div class="col-md-9">
-                                <div id="m_layDiskripsi" class="form-control"
-                                    style="font-size:20px;padding:20px;min-height:200px;">
-                                </div>
-                            </div>
-
-                        </div>
-
+                <!-- Nomor Tiket -->
+                <div class="mb-4">
+                    <label class="font-weight-bold">Nomor Tiket</label>
+                    <div id="m_layID" class="form-control text-center"
+                        style="width:200px; font-size:22px; height:50px;">
                     </div>
-                    <!-- KANAN: PENANGGUNG JAWAB -->
-                    <div class="col-md-6">
+                </div>
 
-                        <h5 class="mb-3">Penanggung Jawab</h5>
-
-                        <div id="petugas-container">
-
-                            <div class="form-group">
-                                <label>Petugas 1</label>
-                                <select name="petugas[]" class="form-control">
-                                    <option value="">-- Pilih Petugas --</option>
-                                    <option value="1">Petugas A</option>
-                                    <option value="2">Petugas B</option>
-                                    <option value="3">Petugas C</option>
-                                </select>
-                            </div>
-
-                        </div>
-
+                <!-- Tanggal -->
+                <div class="mb-4">
+                    <label class="font-weight-bold">Tanggal</label>
+                    <div id="m_layTanggal" class="form-control"
+                        style="width:250px; font-size:22px; height:50px;">
                     </div>
+                </div>
 
-                    <!-- FOOTER -->
-                    <div class="modal-footer justify-content-center">
+                <!-- User -->
+                <div class="mb-4">
+                    <label class="font-weight-bold">User</label>
+                    <div id="m_userNama" class="form-control"
+                        style="font-size:22px; height:50px;">
+                    </div>
+                </div>
 
-                        <button type="button"
-                            class="btn btn-danger"
-                            style="font-size:20px;padding:10px 40px;"
-                            data-dismiss="modal">
+                <!-- Status -->
+                <div class="mb-4">
+                    <label class="font-weight-bold">Status</label>
+                    <div id="m_layStatus" class="form-control text-center font-weight-bold"
+                        style="width:150px; font-size:22px; height:50px;">
+                    </div>
+                </div>
 
-                            Tutup
+                <hr>
 
-                        </button>
+                <!-- Ringkasan -->
+                <div class="mb-4">
+                    <label class="font-weight-bold">Ringkasan</label>
+                    <div id="m_layHal" class="form-control"
+                        style="min-height:120px; font-size:20px; padding:15px;">
+                    </div>
+                </div>
 
+                <!-- Deskripsi -->
+                <div class="mb-4">
+                    <label class="font-weight-bold">Deskripsi Keluhan</label>
+                    <div id="m_layDiskripsi" class="form-control"
+                        style="min-height:200px; font-size:20px; padding:15px;">
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- PENANGGUNG JAWAB -->
+                <div class="mb-4">
+                    <h5 class="text-primary font-weight-bold mb-3">
+                        Penanggung Jawab
+                    </h5>
+
+                    <div class="form-group">
+                        <label>Petugas 1</label>
+                        <select name="petugas[]" class="form-control" style="height:50px; font-size:20px;">
+                            <option value="">-- Pilih Petugas --</option>
+                            <option value="1">Petugas A</option>
+                            <option value="2">Petugas B</option>
+                            <option value="3">Petugas C</option>
+                        </select>
                     </div>
 
                 </div>
+
             </div>
+
+            <!-- FOOTER -->
+            <div class="modal-footer justify-content-center">
+                <button type="button"
+                    class="btn btn-danger"
+                    style="font-size:20px; padding:12px 40px;"
+                    data-dismiss="modal">
+                    Tutup
+                </button>
+            </div>
+
         </div>
     </div>
 </div>

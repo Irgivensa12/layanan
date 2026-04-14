@@ -59,10 +59,10 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                             <tr>
                                 <th style="width:10px">No</th>
                                 <th>Tanggal</th>
-                                <th>Penginput</th>
-                                <th>Ringkasan</th>
+                                <th>User ID</th>
+                                <th>Keluhan</th>
+                                <th>Deskripsi</th>
                                 <th>Status</th>
-                                <th>Detail</th>
                             </tr>
                         </thead>
                         <tbody id="tbody" name="tbody" style="color: black;">
@@ -172,8 +172,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         data[i].layHal,
                         data[i].layDiskripsi,
                         data[i].layStatus,
-                        '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
-                        data[i].layID + '" data-toggle="modal" data-target="#exampleModal">Detail</button>'
                     ]);
                 }
 
@@ -181,37 +179,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             }
         });
     }
-
-    $(document).on("click", ".detailBtn", function() { // Event listener untuk tombol detail
-
-        var tikNomor = $(this).data("id");
-
-        $.ajax({
-            url: "<?= base_url('Select/detail_tiket/') ?>" + tikNomor,
-            type: "GET",
-            dataType: "JSON",
-            success: function(data) {
-                // Format tanggal Indonesia
-                var tanggal_db = new Date(data.layTanggal);
-
-                var options = {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                };
-                var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
-
-                $("#m_tikNomor").text(data.tikNomor);
-                $("#m_tikTanggal").text(tanggal_benar);
-                $("#m_userNama").text(data.userNama);
-                $("#m_tikRingkasan").text(data.tikRingkasan);
-                $("#m_tiketStatus").text(data.tiketStatus);
-                $('#m_tikDeskripsi').html(data.tikDeskripsi);
-
-            }
-        });
-
-    });
 
     // kalau butuh input dari user
     function getContoh2() {

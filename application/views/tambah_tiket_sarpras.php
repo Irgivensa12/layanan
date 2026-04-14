@@ -113,7 +113,7 @@ if (!$this->session->userdata('userId')) {
                                 class="form-control"
                                 name="tikDeskripsi"
                                 rows="5"
-                                placeholder="Deskripsi Kerusakan"
+                                placeholder="Deskripsi Keluhan"
                                 style="font-size:16px;padding:12px;">
 </textarea>
                         </div>
