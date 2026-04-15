@@ -252,6 +252,30 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             }
         });
     }
+
+    function simpanPetugas() { // function untuk menyimpan petugas yang dipilih di modal detail
+
+        var petugas = []; // array untuk menyimpan petugas yang dipilih
+
+        $('select[name="petugas[]"]').each(function() { // loop untuk setiap select petugas
+            if ($(this).val() != '') { // jika petugas dipilih (tidak kosong), simpan ke array
+                petugas.push($(this).val());
+            }
+        });
+
+        $.ajax({
+            url: "<?= base_url('Controller/simpan_petugas') ?>",
+            method: "POST", // kirim data menggunakan POST karena mengirim data yang lebih kompleks (array petugas)
+            data: {
+                layID: $('#m_layID').text(), // ambil ID layanan dari modal
+                petugas: petugas // kirim array petugas yang dipilih ke controller
+            },
+            success: function(res) { // jika berhasil, tampilkan alert dan tutup modal
+                alert("Pilihan Petugas Berhasil disimpan!");
+                $('#exampleModal').modal('hide');
+            }
+        });
+    }
 </script>
 
 <div class="modal fade" id="exampleModal" tabindex="-1">
@@ -342,7 +366,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     </div>
 
                 </div>
-
+                <button class="btn btn-success" onclick="simpanPetugas()">Simpan</button>
             </div>
 
             <!-- FOOTER -->
