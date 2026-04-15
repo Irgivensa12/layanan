@@ -28,7 +28,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         <div class="container-fluid">
 
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">List Semua Kerusakan SARPRAS</h1>
+                <h1 class="h3 mb-0 text-gray-800">List Semua Keluhan SARPRAS</h1>
             </div>
 
             <div class="form-group row">
@@ -199,7 +199,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
                 // Menampilkan data ke dalam modal
-                $("#m_layID").text(data.layID); 
+                $("#m_layID").text(data.layID);
                 $("#m_layTanggal").text(tanggal_benar);
                 $("#m_userNama").text(data.userNama);
                 $("#m_layHal").text(data.layHal);
@@ -250,7 +250,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
             <!-- HEADER -->
             <div class="modal-header bg-primary text-white">
-                <h4 class="modal-title" style="font-size:26px;">
+                <h4 class="modal-title text-center w-100" style="font-size:26px;">
                     DATA LAYANAN SARPRAS
                 </h4>
                 <button type="button" class="close text-white" data-dismiss="modal" style="font-size:30px;">&times;</button>
@@ -343,7 +343,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     <div class="form-group row">
 
                         <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-3">
-                            Deskripsi Kerusakan
+                            Deskripsi Keluhan
                         </label>
 
                         <div class="col-md-9">
