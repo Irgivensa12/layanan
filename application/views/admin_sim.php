@@ -180,7 +180,11 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 $("#m_tikTanggal").text(tanggal_benar);
                 $("#m_userNama").text(data.userNama);
                 $("#m_tikRingkasan").text(data.tikRingkasan);
-                $("#m_tiketStatus").text(data.tiketStatus);
+                  $("#m_tikStatus").html(
+                    data.tikStatus === 'OPEN' ?
+                    '<span class="badge badge-success">OPEN</span>' :
+                    '<span class="badge badge-secondary">CLOSED</span>'
+                );
                 $('#m_tikDeskripsi').html(data.tikDeskripsi);
 
             }
@@ -314,7 +318,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_tiketStatus" class="form-control d-flex align-items-center"
+                            <div id="m_tikStatus" class="form-control d-flex align-items-center"
                                 style="height:55px;font-size:20px;width:200px;">
                             </div>
                         </div>

@@ -148,15 +148,22 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         day: 'numeric'
                     };
 
+                    var statusBtn = '';
+
+                    if (data[i].tikStatus == 'N') {
+                        statusBtn = '<span class="badge badge-success">OPEN</span>';
+                    } else {
+                        statusBtn = '<span class="badge badge-secondary">CLOSED</span>';
+                    }
+
                     var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia
                     table.row.add([
                         data[i].tikNomor,
                         tanggal_benar,
                         data[i].tikRingkasan,
-                        data[i].tikStatus,
+                        statusBtn,
                         '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
                         data[i].tikNomor + '" data-toggle="modal" data-target="#exampleModal">Detail</button>'
-
                     ]);
                 }
 
@@ -167,35 +174,40 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
     $(document).on("click", ".detailBtn", function() { // Event listener untuk tombol detail
 
-    var tikNomor = $(this).data("id");
+        var tikNomor = $(this).data("id");
 
-    $.ajax({
-        url: "<?= base_url('Select/detail_tiket/') ?>" + tikNomor,
-        type: "GET",
-        dataType: "JSON",
-        success: function(data) {
+        $.ajax({
+            url: "<?= base_url('Select/detail_tiket/') ?>" + tikNomor,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data) {
 
-            // Format tanggal Indonesia
-            var tanggal_db = new Date(data.tikTanggal);
+                // Format tanggal Indonesia
+                var tanggal_db = new Date(data.tikTanggal);
 
-            var options = {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            };
-            var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
+                var options = {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
+                var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
-            $("#m_tikNomor").text(data.tikNomor);
-            $("#m_tikTanggal").text(tanggal_benar); 
-            $("#m_userNama").text(data.userNama);
-            $("#m_tikRingkasan").text(data.tikRingkasan);
-            $("#m_tiketStatus").text(data.tiketStatus);
-            $('#m_tikDeskripsi').html(data.tikDeskripsi);
+                $("#m_tikNomor").text(data.tikNomor);
+                $("#m_tikTanggal").text(tanggal_benar);
+                $("#m_userNama").text(data.userNama);
+                $("#m_tikRingkasan").text(data.tikRingkasan);
+                // ✅ STATUS SUDAH DARI CONTROLLER (OPEN/CLOSED)
+                $("#m_tikStatus").html(
+                    data.tikStatus === 'OPEN' ?
+                    '<span class="badge badge-success">OPEN</span>' :
+                    '<span class="badge badge-secondary">CLOSED</span>'
+                );
+                $('#m_tikDeskripsi').html(data.tikDeskripsi);
 
-        }
+            }
+        });
+
     });
-
-});
 
     // kalau butuh input dari user
     function getContoh2() {
@@ -271,7 +283,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         </label>
 
                         <div class="col-md-9">
-                         
+
                             <div id="m_tikTanggal" class="form-control d-flex align-items-center"
                                 style="height:55px;font-size:20px;width:300px;">
                             </div>
@@ -304,7 +316,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_tiketStatus" class="form-control d-flex align-items-center"
+                            <div id="m_tikStatus" class="form-control d-flex align-items-center"
                                 style="height:55px;font-size:20px;width:200px;">
                             </div>
                         </div>
@@ -341,6 +353,19 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                             </div>
                         </div>
 
+                    </div>
+
+                    <!-- PENANGGUNG JAWAB -->
+                    <div class="form-group row mt-4">
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-3">
+                            Penanggung Jawab
+                        </label>
+
+                        <div class="col-md-9">
+                            <div id="m_penanggungJawab" class="form-control"
+                                style="font-size:20px;padding:20px;min-height:80px;">
+                            </div>
+                        </div>
                     </div>
 
                 </div>

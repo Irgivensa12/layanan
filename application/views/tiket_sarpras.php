@@ -168,7 +168,9 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         data[i].layUserID,
                         data[i].layHal,
                         data[i].layDiskripsi,
-                        data[i].layStatus,
+                        data[i].layStatus == 'N' ?
+                        '<button class="btn btn-success btn-sm" disabled>OPEN</button>' :
+                        '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>',
                         '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
                         data[i].layID + '" data-toggle="modal" data-target="#exampleModal">Detail</button>'
                     ]);
@@ -188,7 +190,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             type: "GET",
             dataType: "JSON",
             success: function(data) {
-                // Format tanggal Indonesia
+
                 var tanggal_db = new Date(data.layTanggal);
 
                 var options = {
@@ -196,16 +198,31 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     month: 'long',
                     day: 'numeric'
                 };
+
                 var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
-                // Menampilkan data ke dalam modal
                 $("#m_layID").text(data.layID);
                 $("#m_layTanggal").text(tanggal_benar);
                 $("#m_userNama").text(data.userNama);
                 $("#m_layHal").text(data.layHal);
-                $("#m_layStatus").text(data.layStatus);
+
+                // ✅ STATUS SUDAH DARI CONTROLLER (OPEN/CLOSED)
+                $("#m_layStatus").html(
+                    data.layStatus === 'OPEN' ?
+                    '<span class="badge badge-success">OPEN</span>' :
+                    '<span class="badge badge-secondary">CLOSED</span>'
+                );
+
                 $('#m_layDiskripsi').html(data.layDiskripsi);
 
+                // ✅ PENANGGUNG JAWAB
+                $("#m_penanggungJawab").html(
+                    data.penanggungJawab ?
+                    '<span class="badge badge-info" style="font-size:18px;">' +
+                    data.penanggungJawab +
+                    '</span>' :
+                    '<span class="text-muted">Belum ditentukan</span>'
+                );
             }
         });
 
@@ -354,9 +371,24 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
                     </div>
 
+                    <!-- PENANGGUNG JAWAB -->
+                    <div class="form-group row mt-4">
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-3">
+                            Penanggung Jawab
+                        </label>
+
+                        <div class="col-md-9">
+                            <div id="m_penanggungJawab" class="form-control"
+                                style="font-size:20px;padding:20px;min-height:80px;">
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>
+
+
 
             <!-- FOOTER -->
             <div class="modal-footer justify-content-center">

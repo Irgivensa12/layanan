@@ -168,7 +168,9 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         data[i].layUserID,
                         data[i].layHal,
                         data[i].layDiskripsi,
-                        data[i].layStatus,
+                        data[i].layStatus == 'N' ?
+                        '<button class="btn btn-success btn-sm statusBtn" data-id="' + data[i].layID + '">OPEN</button>' :
+                        '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>',
                         '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
                         data[i].layID + '" data-toggle="modal" data-target="#exampleModal">Detail</button>'
                     ]);
@@ -214,7 +216,11 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 $("#m_layTanggal").text(tanggal_benar);
                 $("#m_userNama").text(data.userNama);
                 $("#m_layHal").text(data.layHal);
-                $("#m_layStatus").text(data.layStatus);
+                $("#m_layStatus").html(
+                    data.layStatus === 'OPEN' ?
+                    '<span class="badge badge-success">OPEN</span>' :
+                    '<span class="badge badge-secondary">CLOSED</span>'
+                );
                 $('#m_layDiskripsi').html(data.layDiskripsi);
             }
         });
@@ -249,6 +255,30 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     no++;
                 }
                 $("#tbody").html(html);
+            }
+        });
+    }
+
+    function simpanPetugas() { // function untuk menyimpan petugas yang dipilih di modal detail
+
+        var petugas = []; // array untuk menyimpan petugas yang dipilih
+
+        $('select[name="petugas[]"]').each(function() { // loop untuk setiap select petugas
+            if ($(this).val() != '') { // jika petugas dipilih (tidak kosong), simpan ke array
+                petugas.push($(this).val());
+            }
+        });
+
+        $.ajax({
+            url: "<?= base_url('Controller/simpan_petugas') ?>",
+            method: "POST", // kirim data menggunakan POST karena mengirim data yang lebih kompleks (array petugas)
+            data: {
+                layID: $('#m_layID').text(), // ambil ID layanan dari modal
+                petugas: petugas // kirim array petugas yang dipilih ke controller
+            },
+            success: function(res) { // jika berhasil, tampilkan alert dan tutup modal
+                alert("Pilihan Petugas Berhasil disimpan!");
+                $('#exampleModal').modal('hide');
             }
         });
     }
@@ -342,7 +372,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     </div>
 
                 </div>
-
+                <button class="btn btn-success" onclick="simpanPetugas()">Simpan</button>
             </div>
 
             <!-- FOOTER -->

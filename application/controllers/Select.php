@@ -160,7 +160,7 @@ class Select extends CI_Controller
         (CASE 
             WHEN tikStatus='Y' THEN 'CLOSE' 
             ELSE 'OPEN' 
-        END) AS tiketStatus
+        END) AS tikStatus
     ");
 
         $this->db->from('tb_tiket');
@@ -171,18 +171,25 @@ class Select extends CI_Controller
 
         echo json_encode($data);
     }
+
     public function detail_tiket_sarpras($tikNomor = null)
     {
         $this->db->select("
         layID,
         layTanggal,
         layUserID,
+        userNama,
         layHal,
         layDiskripsi,
+        layPetugas1,
+        layPetugas2,
+        layPetugas3,
+        layPetugas4,
+        layPetugas5,
         (CASE 
             WHEN layStatus='Y' THEN 'CLOSE' 
             ELSE 'OPEN' 
-        END) AS tiketStatus
+        END) AS layStatus
     ");
 
         $this->db->from('tb_layanan');
@@ -190,6 +197,37 @@ class Select extends CI_Controller
         $this->db->where('layID', $tikNomor);
 
         $data = $this->db->get()->row_array();
+
+        // 🔥 ambil nama petugas satu per satu (TETAP)
+        $petugas = [];
+
+        $listPetugas = [
+            $data['layPetugas1'],
+            $data['layPetugas2'],
+            $data['layPetugas3'],
+            $data['layPetugas4'],
+            $data['layPetugas5']
+        ];
+
+        foreach ($listPetugas as $p) {
+            if (!empty($p)) {
+                $nama = $this->db
+                    ->select('userNama')
+                    ->from('vuser')
+                    ->where('userID', $p)
+                    ->get()
+                    ->row();
+
+                if ($nama) {
+                    $petugas[] = $nama->userNama;
+                }
+            }
+        }
+
+        // 🔥 tetap gabung jadi 1 baris + tetap ada default
+        $data['penanggungJawab'] = !empty($petugas)
+            ? implode(', ', $petugas)
+            : 'Belum ditentukan';
 
         echo json_encode($data);
     }

@@ -165,4 +165,29 @@ class Controller extends CI_Controller
 
         $this->Model->update_tiket($tikNomor, $data);
     }
+
+    public function simpan_petugas() // function untuk menyimpan petugas ke database
+    {
+        $layID   = $this->input->post('layID'); // ID layanan yang akan diupdate petugasnya
+        $petugas = $this->input->post('petugas'); // array petugas yang dikirim dari frontend
+
+        // reset semua petugas menjadi null terlebih dahulu
+        $data = [
+            'layPetugas1' => null,
+            'layPetugas2' => null,
+            'layPetugas3' => null,
+            'layPetugas4' => null,
+            'layPetugas5' => null,
+        ];
+
+        // isi sesuai urutan
+        for ($i = 0; $i < count($petugas); $i++) {
+            $data['layPetugas' . ($i + 1)] = $petugas[$i];
+        }
+
+        $this->db->where('layID', $layID); // pastikan update berdasarkan layID
+        $this->db->update('tb_layanan', $data); // update data petugas di database
+
+        echo json_encode(['status' => 'ok']); // kirim response sukses ke frontend
+    }
 }
