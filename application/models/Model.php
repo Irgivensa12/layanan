@@ -210,7 +210,7 @@ class model extends CI_Model
         $this->db->where('tikNomor', $tikNomor);
         $this->db->update('tb_tiket', $data);
     }
-    public function update_tiket_lay($tikNomor, $data)
+    public function update_tiket_lay($layID, $data)
     {
         $this->db->where('layID', $layID);
         $this->db->update('tb_layanan', $data);

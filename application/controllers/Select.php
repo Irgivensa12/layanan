@@ -160,7 +160,9 @@ class Select extends CI_Controller
         (CASE 
             WHEN tikStatus='Y' THEN 'CLOSE' 
             ELSE 'OPEN' 
-        END) AS tikStatus
+        END) AS tikStatus,
+        tikOperator,
+        tikTindakan
     ");
 
         $this->db->from('tb_tiket');

@@ -190,4 +190,18 @@ class Controller extends CI_Controller
 
         echo json_encode(['status' => 'ok']); // kirim response sukses ke frontend
     }
+
+    public function simpan_tindakan() // function untuk menyimpan tindakan ke database
+    {
+        $tikNomor = $this->input->post('tikNomor'); // nomor tiket yang akan diupdate tindakannya
+        $tindakan = $this->input->post('tindakan'); // tindakan yang dikirim dari frontend
+
+        $data = [
+            'tikTindakan' => $tindakan
+        ];
+
+        $this->Model->update_tiket($tikNomor, $data); // update data tindakan di database
+
+        echo json_encode(['status' => 'ok']); // kirim response sukses ke frontend
+    }
 }

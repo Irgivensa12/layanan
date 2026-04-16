@@ -149,7 +149,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         '<button class="btn btn-success btn-sm statusBtn" data-id="' + data[i].tikNomor + '">OPEN</button>' :
                         '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>',
 
-                        '<button class="btn btn-primary btn-sm detailBtn" data-id="' + data[i].tikNomor + '" data-toggle="modal" data-target="#exampleModal">Detail</button>'
+                        '<button class="btn btn-primary btn-sm detailBtn" data-id="' + data[i].tikNomor + '" data-toggle="modal" data-target="#modalDetail">Detail</button>'
                     ]);
                 }
 
@@ -180,13 +180,25 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 $("#m_tikTanggal").text(tanggal_benar);
                 $("#m_userNama").text(data.userNama);
                 $("#m_tikRingkasan").text(data.tikRingkasan);
-                  $("#m_tikStatus").html(
+                $("#m_tikStatus").html(
                     data.tikStatus === 'OPEN' ?
                     '<span class="badge badge-success">OPEN</span>' :
                     '<span class="badge badge-secondary">CLOSED</span>'
                 );
                 $('#m_tikDeskripsi').html(data.tikDeskripsi);
-
+                // $('#m_tikOperator').html(data.tikOperator);
+                // $('#m_tikTindakan').html(data.tikTindakan);
+                if (data.tikStatus == 'OPEN') {
+                    // Jika status "OPEN" boleh input
+                    $('#tikOperator').prop('readonly', false);
+                    $('#tikTindakan').prop('readonly', false);
+                    $('#btnSimpan').show();
+                } else {
+                    // Jika status "CLOSED" tidak boleh input
+                    $('#tikOperator').prop('readonly', true);
+                    $('#tikTindakan').prop('readonly', true);
+                    $('#btnSimpan').hide();
+                }
             }
         });
 
@@ -246,8 +258,37 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             }
         });
     }
+
+    function simpanTindakan() {
+
+        var operator = $('#tikOperator').val();
+        var tindakan = $('#tikTindakan').val();
+        var id = $('#m_tikID').text(); // ambil ID tiket
+
+        // VALIDASI
+        if (tindakan.trim() == '') {
+            alert('Tindakan wajib diisi!');
+            $('#tikTindakan').focus();
+            return;
+        }
+
+        // Kirim data tindakan ke Controller untuk disimpan ke database
+        $.ajax({
+            url: "<?= base_url('Controller/simpan_tindakan') ?>",
+            method: "POST",
+            data: {
+                tikID: id,
+                tikOperator: operator,
+                tikTindakan: tindakan
+            },
+            success: function(res) {
+                alert('Data Berhasil disimpan yeeee!');
+                $('#modalDetail').modal('hide');
+            }
+        });
+    }
 </script>
-<div class="modal fade" id="exampleModal" tabindex="-1">
+<div class="modal fade" id="modalDetail" tabindex="-1">
     <div class="modal-dialog" style="max-width:75%; width:75%; margin:40px auto;">
         <div class="modal-content" style="border-radius:15px;">
 
@@ -309,7 +350,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
                     </div>
 
-
                     <!-- Status -->
                     <div class="form-group row align-items-center mb-4">
 
@@ -357,10 +397,43 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
                     </div>
 
+                    <!-- Operator -->
+                    <div class="form-group row align-items-center mb-4">
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                            Operator
+                        </label>
+
+                        <div class="col-md-9">
+                            <input type="text" name="tikOperator" id="tikOperator"
+                                class="form-control"
+                                style="height:55px;font-size:20px;"
+                                placeholder="Masukkan id operator">
+                        </div>
+                    </div>
+                    <!-- Tindakan -->
+                    <div class="form-group row">
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-3">
+                            Tindakan <span class="text-danger">*</span>
+                        </label>
+
+                        <div class="col-md-9">
+                            <textarea name="tikTindakan" id="tikTindakan"
+                                class="form-control"
+                                style="font-size:20px;padding:20px;min-height:200px;"
+                                placeholder="Masukkan tindakan yang dilakukan"
+                                required></textarea>
+                        </div>
+                    </div>
                 </div>
-
             </div>
-
+            <!-- Button Simpan -->
+            <div class="text-center mt-4">
+                <button class="btn btn-success"
+                    style="font-size:20px; padding:10px 40px;"
+                    onclick="simpanTindakan()">
+                    Simpan
+                </button>
+            </div>
             <!-- FOOTER -->
             <div class="modal-footer justify-content-center">
 

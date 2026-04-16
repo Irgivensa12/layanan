@@ -163,7 +163,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         data[i].tikRingkasan,
                         statusBtn,
                         '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
-                        data[i].tikNomor + '" data-toggle="modal" data-target="#exampleModal">Detail</button>'
+                        data[i].tikNomor + '" data-toggle="modal" data-target="#modalDetail">Detail</button>'
                     ]);
                 }
 
@@ -196,14 +196,15 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 $("#m_tikTanggal").text(tanggal_benar);
                 $("#m_userNama").text(data.userNama);
                 $("#m_tikRingkasan").text(data.tikRingkasan);
-                // ✅ STATUS SUDAH DARI CONTROLLER (OPEN/CLOSED)
+                // STATUS SUDAH DARI CONTROLLER (OPEN/CLOSED)
                 $("#m_tikStatus").html(
                     data.tikStatus === 'OPEN' ?
                     '<span class="badge badge-success">OPEN</span>' :
                     '<span class="badge badge-secondary">CLOSED</span>'
                 );
                 $('#m_tikDeskripsi').html(data.tikDeskripsi);
-
+                $('#m_tikOperator').html(data.tikOperator);
+                $('#m_tikTindakan').html(data.tikTindakan);
             }
         });
 
@@ -244,7 +245,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 </script>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1">
+<div class="modal fade" id="modalDetail" tabindex="-1">
     <div class="modal-dialog" style="max-width:75%; width:75%; margin:40px auto;">
         <div class="modal-content" style="border-radius:15px;">
 
@@ -273,7 +274,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                             </div>
                         </div>
                     </div>
-
 
                     <!-- Tanggal -->
                     <div class="form-group row align-items-center mb-4">
@@ -354,18 +354,33 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         </div>
 
                     </div>
+                    <!-- Operator -->
+                    <div class="form-group row align-items-center mb-4">
 
-                    <!-- PENANGGUNG JAWAB -->
-                    <div class="form-group row mt-4">
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-3">
-                            Penanggung Jawab
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                            Operator
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_penanggungJawab" class="form-control"
-                                style="font-size:20px;padding:20px;min-height:80px;">
+                            <div id="m_tikOperator" class="form-control d-flex align-items-center"
+                                style="height:55px;font-size:20px;">
                             </div>
                         </div>
+
+                    </div>
+                    <!-- Tindakan -->
+                    <div class="form-group row">
+
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-3">
+                            Tindakan
+                        </label>
+
+                        <div class="col-md-9">
+                            <div id="m_tikTindakan" class="form-control"
+                                style="font-size:20px;padding:20px;min-height:200px;">
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
