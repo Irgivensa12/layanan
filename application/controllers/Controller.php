@@ -193,11 +193,12 @@ class Controller extends CI_Controller
 
     public function simpan_tindakan() // function untuk menyimpan tindakan ke database
     {
-        $tikNomor = $this->input->post('tikNomor'); // nomor tiket yang akan diupdate tindakannya
-        $tindakan = $this->input->post('tindakan'); // tindakan yang dikirim dari frontend
-
+        $tikNomor = $this->input->post('tikJD'); // nomor tiket yang akan diupdate tindakannya
+        $tindakan = $this->input->post('tikTindakan'); // tindakan yang dikirim dari frontend
+        $operator  = $this->input->post('tikOperator'); // operator yang mengupdate tindakan (bisa dipakai untuk log)
         $data = [
-            'tikTindakan' => $tindakan
+            'tikTindakan' => $tindakan,
+            'tikOperator' => $operator
         ];
 
         $this->Model->update_tiket($tikNomor, $data); // update data tindakan di database

@@ -186,8 +186,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     '<span class="badge badge-secondary">CLOSED</span>'
                 );
                 $('#m_tikDeskripsi').html(data.tikDeskripsi);
-                // $('#m_tikOperator').html(data.tikOperator);
-                // $('#m_tikTindakan').html(data.tikTindakan);
                 if (data.tikStatus == 'OPEN') {
                     // Jika status "OPEN" boleh input
                     $('#tikOperator').prop('readonly', false);
@@ -263,7 +261,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
         var operator = $('#tikOperator').val();
         var tindakan = $('#tikTindakan').val();
-        var id = $('#m_tikID').text(); // ambil ID tiket
+        var id = $('#m_tikNomor').text(); // ambil ID tiket
 
         // VALIDASI
         if (tindakan.trim() == '') {
@@ -282,10 +280,16 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 tikTindakan: tindakan
             },
             success: function(res) {
-                alert('Data Berhasil disimpan yeeee!');
+                alert('Data Berhasil disimpan!');
                 $('#modalDetail').modal('hide');
             }
         });
+    }
+
+    function konfirmasiSimpan() {
+        if (confirm("Apakah Anda yakin ingin menyimpan tindakan ini?")) {
+            simpanTindakan();
+        }
     }
 </script>
 <div class="modal fade" id="modalDetail" tabindex="-1">
@@ -427,29 +431,30 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 </div>
             </div>
             <!-- Button Simpan -->
-            <div class="text-center mt-4">
-                <button class="btn btn-success"
+            <<div class="text-center mt-4">
+                <button type="button"
+                    class="btn btn-success"
                     style="font-size:20px; padding:10px 40px;"
-                    onclick="simpanTindakan()">
+                    onclick="konfirmasiSimpan()">
                     Simpan
                 </button>
-            </div>
-            <!-- FOOTER -->
-            <div class="modal-footer justify-content-center">
+        </div>
+        <!-- FOOTER -->
+        <div class="modal-footer justify-content-center">
 
-                <button type="button"
-                    class="btn btn-danger"
-                    style="font-size:20px;padding:10px 40px;"
-                    data-dismiss="modal">
+            <button type="button"
+                class="btn btn-danger"
+                style="font-size:20px;padding:10px 40px;"
+                data-dismiss="modal">
 
-                    Tutup
+                Tutup
 
-                </button>
-
-            </div>
+            </button>
 
         </div>
+
     </div>
+</div>
 </div>
 
 </body>
