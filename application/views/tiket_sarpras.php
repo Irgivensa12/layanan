@@ -172,7 +172,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         '<button class="btn btn-success btn-sm" disabled>OPEN</button>' :
                         '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>',
                         '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
-                        data[i].layID + '" data-toggle="modal" data-target="#exampleModal">Detail</button>'
+                        data[i].layID + '" data-toggle="modal" data-target="#modalDetail">Detail</button>'
                     ]);
                 }
 
@@ -261,7 +261,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
     }
 </script>
 
-<div class="modal fade" id="exampleModal" tabindex="-1">
+<div class="modal fade" id="modalDetail" tabindex="-1">
     <div class="modal-dialog" style="max-width:75%; width:75%; margin:40px auto;">
         <div class="modal-content" style="border-radius:15px;">
 

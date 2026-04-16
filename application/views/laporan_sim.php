@@ -211,7 +211,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 </script>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1">
+<div class="modal fade" id="modalDetail" tabindex="-1">
     <div class="modal-dialog" style="max-width:75%; width:75%; margin:40px auto;">
         <div class="modal-content" style="border-radius:15px;">
 
