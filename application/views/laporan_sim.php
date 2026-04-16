@@ -161,13 +161,21 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         month: 'long',
                         day: 'numeric'
                     };
+
+                    var statusBtn = '';
+
+                    if (data[i].tikStatus == 'N') {
+                        statusBtn = '<span class="badge badge-success">OPEN</span>';
+                    } else {
+                        statusBtn = '<span class="badge badge-secondary">CLOSED</span>';
+                    }
                     var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia
                     table.row.add([
                         data[i].tikNomor,
                         tanggal_benar,
                         data[i].tikUserID,
                         data[i].tikRingkasan,
-                        data[i].tikStatus,
+                        statusBtn
                     ]);
                 }
 
