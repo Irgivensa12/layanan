@@ -160,10 +160,10 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
     $(document).on("click", ".detailBtn", function() { // Event listener untuk tombol detail
 
-        var tikNomor = $(this).data("id");
+        var layID = $(this).data("id");
 
         $.ajax({
-            url: "<?= base_url('Select/detail_tiket/') ?>" + tikNomor,
+            url: "<?= base_url('Select/detail_tiket/') ?>" + layID,
             type: "GET",
             dataType: "JSON",
             success: function(data) {

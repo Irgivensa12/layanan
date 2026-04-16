@@ -138,12 +138,12 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 className: 'btn btn-success btn-lg'
             }]
         });
-        getTiket_SIM(); // Memanggil function get
+        getTiket_Sarpras(); // Memanggil function get
     });
 
     // menggunakan AJAX untuk membuat tabel dari data tabel
     // AJAX (View) -> Controller -> Model -> dapat hasil
-    function getTiket_SIM() {
+    function getTiket_Sarpras() {
 
         $.ajax({
             url: "<?php echo base_url('Select/tiket_sarpras'); ?>",
@@ -164,6 +164,15 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         month: 'long',
                         day: 'numeric'
                     };
+
+                    var statusBtn = '';
+
+                    if (data[i].layStatus == 'N') {
+                        statusBtn = '<span class="badge badge-success">OPEN</span>';
+                    } else {
+                        statusBtn = '<span class="badge badge-secondary">CLOSED</span>';
+                    }
+
                     var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia
                     table.row.add([
                         data[i].layID,
@@ -171,7 +180,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         data[i].layUserID,
                         data[i].layHal,
                         data[i].layDiskripsi,
-                        data[i].layStatus,
+                        statusBtn,
                     ]);
                 }
 

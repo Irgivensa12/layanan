@@ -125,12 +125,12 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             "select": true,
             "bSort": false
         });
-        getTiket_Sarpras(); // Memanggil function get
+        getAdmin_Sarpras(); // Memanggil function get
     });
 
     // menggunakan AJAX untuk membuat tabel dari data tabel
     // AJAX (View) -> Controller -> Model -> dapat hasil
-    function getTiket_Sarpras() {
+    function getAdmin_Sarpras() {
 
         $.ajax({
             url: "<?php echo base_url('Select/tiket_sarpras'); ?>",
@@ -181,6 +181,25 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         });
     }
 
+    $(document).on("click", ".statusBtn", function() {
+
+        var nomor = $(this).data("id");
+
+        if (confirm("Apakah Anda yakin ingin menutup tiket ini?")) {
+
+            $.ajax({
+                url: "<?= base_url('Controller/close_sarpras/') ?>" + nomor, // ✅ GANTI
+                type: "POST",
+                success: function() {
+
+                    alert("Tiket berhasil ditutup!");
+
+                    getAdmin_SARPRAS(); // ✅ reload yang benar
+                }
+            });
+        }
+    });
+
     $(document).on("click", ".detailBtn", function() { // Event listener untuk tombol detail
 
         var tikNomor = $(this).data("id");
@@ -227,37 +246,37 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
     });
     // kalau butuh input dari user
-    function getContoh2() {
-        var test = 'inputtan dari user';
-        // var test = $('#nama_input_id).val();
+    // function getContoh2() {
+    //     var test = 'inputtan dari user';
+    //     // var test = $('#nama_input_id).val();
 
-        var url = "<?php echo base_url('Insert/contoh2?'); ?>"; //Controller Insert.php, function contoh2()
-        var urlBaru = url + "inputAjax=" + test;
+    //     var url = "<?php echo base_url('Insert/contoh2?'); ?>"; //Controller Insert.php, function contoh2()
+    //     var urlBaru = url + "inputAjax=" + test;
 
-        var html = '';
-        var no = 1;
+    //     var html = '';
+    //     var no = 1;
 
-        $.ajax({
-            url: urlBaru,
-            method: "POST",
-            dataType: "JSON",
-            async: false,
-            success: function(data) {
-                for (var i = 0; i < data.length; i++) {
+    //     $.ajax({
+    //         url: urlBaru,
+    //         method: "POST",
+    //         dataType: "JSON",
+    //         async: false,
+    //         success: function(data) {
+    //             for (var i = 0; i < data.length; i++) {
 
-                    html += '<tr>';
-                    html += '<td>' + no + '</td>';
-                    html += '<td></td>';
-                    html += '<td></td>';
-                    html += '<td></td>';
-                    html += '</tr>';
+    //                 html += '<tr>';
+    //                 html += '<td>' + no + '</td>';
+    //                 html += '<td></td>';
+    //                 html += '<td></td>';
+    //                 html += '<td></td>';
+    //                 html += '</tr>';
 
-                    no++;
-                }
-                $("#tbody").html(html);
-            }
-        });
-    }
+    //                 no++;
+    //             }
+    //             $("#tbody").html(html);
+    //         }
+    //     });
+    // }
 
     function simpanPetugas() { // function untuk menyimpan petugas yang dipilih di modal detail
 
