@@ -160,9 +160,9 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
     $(document).on("click", ".detailBtn", function() { // Event listener untuk tombol detail
 
-        var tikNomor = $(this).data("id"); // ✅ pakai tikNomor
+        var tikNomor = $(this).data("id"); // mengambil data-id dari tombol yang diklik, yaitu tikNomor
 
-        loadDetailTik(tikNomor); // 🔥 ambil detail tiket
+        loadDetailTik(tikNomor); // ambil detail tiket
 
     });
 
@@ -228,12 +228,12 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         var id = $('#m_tikNomor').text(); // ambil ID tiket
 
         // Validasi input tindakan
-        if (operator == '') {
+        if (operator == '') { // Jika operator belum dipilih
             alert('Operator wajib dipilih!');
             return;
         }
 
-        if (tindakan.trim() == '') {
+        if (tindakan.trim() == '') { // Jika tindakan masih kosong atau hanya berisi spasi
             alert('Tindakan wajib diisi!');
             return;
         }
@@ -315,18 +315,26 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
                 $('#m_tikDeskripsi').html(data.tikDeskripsi);
 
-                //load operator + selected
-                loadOperator(data.tikOperator);
+                // Menampilkan operator dan tindakan di modal
+                $('#m_tikOperator').html(data.tikOperator);
+                $('#m_tikTindakan').html(data.tikTindakan);
 
+                // Muat dropdown operator dengan opsi dari database, dan set nilai yang dipilih sesuai data tiket
+                loadOperator(data.tikOperator);
+                $('#tikOperator').val(data.tikOperator);
                 $('#tikTindakan').val(data.tikTindakan);
 
+                // Jika status tiket "OPEN"
                 if (data.tikStatus == 'OPEN') {
-                    $('#tikOperator').prop('disabled', false);
-                    $('#tikTindakan').prop('readonly', false);
+                    $('#tikOperator').prop('readonly', false); // operator bisa diubah jika tiket masih OPEN
+                    $('#tikTindakan').prop('readonly', false); // tindakan bisa diubah jika tiket masih OPEN
+                    $('#btnSimpan').show(); // tampilkan tombol simpan jika tiket masih OPEN
                 } else {
-                    $('#tikOperator').prop('disabled', true);
-                    $('#tikTindakan').prop('readonly', true);
+                    $('#tikOperator').prop('readonly', true); // operator tidak bisa diubah jika tiket sudah CLOSED
+                    $('#tikTindakan').prop('readonly', true); // tindakan tidak bisa diubah jika tiket sudah CLOSED
+                    $('#btnSimpan').hide(); // sembunyikan tombol simpan jika tiket sudah CLOSED
                 }
+
 
             }
         });
@@ -473,8 +481,10 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     </div>
                 </div>
             </div>
-            <!-- Button Simpan -->
-            <div class="text-center mt-4">
+            <!-- FOOTER BUTTON -->
+            <div class="modal-footer px-4 py-3 d-flex justify-content-between">
+
+                <!-- Simpan -->
                 <button type="button"
                     id="btnSimpan"
                     class="btn btn-success"
@@ -482,21 +492,16 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     onclick="konfirmasiSimpan()">
                     Simpan
                 </button>
-            </div>
-            <!-- FOOTER -->
-            <div class="modal-footer justify-content-center">
 
+                <!-- Tutup-->
                 <button type="button"
                     class="btn btn-danger"
-                    style="font-size:20px;padding:10px 40px;"
+                    style="font-size:20px; padding:10px 40px;"
                     data-dismiss="modal">
-
                     Tutup
-
                 </button>
 
             </div>
-
         </div>
     </div>
 </div>
