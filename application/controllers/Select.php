@@ -172,30 +172,35 @@ class Select extends CI_Controller
     }
 
     public function detail_tiket($tikNomor = null)
-    {
-        $this->db->select("
-        tikNomor,
-        tikTanggal,
-        tikUserID,
-        userNama,
-        tikRingkasan,
-        tikDeskripsi,
+{
+    $this->db->select("
+        t.tikNomor,
+        t.tikTanggal,
+        t.tikUserID,
+        u.userNama,
+        t.tikRingkasan,
+        t.tikDeskripsi,
         (CASE 
-            WHEN tikStatus='Y' THEN 'CLOSE' 
+            WHEN t.tikStatus='Y' THEN 'CLOSE' 
             ELSE 'OPEN' 
         END) AS tikStatus,
-        tikOperator,
-        tikTindakan
+        t.tikOperator,
+        p.pegNama as operatorNama,  
+        t.tikTindakan
     ");
 
-        $this->db->from('tb_tiket');
-        $this->db->join('vuser', 'tikUserID = userID', 'left');
-        $this->db->where('tikNomor', $tikNomor);
+    $this->db->from('tb_tiket t');
+    $this->db->join('vuser u', 't.tikUserID = u.userID', 'left');
 
-        $data = $this->db->get()->row_array();
+  
+    $this->db->join('db_kbs_hris.ref_pegawai p', 't.tikOperator = p.pegNoreg', 'left');
 
-        echo json_encode($data);
-    }
+    $this->db->where('t.tikNomor', $tikNomor);
+
+    $data = $this->db->get()->row_array();
+
+    echo json_encode($data);
+}
 
     public function detail_tiket_sarpras($tikNomor = null)
     {
