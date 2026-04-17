@@ -169,30 +169,40 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             success: function(data) {
                 // Format tanggal Indonesia
                 var tanggal_db = new Date(data.tikTanggal);
-
                 var options = {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'
                 };
                 var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
+
                 $("#m_tikNomor").text(data.tikNomor);
                 $("#m_tikTanggal").text(tanggal_benar);
                 $("#m_userNama").text(data.userNama);
                 $("#m_tikRingkasan").text(data.tikRingkasan);
+
                 $("#m_tikStatus").html(
                     data.tikStatus === 'OPEN' ?
                     '<span class="badge badge-success">OPEN</span>' :
                     '<span class="badge badge-secondary">CLOSED</span>'
                 );
+
                 $('#m_tikDeskripsi').html(data.tikDeskripsi);
+
+                // Display data tindakan dan operator di modal
+                $('#m_tikOperator').html(data.tikOperator);
+                $('#m_tikTindakan').html(data.tikTindakan);
+
+                // Set nilai input tindakan dan operator di modal untuk bisa diedit jika status OPEN
+                $('#tikOperator').val(data.tikOperator);
+                $('#tikTindakan').val(data.tikTindakan);
+
+                // Jika status tiket OPEN, maka input tindakan dan operator bisa diedit, jika CLOSED maka readonly
                 if (data.tikStatus == 'OPEN') {
-                    // Jika status "OPEN" boleh input
                     $('#tikOperator').prop('readonly', false);
                     $('#tikTindakan').prop('readonly', false);
                     $('#btnSimpan').show();
                 } else {
-                    // Jika status "CLOSED" tidak boleh input
                     $('#tikOperator').prop('readonly', true);
                     $('#tikTindakan').prop('readonly', true);
                     $('#btnSimpan').hide();
@@ -263,7 +273,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         var tindakan = $('#tikTindakan').val();
         var id = $('#m_tikNomor').text(); // ambil ID tiket
 
-        // VALIDASI
+        // Validasi input tindakan
         if (tindakan.trim() == '') {
             alert('Tindakan wajib diisi!');
             $('#tikTindakan').focus();
@@ -431,30 +441,30 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 </div>
             </div>
             <!-- Button Simpan -->
-            <<div class="text-center mt-4">
+            <div class="text-center mt-4">
                 <button type="button"
                     class="btn btn-success"
                     style="font-size:20px; padding:10px 40px;"
                     onclick="konfirmasiSimpan()">
                     Simpan
                 </button>
+            </div>
+            <!-- FOOTER -->
+            <div class="modal-footer justify-content-center">
+
+                <button type="button"
+                    class="btn btn-danger"
+                    style="font-size:20px;padding:10px 40px;"
+                    data-dismiss="modal">
+
+                    Tutup
+
+                </button>
+
+            </div>
+
         </div>
-        <!-- FOOTER -->
-        <div class="modal-footer justify-content-center">
-
-            <button type="button"
-                class="btn btn-danger"
-                style="font-size:20px;padding:10px 40px;"
-                data-dismiss="modal">
-
-                Tutup
-
-            </button>
-
-        </div>
-
     </div>
-</div>
 </div>
 
 </body>
