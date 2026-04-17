@@ -200,49 +200,12 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         }
     });
 
-    $(document).on("click", ".detailBtn", function() { // Event listener untuk tombol detail
+    $(document).on("click", ".detailBtn", function() {
 
-        var tikNomor = $(this).data("id");
+        var layID = $(this).data("id");
 
-        $.ajax({
-            url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + tikNomor,
-            type: "GET",
-            dataType: "JSON",
-            success: function(data) {
-                // Format tanggal Indonesia
-                var tanggal_db = new Date(data.layTanggal);
-
-                var options = {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                };
-                var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
-
-                // Format tanggal Indonesia
-                var tanggal_db = new Date(data.layTanggal);
-
-                var options = {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                };
-
-                var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
-
-                // Menampilkan data ke dalam modal
-                $("#m_layID").text(data.layID);
-                $("#m_layTanggal").text(tanggal_benar);
-                $("#m_userNama").text(data.userNama);
-                $("#m_layHal").text(data.layHal);
-                $("#m_layStatus").html(
-                    data.layStatus === 'OPEN' ?
-                    '<span class="badge badge-success">OPEN</span>' :
-                    '<span class="badge badge-secondary">CLOSED</span>'
-                );
-                $('#m_layDiskripsi').html(data.layDiskripsi);
-            }
-        });
+        loadPetugas(); // ambil dropdown dari DB
+        loadDetailLay(layID); // ambil detail tiket
 
     });
     // kalau butuh input dari user
@@ -298,6 +261,109 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             success: function(res) { // jika berhasil, tampilkan alert dan tutup modal
                 alert("Pilihan Petugas Berhasil disimpan!");
                 $('#modalDetail').modal('hide');
+            }
+        });
+    }
+
+    function loadPetugas() {
+        $.ajax({
+            url: "<?= base_url('Select/get_petugas') ?>",
+            method: "GET",
+            dataType: "JSON",
+            success: function(data) {
+
+                $('select[name="petugas[]"]').each(function() {
+
+                    var select = $(this);
+                    select.empty();
+                    select.append('<option value="">-- Pilih Petugas --</option>');
+
+                    $.each(data, function(i, p) {
+                        select.append(
+                            '<option value="' + p.pegNoreg + '">' + p.pegNama + '</option>'
+                        );
+                    });
+
+                });
+
+                preventDuplicatePetugas();
+
+            }
+        });
+    }
+
+    function preventDuplicatePetugas() {
+
+        let selectedValues = [];
+
+        // ambil semua value yang dipilih
+        $('select[name="petugas[]"]').each(function() {
+            let val = $(this).val();
+            if (val !== "") {
+                selectedValues.push(val);
+            }
+        });
+
+        // reset dulu semua option
+        $('select[name="petugas[]"] option').prop('disabled', false);
+
+        // disable yang sudah dipilih di dropdown lain
+        $('select[name="petugas[]"]').each(function() {
+
+            let currentSelect = $(this);
+            let currentVal = currentSelect.val();
+
+            currentSelect.find('option').each(function() {
+                let optionVal = $(this).val();
+
+                if (selectedValues.includes(optionVal) && optionVal !== currentVal) {
+                    $(this).prop('disabled', true);
+                }
+            });
+
+        });
+    }
+
+    $(document).on('change', 'select[name="petugas[]"]', function() {
+        preventDuplicatePetugas();
+    });
+
+    function loadDetailLay(layID) {
+
+        $.ajax({
+            url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + layID,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data) {
+
+                var tanggal_db = new Date(data.layTanggal);
+                var options = {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
+                var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
+
+                $("#m_layID").text(data.layID);
+                $("#m_layTanggal").text(tanggal_benar);
+                $("#m_userNama").text(data.userNama);
+                $("#m_layHal").text(data.layHal);
+
+                $("#m_layStatus").html(
+                    data.layStatus === 'OPEN' ?
+                    '<span class="badge badge-success">OPEN</span>' :
+                    '<span class="badge badge-secondary">CLOSED</span>'
+                );
+
+                $('#m_layDiskripsi').html(data.layDiskripsi);
+
+                $("#m_penanggungJawab").html(
+                    data.penanggungJawab ?
+                    '<span class="badge badge-info" style="font-size:18px;">' +
+                    data.penanggungJawab +
+                    '</span>' :
+                    '<span class="text-muted">Belum ditentukan</span>'
+                );
             }
         });
     }
@@ -384,30 +450,55 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         <label>Petugas 1</label>
                         <select name="petugas[]" class="form-control" style="height:50px; font-size:20px;">
                             <option value="">-- Pilih Petugas --</option>
-                            <option value="1">Petugas A</option>
-                            <option value="2">Petugas B</option>
-                            <option value="3">Petugas C</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Petugas 2</label>
+                        <select name="petugas[]" class="form-control" style="height:50px; font-size:20px;">
+                            <option value="">-- Pilih Petugas --</option>
+                        </select>
+                    </div>
+
+                    <div class=" form-group">
+                            <label>Petugas 3</label>
+                            <select name="petugas[]" class="form-control" style="height:50px; font-size:20px;">
+                            <option value="">-- Pilih Petugas --</option>
+                        </select>
+                    </div>
+
+                    <div class=" form-group">
+                                <label>Petugas 4</label>
+                                <select name="petugas[]" class="form-control" style="height:50px; font-size:20px;">
+                            <option value="">-- Pilih Petugas --</option>
+                        </select>
+                    </div>
+
+                    <div class=" form-group">
+                                    <label>Petugas 5</label>
+                                    <select name="petugas[]" class="form-control" style="height:50px; font-size:20px;">
+                            <option value="">-- Pilih Petugas --</option>
                         </select>
                     </div>
 
                 </div>
-                <button class="btn btn-success" onclick="simpanPetugas()">Simpan</button>
-            </div>
+                <button class=" btn btn-success" onclick="simpanPetugas()">Simpan</button>
+                    </div>
 
-            <!-- FOOTER -->
-            <div class="modal-footer justify-content-center">
-                <button type="button"
-                    class="btn btn-danger"
-                    style="font-size:20px; padding:12px 40px;"
-                    data-dismiss="modal">
-                    Tutup
-                </button>
-            </div>
+                    <!-- FOOTER -->
+                    <div class="modal-footer justify-content-center">
+                        <button type="button"
+                            class="btn btn-danger"
+                            style="font-size:20px; padding:12px 40px;"
+                            data-dismiss="modal">
+                            Tutup
+                        </button>
+                    </div>
 
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-</body>
+        </body>
 
-</html>
+        </html>
