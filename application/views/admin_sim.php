@@ -483,6 +483,13 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             </div>
             <!-- FOOTER BUTTON -->
             <div class="modal-footer px-4 py-3 d-flex justify-content-between">
+                <!-- Tutup-->
+                <button type="button"
+                    class="btn btn-danger"
+                    style="font-size:20px; padding:10px 40px;"
+                    data-dismiss="modal">
+                    Tutup
+                </button>
 
                 <!-- Simpan -->
                 <button type="button"
@@ -491,14 +498,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     style="font-size:20px; padding:10px 40px;"
                     onclick="konfirmasiSimpan()">
                     Simpan
-                </button>
-
-                <!-- Tutup-->
-                <button type="button"
-                    class="btn btn-danger"
-                    style="font-size:20px; padding:10px 40px;"
-                    data-dismiss="modal">
-                    Tutup
                 </button>
 
             </div>

@@ -188,13 +188,13 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         if (confirm("Apakah Anda yakin ingin menutup tiket ini?")) {
 
             $.ajax({
-                url: "<?= base_url('Controller/close_sarpras/') ?>" + nomor, // ✅ GANTI
+                url: "<?= base_url('Controller/close_sarpras/') ?>" + nomor,
                 type: "POST",
                 success: function() {
 
                     alert("Tiket berhasil ditutup!");
 
-                    getAdmin_SARPRAS(); // ✅ reload yang benar
+                    getAdmin_SARPRAS();
                 }
             });
         }
@@ -367,6 +367,12 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             }
         });
     }
+
+    konfirmasiSimpan = () => {
+        if (confirm("Apakah Anda yakin ingin menyimpan perubahan ini?")) {
+            simpanPetugas();
+        }
+    }
 </script>
 
 <div class="modal fade" id="modalDetail" tabindex="-1">
@@ -461,44 +467,47 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     </div>
 
                     <div class=" form-group">
-                            <label>Petugas 3</label>
-                            <select name="petugas[]" class="form-control" style="height:50px; font-size:20px;">
+                        <label>Petugas 3</label>
+                        <select name="petugas[]" class="form-control" style="height:50px; font-size:20px;">
                             <option value="">-- Pilih Petugas --</option>
                         </select>
                     </div>
 
                     <div class=" form-group">
-                                <label>Petugas 4</label>
-                                <select name="petugas[]" class="form-control" style="height:50px; font-size:20px;">
+                        <label>Petugas 4</label>
+                        <select name="petugas[]" class="form-control" style="height:50px; font-size:20px;">
                             <option value="">-- Pilih Petugas --</option>
                         </select>
                     </div>
 
                     <div class=" form-group">
-                                    <label>Petugas 5</label>
-                                    <select name="petugas[]" class="form-control" style="height:50px; font-size:20px;">
+                        <label>Petugas 5</label>
+                        <select name="petugas[]" class="form-control" style="height:50px; font-size:20px;">
                             <option value="">-- Pilih Petugas --</option>
                         </select>
                     </div>
-
-                </div>
-                <button class=" btn btn-success" onclick="simpanPetugas()">Simpan</button>
-                    </div>
-
-                    <!-- FOOTER -->
-                    <div class="modal-footer justify-content-center">
+                    <!-- FOOTER BUTTON -->
+                    <div class="modal-footer px-4 py-3 d-flex justify-content-between">
+                        <!-- Tutup-->
                         <button type="button"
                             class="btn btn-danger"
-                            style="font-size:20px; padding:12px 40px;"
+                            style="font-size:20px; padding:10px 40px;"
                             data-dismiss="modal">
                             Tutup
                         </button>
-                    </div>
 
+                        <!-- Simpan -->
+                        <button type="button"
+                            id="btnSimpan"
+                            class="btn btn-success"
+                            style="font-size:20px; padding:10px 40px;"
+                            onclick="konfirmasiSimpan()">
+                            Simpan
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        </body>
+            </body>
 
-        </html>
+            </html>
