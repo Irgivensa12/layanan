@@ -148,6 +148,18 @@ class Select extends CI_Controller
         echo json_encode($data);
     }
 
+    public function get_petugas()
+    {
+        $this->db->select('pegNoreg, pegNama');
+        $this->db->from('ref_operator');
+        $this->db->join('db_kbs_hris.ref_pegawai', 'pegNoreg = opNoreg', 'left');
+        $this->db->where('opJenis', 2);
+
+        $query = $this->db->get()->result();
+
+        echo json_encode($query);
+    }
+
     public function detail_tiket($tikNomor = null)
     {
         $this->db->select("
