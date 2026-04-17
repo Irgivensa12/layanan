@@ -160,6 +160,17 @@ class Select extends CI_Controller
         echo json_encode($query);
     }
 
+    public function get_operator_sim()
+    {
+        $this->db->select('pegNoreg, pegNama');
+        $this->db->from('db_kbs_hris.ref_pegawai'); 
+        $this->db->where_in('pegNoreg', [9722, 2054]);
+
+        $data = $this->db->get()->result();
+
+        echo json_encode($data);
+    }
+
     public function detail_tiket($tikNomor = null)
     {
         $this->db->select("
