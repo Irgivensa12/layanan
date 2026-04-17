@@ -203,7 +203,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     '<span class="badge badge-secondary">CLOSED</span>'
                 );
                 $('#m_tikDeskripsi').html(data.tikDeskripsi);
-                $('#m_tikOperator').html(data.tikOperator);
+                $('#m_tikOperator').html(data.operatorNama ?? '-');
                 $('#m_tikTindakan').html(data.tikTindakan);
             }
         });
