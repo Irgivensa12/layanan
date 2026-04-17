@@ -218,47 +218,13 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 // ✅ PENANGGUNG JAWAB
                 $("#m_penanggungJawab").html(
                     data.penanggungJawab ?
-                    '<span class="badge badge-info" style="font-size:18px;">' +
-                    data.penanggungJawab +
-                    '</span>' :
+                    data.penanggungJawab :
                     '<span class="text-muted">Belum ditentukan</span>'
                 );
             }
         });
 
     });
-    // kalau butuh input dari user
-    function getContoh2() {
-        var test = 'inputtan dari user';
-        // var test = $('#nama_input_id).val();
-
-        var url = "<?php echo base_url('Insert/contoh2?'); ?>"; //Controller Insert.php, function contoh2()
-        var urlBaru = url + "inputAjax=" + test;
-
-        var html = '';
-        var no = 1;
-
-        $.ajax({
-            url: urlBaru,
-            method: "POST",
-            dataType: "JSON",
-            async: false,
-            success: function(data) {
-                for (var i = 0; i < data.length; i++) {
-
-                    html += '<tr>';
-                    html += '<td>' + no + '</td>';
-                    html += '<td></td>';
-                    html += '<td></td>';
-                    html += '<td></td>';
-                    html += '</tr>';
-
-                    no++;
-                }
-                $("#tbody").html(html);
-            }
-        });
-    }
 </script>
 
 <div class="modal fade" id="modalDetail" tabindex="-1">

@@ -160,55 +160,9 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
     $(document).on("click", ".detailBtn", function() { // Event listener untuk tombol detail
 
-        var layID = $(this).data("id");
+        var tikNomor = $(this).data("id"); // ✅ pakai tikNomor
 
-        $.ajax({
-            url: "<?= base_url('Select/detail_tiket/') ?>" + layID,
-            type: "GET",
-            dataType: "JSON",
-            success: function(data) {
-                // Format tanggal Indonesia
-                var tanggal_db = new Date(data.tikTanggal);
-                var options = {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                };
-                var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
-
-                $("#m_tikNomor").text(data.tikNomor);
-                $("#m_tikTanggal").text(tanggal_benar);
-                $("#m_userNama").text(data.userNama);
-                $("#m_tikRingkasan").text(data.tikRingkasan);
-
-                $("#m_tikStatus").html(
-                    data.tikStatus === 'OPEN' ?
-                    '<span class="badge badge-success">OPEN</span>' :
-                    '<span class="badge badge-secondary">CLOSED</span>'
-                );
-
-                $('#m_tikDeskripsi').html(data.tikDeskripsi);
-
-                // Display data tindakan dan operator di modal
-                $('#m_tikOperator').html(data.tikOperator);
-                $('#m_tikTindakan').html(data.tikTindakan);
-
-                // Set nilai input tindakan dan operator di modal untuk bisa diedit jika status OPEN
-                $('#tikOperator').val(data.tikOperator);
-                $('#tikTindakan').val(data.tikTindakan);
-
-                // Jika status tiket OPEN, maka input tindakan dan operator bisa diedit, jika CLOSED maka readonly
-                if (data.tikStatus == 'OPEN') {
-                    $('#tikOperator').prop('readonly', false);
-                    $('#tikTindakan').prop('readonly', false);
-                    $('#btnSimpan').show();
-                } else {
-                    $('#tikOperator').prop('readonly', true);
-                    $('#tikTindakan').prop('readonly', true);
-                    $('#btnSimpan').hide();
-                }
-            }
-        });
+        loadDetailTik(tikNomor); // 🔥 ambil detail tiket
 
     });
 
@@ -274,9 +228,13 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         var id = $('#m_tikNomor').text(); // ambil ID tiket
 
         // Validasi input tindakan
+        if (operator == '') {
+            alert('Operator wajib dipilih!');
+            return;
+        }
+
         if (tindakan.trim() == '') {
             alert('Tindakan wajib diisi!');
-            $('#tikTindakan').focus();
             return;
         }
 
@@ -292,6 +250,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             success: function(res) {
                 alert('Data Berhasil disimpan!');
                 $('#modalDetail').modal('hide');
+                getAdmin_SIM(); // untuk refresh
             }
         });
     }
@@ -300,6 +259,78 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         if (confirm("Apakah Anda yakin ingin menyimpan tindakan ini?")) {
             simpanTindakan();
         }
+    }
+
+    function loadOperator(selected = '') {
+
+        $.ajax({
+            url: "<?= base_url('Select/get_operator_sim') ?>",
+            method: "GET",
+            dataType: "JSON",
+            success: function(data) {
+                console.log(data);
+                let select = $('#tikOperator');
+                select.empty();
+                select.append('<option value="">-- Pilih Operator --</option>');
+
+                $.each(data, function(i, op) {
+                    let selectedAttr = (op.pegNoreg == selected) ? 'selected' : '';
+                    select.append(
+                        '<option value="' + op.pegNoreg + '" ' + selectedAttr + '>' + op.pegNama + '</option>'
+                    );
+                });
+
+            }
+        });
+
+    }
+
+    function loadDetailTik(tikNomor) {
+
+        $.ajax({
+            url: "<?= base_url('Select/detail_tiket/') ?>" + tikNomor,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data) {
+
+                var tanggal_db = new Date(data.tikTanggal);
+                var options = {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
+
+                var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
+
+                $("#m_tikNomor").text(data.tikNomor);
+                $("#m_tikTanggal").text(tanggal_benar);
+                $("#m_userNama").text(data.userNama);
+                $("#m_tikRingkasan").text(data.tikRingkasan);
+
+                $("#m_tikStatus").html(
+                    data.tikStatus === 'OPEN' ?
+                    '<span class="badge badge-success">OPEN</span>' :
+                    '<span class="badge badge-secondary">CLOSED</span>'
+                );
+
+                $('#m_tikDeskripsi').html(data.tikDeskripsi);
+
+                //load operator + selected
+                loadOperator(data.tikOperator);
+
+                $('#tikTindakan').val(data.tikTindakan);
+
+                if (data.tikStatus == 'OPEN') {
+                    $('#tikOperator').prop('disabled', false);
+                    $('#tikTindakan').prop('readonly', false);
+                } else {
+                    $('#tikOperator').prop('disabled', true);
+                    $('#tikTindakan').prop('readonly', true);
+                }
+
+            }
+        });
+
     }
 </script>
 <div class="modal fade" id="modalDetail" tabindex="-1">
@@ -418,10 +449,12 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         </label>
 
                         <div class="col-md-9">
-                            <input type="text" name="tikOperator" id="tikOperator"
+                            <select name="tikOperator" id="tikOperator"
                                 class="form-control"
-                                style="height:55px;font-size:20px;"
-                                placeholder="Masukkan id operator">
+                                style="height:55px;font-size:20px;">
+                                <option value="">-- Pilih Operator --</option>
+                            </select>
+
                         </div>
                     </div>
                     <!-- Tindakan -->
@@ -434,7 +467,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                             <textarea name="tikTindakan" id="tikTindakan"
                                 class="form-control"
                                 style="font-size:20px;padding:20px;min-height:200px;"
-                                placeholder="Masukkan tindakan yang dilakukan"
+                                placeholder="Masukkan tindakan yang ingin dilakukan"
                                 required></textarea>
                         </div>
                     </div>
@@ -443,6 +476,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             <!-- Button Simpan -->
             <div class="text-center mt-4">
                 <button type="button"
+                    id="btnSimpan"
                     class="btn btn-success"
                     style="font-size:20px; padding:10px 40px;"
                     onclick="konfirmasiSimpan()">

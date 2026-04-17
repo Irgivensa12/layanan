@@ -160,31 +160,47 @@ class Select extends CI_Controller
         echo json_encode($query);
     }
 
-    public function detail_tiket($tikNomor = null)
+    public function get_operator_sim()
     {
-        $this->db->select("
-        tikNomor,
-        tikTanggal,
-        tikUserID,
-        userNama,
-        tikRingkasan,
-        tikDeskripsi,
-        (CASE 
-            WHEN tikStatus='Y' THEN 'CLOSE' 
-            ELSE 'OPEN' 
-        END) AS tikStatus,
-        tikOperator,
-        tikTindakan
-    ");
+        $this->db->select('pegNoreg, pegNama');
+        $this->db->from('db_kbs_hris.ref_pegawai'); 
+        $this->db->where_in('pegNoreg', [9722, 2054]);
 
-        $this->db->from('tb_tiket');
-        $this->db->join('vuser', 'tikUserID = userID', 'left');
-        $this->db->where('tikNomor', $tikNomor);
-
-        $data = $this->db->get()->row_array();
+        $data = $this->db->get()->result();
 
         echo json_encode($data);
     }
+
+    public function detail_tiket($tikNomor = null)
+{
+    $this->db->select("
+        t.tikNomor,
+        t.tikTanggal,
+        t.tikUserID,
+        u.userNama,
+        t.tikRingkasan,
+        t.tikDeskripsi,
+        (CASE 
+            WHEN t.tikStatus='Y' THEN 'CLOSE' 
+            ELSE 'OPEN' 
+        END) AS tikStatus,
+        t.tikOperator,
+        p.pegNama as operatorNama,  
+        t.tikTindakan
+    ");
+
+    $this->db->from('tb_tiket t');
+    $this->db->join('vuser u', 't.tikUserID = u.userID', 'left');
+
+  
+    $this->db->join('db_kbs_hris.ref_pegawai p', 't.tikOperator = p.pegNoreg', 'left');
+
+    $this->db->where('t.tikNomor', $tikNomor);
+
+    $data = $this->db->get()->row_array();
+
+    echo json_encode($data);
+}
 
     public function detail_tiket_sarpras($tikNomor = null)
     {
