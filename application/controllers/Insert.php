@@ -61,14 +61,13 @@
             // generate ulang nomor tiket
             $no_layanan = $this->Model->generate_no_layanan();
             $data = [
-                'layID'      => $no_layanan,
+                'layID'         => $no_layanan,
                 'layTanggal'    => $this->input->post('layTanggal'),
-                'layUserID'     => $this->input->post('layUserID'),
-                'layDivisiID'  => $this->input->post('layDivisiID'),
-                'layHal'  => $this->input->post('layHal'),
+                'layUserID'    => $this->input->post('layUserID'),
+                'layHal'        => $this->input->post('layHal'),
                 'layDiskripsi'  => $this->input->post('layDiskripsi'),
-                'layStatus'  => 'N',
-
+                'layTarget'     => $this->input->post('layTarget'),
+                'layStatus'     => 'N',
             ];
 
             $this->Model->insertData_layanan('tb_layanan', $data);
@@ -93,6 +92,4 @@
 
             redirect('tiket_sim');
         }
-
-      
     }

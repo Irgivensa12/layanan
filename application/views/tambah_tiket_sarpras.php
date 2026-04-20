@@ -60,7 +60,7 @@ if (!$this->session->userdata('userId')) {
                         <div class="col-md-5">
                             <input type="date"
                                 class="form-control"
-                                name="tikTanggal"
+                                name="layTanggal"
                                 style="height:50px;font-size:16px;">
                         </div>
 
@@ -76,7 +76,7 @@ if (!$this->session->userdata('userId')) {
                         <div class="col-md-9">
                             <input type="number"
                                 class="form-control"
-                                name="tikUserID"
+                                name="layUserID"
                                 value="<?= $this->session->userdata('userId'); ?>"
                                 readonly
                                 style="height:50px;font-size:16px;">
@@ -94,7 +94,7 @@ if (!$this->session->userdata('userId')) {
                         <div class="col-md-9">
                             <input type="text"
                                 class="form-control"
-                                name="tikRingkasan"
+                                name="layHal"
                                 placeholder="Ringkasan Keluhan"
                                 style="height:50px;font-size:16px;">
                         </div>
@@ -111,11 +111,28 @@ if (!$this->session->userdata('userId')) {
                         <div class="col-md-9">
                             <textarea
                                 class="form-control"
-                                name="tikDeskripsi"
+                                name="layDiskripsi"
                                 rows="5"
                                 placeholder="Deskripsi Keluhan"
                                 style="font-size:16px;padding:12px;">
 </textarea>
+                        </div>
+
+
+                    </div>
+
+                    <!-- Target Waktu -->
+                    <div class="form-group row mb-4 align-items-center">
+
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                            Target Waktu
+                        </label>
+
+                        <div class="col-md-5">
+                            <input type="date"
+                                class="form-control"
+                                name="layTarget"
+                                style="height:50px;font-size:16px;">
                         </div>
 
                     </div>
@@ -123,10 +140,13 @@ if (!$this->session->userdata('userId')) {
                     <div class="text-left mt-3">
                         <button type="submit"
                             class="btn btn-primary"
+                            onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini?')"
                             style="padding:10px 30px;font-size:16px;">
                             Simpan
                         </button>
                     </div>
+
+
 
                 </div>
             </form>
