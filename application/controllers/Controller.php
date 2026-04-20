@@ -203,6 +203,13 @@ class Controller extends CI_Controller
 
         $this->Model->update_tiket($tikNomor, $data); // update data tindakan di database
 
-        echo json_encode(['status' => 'ok']); // kirim response sukses ke frontend
+        // ambil email user dari database
+        // $tiket = $this->Model->get_tiket($tikNomor);
+        // $email = $tiket->userEmail;
+
+        // kirim email
+        $this->kirimEmail("SIM", $tikNomor, "email penerima");
+
+        echo json_encode(['status' => 'ok']);
     }
 }
