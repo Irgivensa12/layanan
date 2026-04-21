@@ -60,7 +60,9 @@ if (!$this->session->userdata('userId')) {
                         <div class="col-md-5">
                             <input type="date"
                                 class="form-control"
-                                name="tikTanggal"
+                                name="layTanggal"
+                                id="layTanggal"
+                                max="<?= date('Y-m-d') ?>"
                                 style="height:50px;font-size:16px;">
                         </div>
 
@@ -76,7 +78,7 @@ if (!$this->session->userdata('userId')) {
                         <div class="col-md-9">
                             <input type="number"
                                 class="form-control"
-                                name="tikUserID"
+                                name="layUserID"
                                 value="<?= $this->session->userdata('userId'); ?>"
                                 readonly
                                 style="height:50px;font-size:16px;">
@@ -94,7 +96,7 @@ if (!$this->session->userdata('userId')) {
                         <div class="col-md-9">
                             <input type="text"
                                 class="form-control"
-                                name="tikRingkasan"
+                                name="layHal"
                                 placeholder="Ringkasan Keluhan"
                                 style="height:50px;font-size:16px;">
                         </div>
@@ -111,22 +113,53 @@ if (!$this->session->userdata('userId')) {
                         <div class="col-md-9">
                             <textarea
                                 class="form-control"
-                                name="tikDeskripsi"
+                                name="layDiskripsi"
                                 rows="5"
                                 placeholder="Deskripsi Keluhan"
                                 style="font-size:16px;padding:12px;">
 </textarea>
                         </div>
 
+
                     </div>
 
-                    <div class="text-left mt-3">
+                    <!-- Target Waktu -->
+                    <div class="form-group row mb-4 align-items-center">
+
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                            Target Waktu
+                        </label>
+
+                        <div class="col-md-5">
+                            <input type="date"
+                                class="form-control"
+                                name="layTarget"
+                                id="layTarget"
+                                style="height:50px;font-size:16px;">
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+
+                        <!-- Tombol Kembali (Kiri) -->
+                        <a href="<?= base_url('Controller/tiket_sarpras') ?>"
+                            class="btn btn-secondary"
+                            style="padding:10px 30px;font-size:16px;">
+                            ← Kembali
+                        </a>
+
+                        <!-- Tombol Simpan (Kanan) -->
                         <button type="submit"
                             class="btn btn-primary"
+                            onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini?')"
                             style="padding:10px 30px;font-size:16px;">
                             Simpan
                         </button>
+
                     </div>
+
+
 
                 </div>
             </form>
@@ -152,3 +185,27 @@ if (!$this->session->userdata('userId')) {
 <script src="<?= base_url('vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
 <script src="<?= base_url('vendor/jquery-easing/jquery.easing.min.js') ?>"></script>
 <script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
+
+<script>
+    $(document).ready(function() {
+
+        // Ambil elemen
+        let tanggal = $('#layTanggal');
+        let target = $('#layTarget');
+
+        // Saat tanggal dipilih
+        tanggal.on('change', function() {
+
+            let valTanggal = $(this).val();
+
+            // set minimal target = tanggal input
+            target.attr('min', valTanggal);
+
+            // kalau target lebih kecil dari tanggal, reset
+            if (target.val() < valTanggal) {
+                target.val('');
+            }
+        });
+
+    });
+</script>

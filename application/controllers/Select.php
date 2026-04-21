@@ -228,10 +228,8 @@ class Select extends CI_Controller
 
         $data = $this->db->get()->row_array();
 
-        // ambil nama petugas satu per satu (TETAP)
-        $petugas = [];
-
-        $listPetugas = [
+      
+        $data['petugas'] = [
             $data['layPetugas1'],
             $data['layPetugas2'],
             $data['layPetugas3'],
@@ -239,7 +237,10 @@ class Select extends CI_Controller
             $data['layPetugas5']
         ];
 
-        foreach ($listPetugas as $p) {
+        
+        $petugasNama = [];
+
+        foreach ($data['petugas'] as $p) {
             if (!empty($p)) {
                 $nama = $this->db
                     ->select('userNama')
@@ -249,7 +250,7 @@ class Select extends CI_Controller
                     ->row();
 
                 if ($nama) {
-                    $petugas[] = $nama->userNama;
+                    $petugasNama[] = $nama->userNama;
                 }
             }
         }

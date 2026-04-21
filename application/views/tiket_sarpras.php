@@ -172,7 +172,8 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         '<button class="btn btn-success btn-sm" disabled>OPEN</button>' :
                         '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>',
                         '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
-                        data[i].layID + '" data-toggle="modal" data-target="#modalDetail">Detail</button>'
+                        data[i].layID + '" data-toggle="modal" data-target="#modalDetail">Detail</button>',
+                        data[i].layTarget
                     ]);
                 }
 
@@ -221,6 +222,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     data.penanggungJawab :
                     '<span class="text-muted">Belum ditentukan</span>'
                 );
+                $('#m_layTarget').text(data.layTarget);
             }
         });
 

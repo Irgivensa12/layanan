@@ -61,18 +61,30 @@
             // generate ulang nomor tiket
             $no_layanan = $this->Model->generate_no_layanan();
             $data = [
-                'layID'      => $no_layanan,
+                'layID'         => $no_layanan,
                 'layTanggal'    => $this->input->post('layTanggal'),
-                'layUserID'     => $this->input->post('layUserID'),
-                'layDivisiID'  => $this->input->post('layDivisiID'),
-                'layHal'  => $this->input->post('layHal'),
+                'layUserID'    => $this->input->post('layUserID'),
+                'layHal'        => $this->input->post('layHal'),
                 'layDiskripsi'  => $this->input->post('layDiskripsi'),
-                'layStatus'  => 'N',
-
+                'layTarget'     => $this->input->post('layTarget'),
+                'layStatus'     => 'N',
             ];
 
             $this->Model->insertData_layanan('tb_layanan', $data);
             redirect('tiket_sarpras'); // setelah simpan, diarahkan ke halaman tiket_sarpras
+
+            $tanggal = $this->input->post('layTanggal');
+            $target  = $this->input->post('layTarget');
+
+            if ($tanggal > date('Y-m-d')) {
+                echo "Tanggal tidak boleh lebih dari hari ini";
+                return;
+            }
+
+            if ($target < $tanggal) {
+                echo "Target tidak boleh sebelum tanggal";
+                return;
+            }
         }
 
         public function tambah_tiket_sim()
@@ -90,6 +102,23 @@
             ];
 
             $this->Model->insertData_sim('tb_tiket', $data);
+            $tanggal = $this->input->post('tikTanggal');
+            $close   = $this->input->post('tikDateClose');
+
+            if ($tanggal > date('Y-m-d')) {
+                echo "Tanggal tidak valid";
+                return;
+            }
+
+            if ($close < $tanggal) {
+                echo "Tanggal close tidak boleh sebelum tanggal input";
+                return;
+            }
+
+            if ($close > date('Y-m-d')) {
+                echo "Tanggal close tidak boleh melebihi hari ini";
+                return;
+            }
 
             redirect('tiket_sim');
         }

@@ -165,6 +165,19 @@ class Controller extends CI_Controller
 
         $this->Model->update_tiket($tikNomor, $data);
     }
+    public function close_sarpras($layID)
+    {
+        $data = [
+            'layStatus' => 'Y', // Y = CLOSED
+            'layCloseUserID' => $this->session->userdata('userId'),
+            'layCloseTanggal' => date('Y-m-d H:i:s')
+        ];
+
+        $this->db->where('layID', $layID);
+        $this->db->update('tb_layanan', $data);
+
+        echo json_encode(['status' => 'ok']);
+    }
 
     public function simpan_petugas() // function untuk menyimpan petugas ke database
     {
@@ -215,45 +228,45 @@ class Controller extends CI_Controller
         echo json_encode(['status' => 'ok']);
     }
 
-      public function kirimEmail($jenis, $nomor, $userEmail)
-        {
-            $judul = "Update Tiket $jenis";
-            $pesan = "
+    public function kirimEmail($jenis, $nomor, $userEmail)
+    {
+        $judul = "Update Tiket $jenis";
+        $pesan = "
                 <h3>Penugasan Tiket Baru</h3>
                 <p><b>Jenis:</b> $jenis</p>
                 <p><b>Nomor Tiket:</b> $nomor</p>
                 <p>Silakan cek sistem untuk detail lebih lanjut.</p>
             ";
 
-            $this->load->library('email');
-            // $config = array();
-            $config['charset'] = 'utf-8';
-            // $config['useragent'] = 'Codeigniter';
-            $config['protocol'] = "smtp"; // protokol yang digunakan untuk mengirim email
-            $config['mailtype'] = "html"; // tipe email yang dikirim, bisa berupa 'text' atau 'html'
-            $config['smtp_host'] = "smtp.gmail.com"; //ubah host email
-            $config['smtp_port'] = "587"; // host port
-            $config['smtp_crypto'] = "tls"; // enkripsi yang digunakan 'tls' yang umum digunakan untuk port 587
-            $config['smtp_user'] = "chandrasekhara176@gmail.com"; // email pengirim
-            $config['smtp_pass'] = "abemlquqfkmuwomb"; // password email (jika menggunakan gmail, gunakan password aplikasi)
-            $config['smtp_timeout'] = 120; // waktu habis untuk koneksi SMTP (dalam detik)
-            $config['crlf'] = "\r\n"; // karakter untuk baris baru dalam header email
-            $config['newline'] = "\r\n"; // karakter untuk baris baru dalam isi email
-            //$config['wordwrap'] = TRUE;
+        $this->load->library('email');
+        // $config = array();
+        $config['charset'] = 'utf-8';
+        // $config['useragent'] = 'Codeigniter';
+        $config['protocol'] = "smtp"; // protokol yang digunakan untuk mengirim email
+        $config['mailtype'] = "html"; // tipe email yang dikirim, bisa berupa 'text' atau 'html'
+        $config['smtp_host'] = "smtp.gmail.com"; //ubah host email
+        $config['smtp_port'] = "587"; // host port
+        $config['smtp_crypto'] = "tls"; // enkripsi yang digunakan 'tls' yang umum digunakan untuk port 587
+        $config['smtp_user'] = "chandrasekhara176@gmail.com"; // email pengirim
+        $config['smtp_pass'] = "abemlquqfkmuwomb"; // password email (jika menggunakan gmail, gunakan password aplikasi)
+        $config['smtp_timeout'] = 120; // waktu habis untuk koneksi SMTP (dalam detik)
+        $config['crlf'] = "\r\n"; // karakter untuk baris baru dalam header email
+        $config['newline'] = "\r\n"; // karakter untuk baris baru dalam isi email
+        //$config['wordwrap'] = TRUE;
 
-            $this->email->initialize($config); // menginisialisasi konfigurasi email dengan parameter yang telah ditentukan
-            $this->email->set_newline("\r\n"); // mengatur karakter untuk baris baru dalam email, penting untuk memastikan format email yang benar terutama saat menggunakan protokol SMTP
-            $this->email->from('chandrasekhara176@gmail.com', 'PT Kanisius'); //from: email anda, nama profil email
-            $this->email->to('irgiv1204@gmail.com'); // email penerima
-            $this->email->subject($judul); // subject email
-            $this->email->message($pesan); // isi pesan email, dalam hal ini menggunakan format HTML karena mailtype diatur ke 'html'
+        $this->email->initialize($config); // menginisialisasi konfigurasi email dengan parameter yang telah ditentukan
+        $this->email->set_newline("\r\n"); // mengatur karakter untuk baris baru dalam email, penting untuk memastikan format email yang benar terutama saat menggunakan protokol SMTP
+        $this->email->from('chandrasekhara176@gmail.com', 'PT Kanisius'); //from: email anda, nama profil email
+        $this->email->to('irgiv1204@gmail.com'); // email penerima
+        $this->email->subject($judul); // subject email
+        $this->email->message($pesan); // isi pesan email, dalam hal ini menggunakan format HTML karena mailtype diatur ke 'html'
 
-            if ($this->email->send()) { //kirim email, if sukses:
-                $this->session->set_flashdata('type', 'alert-info');
-                $this->session->set_flashdata('pesan', '<strong>Sukses!</strong> Email terkirim');
-            } else { //if gagal kirim email
-                $this->session->set_flashdata('type', 'alert-danger');
-                $this->session->set_flashdata('pesan', '<strong>Error!</strong> pesan error: <br><br>' . $this->email->print_debugger());
-            }
+        if ($this->email->send()) { //kirim email, if sukses:
+            $this->session->set_flashdata('type', 'alert-info');
+            $this->session->set_flashdata('pesan', '<strong>Sukses!</strong> Email terkirim');
+        } else { //if gagal kirim email
+            $this->session->set_flashdata('type', 'alert-danger');
+            $this->session->set_flashdata('pesan', '<strong>Error!</strong> pesan error: <br><br>' . $this->email->print_debugger());
         }
+    }
 }
