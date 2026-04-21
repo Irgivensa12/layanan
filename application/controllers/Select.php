@@ -228,7 +228,7 @@ class Select extends CI_Controller
 
         $data = $this->db->get()->row_array();
 
-      
+
         $data['petugas'] = [
             $data['layPetugas1'],
             $data['layPetugas2'],
@@ -237,7 +237,7 @@ class Select extends CI_Controller
             $data['layPetugas5']
         ];
 
-        
+
         $petugasNama = [];
 
         foreach ($data['petugas'] as $p) {
@@ -256,8 +256,8 @@ class Select extends CI_Controller
         }
 
         // tetap gabung jadi 1 baris + tetap ada default
-        $data['penanggungJawab'] = !empty($petugas)
-            ? implode(', ', $petugas)
+        $data['penanggungJawab'] = !empty($petugasNama)
+            ? implode(', ', $petugasNama)
             : 'Belum ditentukan';
 
         echo json_encode($data);

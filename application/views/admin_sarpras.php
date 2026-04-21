@@ -190,19 +190,41 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
         var nomor = $(this).data("id");
 
-        if (confirm("Apakah Anda yakin ingin menutup keluhan ini?")) {
+        // 🔥 ambil detail dulu untuk cek petugas
+        $.ajax({
+            url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + nomor,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data) {
 
-            $.ajax({
-                url: "<?= base_url('Controller/close_sarpras/') ?>" + nomor,
-                type: "POST",
-                success: function() {
+                let petugas = data.petugas || [];
 
-                    alert("Tiket berhasil ditutup!");
+                // filter petugas yang tidak kosong
+                let petugasValid = petugas.filter(p => p && p !== "");
 
-                    getAdmin_Sarpras();
+                // ❌ jika belum ada petugas
+                if (petugasValid.length === 0) {
+                    alert("❌ Tidak bisa menutup layanan keluhan!\nSilakan pilih penanggung jawab terlebih dahulu.");
+                    return;
                 }
-            });
-        }
+
+                // ✅ kalau sudah ada petugas
+                if (confirm("Apakah Anda yakin ingin menutup keluhan ini?")) {
+
+                    $.ajax({
+                        url: "<?= base_url('Controller/close_sarpras/') ?>" + nomor,
+                        type: "POST",
+                        success: function() {
+
+                            alert("Tiket berhasil ditutup!");
+                            getAdmin_Sarpras();
+                        }
+                    });
+
+                }
+            }
+        });
+
     });
 
     $(document).on("click", ".detailBtn", function() { // function untuk menampilkan isi detail layanan
@@ -495,8 +517,8 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 <!-- Status -->
                 <div class="mb-4">
                     <label class="font-weight-bold">Status</label>
-                    <div id="m_layStatus" class="form-control text-center font-weight-bold"
-                        style="width:150px; font-size:22px; height:50px;">
+                    <div id="m_layStatus" class="d-flex align-items-center font-weight-bold"
+                        style="font-size:28px;">
                     </div>
                 </div>
 

@@ -300,8 +300,8 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_layStatus" class="form-control d-flex align-items-center"
-                                style="height:55px;font-size:20px;width:200px;">
+                            <div id="m_layStatus" class="d-flex align-items-center font-weight-bold"
+                                style="font-size:28px;">
                             </div>
                         </div>
 

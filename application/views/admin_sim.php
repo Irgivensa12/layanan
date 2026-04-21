@@ -175,25 +175,49 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
     });
 
-    $(document).on("click", ".statusBtn", function() { // Event listener untuk tombol status
+    $(document).on("click", ".statusBtn", function() {
 
         var tikNomor = $(this).data("id");
 
-        if (confirm("Apakah Anda yakin ingin menutup tiket ini?")) {
+        // 🔥 ambil detail dulu
+        $.ajax({
+            url: "<?= base_url('Select/detail_tiket/') ?>" + tikNomor,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data) {
 
-            $.ajax({
-                url: "<?= base_url('Controller/close_tiket/') ?>" + tikNomor,
-                type: "POST",
-                success: function() {
+                let operator = data.tikOperator;
+                let tindakan = data.tikTindakan;
 
-                    alert("Tiket berhasil ditutup!");
+                // ❌ VALIDASI
+                if (!operator || operator === "") {
+                    alert("❌ Tidak bisa menutup tiket!\nOperator belum dipilih.");
+                    return;
+                }
 
-                    getAdmin_SIM(); // reload tabel
+                if (!tindakan || tindakan.trim() === "") {
+                    alert("❌ Tidak bisa menutup tiket!\nTindakan masih kosong.");
+                    return;
+                }
+
+                // ✅ lanjut close
+                if (confirm("Apakah Anda yakin ingin menutup tiket ini?")) {
+
+                    $.ajax({
+                        url: "<?= base_url('Controller/close_tiket/') ?>" + tikNomor,
+                        type: "POST",
+                        success: function() {
+
+                            alert("Tiket berhasil ditutup!");
+                            getAdmin_SIM();
+
+                        }
+                    });
 
                 }
-            });
 
-        }
+            }
+        });
 
     });
 
@@ -420,8 +444,8 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_tikStatus" class="form-control d-flex align-items-center"
-                                style="height:55px;font-size:20px;width:200px;">
+                            <div id="m_tikStatus" class="d-flex align-items-center font-weight-bold"
+                                style="font-size:28px;">
                             </div>
                         </div>
 

@@ -124,13 +124,18 @@ class model extends CI_Model
         $user  = $this->session->userdata('userId');
 
         if ($admin == 'Y') {
-            // admin lihat semua tiket
-            $query = $this->db->query("SELECT * FROM tb_tiket ORDER BY tikTanggal DESC");
+            $query = $this->db->query("
+            SELECT * FROM tb_tiket 
+            WHERE tikNomor IS NOT NULL AND tikNomor != ''
+            ORDER BY CAST(SUBSTRING(tikNomor, 4) AS UNSIGNED) ASC
+        ");
         } else {
-            // user hanya lihat tiket sendiri
-            $query = $this->db->query("SELECT * FROM tb_tiket 
-                                   WHERE tikUserID='$user'
-                                   ORDER BY tikTanggal DESC");
+            $query = $this->db->query("
+            SELECT * FROM tb_tiket 
+            WHERE tikUserID='$user'
+            AND tikNomor IS NOT NULL AND tikNomor != ''
+            ORDER BY CAST(SUBSTRING(tikNomor, 4) AS UNSIGNED) ASC
+        ");
         }
 
         return $query;

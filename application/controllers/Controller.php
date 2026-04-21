@@ -156,19 +156,72 @@ class Controller extends CI_Controller
 
     public function close_tiket($tikNomor)
     {
+        // ambil data tiket
+        $tiket = $this->db->get_where('tb_tiket', ['tikNomor' => $tikNomor])->row();
 
+        if (!$tiket) {
+            echo json_encode(['status' => 'error', 'message' => 'Data tidak ditemukan']);
+            return;
+        }
+
+        // ❌ VALIDASI OPERATOR
+        if (empty($tiket->tikOperator)) {
+            echo json_encode(['status' => 'error', 'message' => 'Operator belum dipilih']);
+            return;
+        }
+
+        // ❌ VALIDASI TINDAKAN
+        if (empty(trim($tiket->tikTindakan))) {
+            echo json_encode(['status' => 'error', 'message' => 'Tindakan masih kosong']);
+            return;
+        }
+
+        // ✅ lanjut close
         $data = [
-            'tikStatus' => 'Y', // Set status tiket menjadi 'N' (CLOSE)
-            'tikUserClose' => $this->session->userdata('userId'), // Ambil userId dari session untuk tikUserClose
-            'tikDateClose' => date('Y-m-d H:i:s') // format tanggal dan waktu saat ini
+            'tikStatus' => 'Y',
+            'tikUserClose' => $this->session->userdata('userId'),
+            'tikDateClose' => date('Y-m-d H:i:s')
         ];
 
         $this->Model->update_tiket($tikNomor, $data);
+
+        echo json_encode(['status' => 'ok']);
     }
+    
     public function close_sarpras($layID)
     {
+        // ambil data layanan
+        $layanan = $this->db->get_where('tb_layanan', ['layID' => $layID])->row();
+
+        if (!$layanan) {
+            echo json_encode(['status' => 'error', 'message' => 'Data tidak ditemukan']);
+            return;
+        }
+
+        // ambil semua petugas
+        $petugas = [
+            $layanan->layPetugas1,
+            $layanan->layPetugas2,
+            $layanan->layPetugas3,
+            $layanan->layPetugas4,
+            $layanan->layPetugas5
+        ];
+
+        // filter yang tidak kosong
+        $petugasValid = array_filter($petugas);
+
+        // ❌ kalau belum ada petugas
+        if (count($petugasValid) == 0) {
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Penanggung jawab belum dipilih'
+            ]);
+            return;
+        }
+
+        // ✅ lanjut close
         $data = [
-            'layStatus' => 'Y', // Y = CLOSED
+            'layStatus' => 'Y',
             'layCloseUserID' => $this->session->userdata('userId'),
             'layCloseTanggal' => date('Y-m-d H:i:s')
         ];
