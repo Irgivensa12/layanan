@@ -26,7 +26,7 @@ if (!$this->session->userdata('userId')) {
         <div class="container" style="max-width:900px;">
 
             <h3 class="text-center font-weight-bold mb-4">
-                DATA LAYANAN SIM 
+                DATA LAYANAN SIM
             </h3>
 
             <form action="<?= base_url('Insert/tambah_tiket_sim') ?>" method="post">
@@ -38,7 +38,7 @@ if (!$this->session->userdata('userId')) {
                         <label class="col-md-3 font-weight-bold text-md-right pr-4">
                             Nomor Tiket
                         </label>
-                       
+
                         <div class="col-md-9">
                             <input type="text"
                                 class="form-control"
@@ -61,6 +61,8 @@ if (!$this->session->userdata('userId')) {
                             <input type="date"
                                 class="form-control"
                                 name="tikTanggal"
+                                id="tikTanggal"
+                                max="<?= date('Y-m-d') ?>"
                                 style="height:50px;font-size:16px;">
                         </div>
 
@@ -120,12 +122,40 @@ if (!$this->session->userdata('userId')) {
 
                     </div>
 
-                    <div class="text-left mt-3">
+                    <!-- Tanggal Close -->
+                    <div class="form-group row mb-4 align-items-center">
+
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                            Tanggal Close
+                        </label>
+
+                        <div class="col-md-5">
+                            <input type="date"
+                                class="form-control"
+                                name="tikDateClose"
+                                id="tikDateClose"
+                                style="height:50px;font-size:16px;">
+                        </div>
+
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+
+                        <!-- Tombol Kembali (Kiri) -->
+                        <a href="<?= base_url('Controller/tiket_sim') ?>"
+                            class="btn btn-secondary"
+                            style="padding:10px 30px;font-size:16px;">
+                            ← Kembali
+                        </a>
+
+                        <!-- Tombol Simpan (Kanan) -->
                         <button type="submit"
                             class="btn btn-primary"
+                            onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini?')"
                             style="padding:10px 30px;font-size:16px;">
                             Simpan
                         </button>
+
                     </div>
 
                 </div>
@@ -154,3 +184,57 @@ if (!$this->session->userdata('userId')) {
 <script src="<?= base_url('vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
 <script src="<?= base_url('vendor/jquery-easing/jquery.easing.min.js') ?>"></script>
 <script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
+
+<script>
+    $(document).ready(function() {
+
+        let tanggal = $('#tikTanggal');
+        let close = $('#tikDateClose');
+        let today = new Date().toISOString().split('T')[0];
+
+        // validasi tanggal input
+        tanggal.on('change', function() {
+
+            let valTanggal = $(this).val();
+
+            // tidak boleh lebih dari hari ini
+            if (valTanggal > today) {
+                alert('Tanggal tidak boleh lebih dari hari ini!');
+                $(this).val('');
+                return;
+            }
+
+            // set MIN saja (tidak pakai max!)
+            close.attr('min', valTanggal);
+
+            // reset kalau sudah tidak valid
+            if (close.val() && close.val() < valTanggal) {
+                close.val('');
+            }
+
+        });
+
+        // validasi saat input close
+        close.on('change', function() {
+
+            let valTanggal = tanggal.val();
+            let valClose = $(this).val();
+
+            if (valTanggal == '') {
+                alert('Isi tanggal terlebih dahulu!');
+                $(this).val('');
+                return;
+            }
+
+            if (valClose < valTanggal) {
+                alert('Tanggal target tidak boleh sebelum tanggal input!');
+                $(this).val('');
+            }
+
+            // ❌ TIDAK ADA LAGI VALIDASI > today
+            // karena boleh masa depan
+
+        });
+
+    });
+</script>

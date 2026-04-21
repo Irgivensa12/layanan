@@ -163,7 +163,7 @@ class Select extends CI_Controller
     public function get_operator_sim()
     {
         $this->db->select('pegNoreg, pegNama');
-        $this->db->from('db_kbs_hris.ref_pegawai'); 
+        $this->db->from('db_kbs_hris.ref_pegawai');
         $this->db->where_in('pegNoreg', [9722, 2054]);
 
         $data = $this->db->get()->result();
@@ -172,8 +172,8 @@ class Select extends CI_Controller
     }
 
     public function detail_tiket($tikNomor = null)
-{
-    $this->db->select("
+    {
+        $this->db->select("
         t.tikNomor,
         t.tikTanggal,
         t.tikUserID,
@@ -189,18 +189,18 @@ class Select extends CI_Controller
         t.tikTindakan
     ");
 
-    $this->db->from('tb_tiket t');
-    $this->db->join('vuser u', 't.tikUserID = u.userID', 'left');
+        $this->db->from('tb_tiket t');
+        $this->db->join('vuser u', 't.tikUserID = u.userID', 'left');
 
-  
-    $this->db->join('db_kbs_hris.ref_pegawai p', 't.tikOperator = p.pegNoreg', 'left');
 
-    $this->db->where('t.tikNomor', $tikNomor);
+        $this->db->join('db_kbs_hris.ref_pegawai p', 't.tikOperator = p.pegNoreg', 'left');
 
-    $data = $this->db->get()->row_array();
+        $this->db->where('t.tikNomor', $tikNomor);
 
-    echo json_encode($data);
-}
+        $data = $this->db->get()->row_array();
+
+        echo json_encode($data);
+    }
 
     public function detail_tiket_sarpras($tikNomor = null)
     {
@@ -228,10 +228,8 @@ class Select extends CI_Controller
 
         $data = $this->db->get()->row_array();
 
-        // 🔥 ambil nama petugas satu per satu (TETAP)
-        $petugas = [];
-
-        $listPetugas = [
+      
+        $data['petugas'] = [
             $data['layPetugas1'],
             $data['layPetugas2'],
             $data['layPetugas3'],
@@ -239,7 +237,10 @@ class Select extends CI_Controller
             $data['layPetugas5']
         ];
 
-        foreach ($listPetugas as $p) {
+        
+        $petugasNama = [];
+
+        foreach ($data['petugas'] as $p) {
             if (!empty($p)) {
                 $nama = $this->db
                     ->select('userNama')
@@ -249,14 +250,13 @@ class Select extends CI_Controller
                     ->row();
 
                 if ($nama) {
-                    $petugas[] = $nama->userNama;
+                    $petugasNama[] = $nama->userNama;
                 }
             }
         }
 
-        // 🔥 tetap gabung jadi 1 baris + tetap ada default
-        $data['penanggungJawab'] = !empty($petugas)
-            ? implode(', ', $petugas)
+        $data['penanggungJawab'] = !empty($petugasNama)
+            ? implode(', ', $petugasNama)
             : 'Belum ditentukan';
 
         echo json_encode($data);

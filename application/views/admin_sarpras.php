@@ -185,7 +185,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
         var nomor = $(this).data("id");
 
-        if (confirm("Apakah Anda yakin ingin menutup tiket ini?")) {
+        if (confirm("Apakah Anda yakin ingin menutup keluhan ini?")) {
 
             $.ajax({
                 url: "<?= base_url('Controller/close_sarpras/') ?>" + nomor,
@@ -194,7 +194,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
                     alert("Tiket berhasil ditutup!");
 
-                    getAdmin_SARPRAS();
+                    getAdmin_Sarpras();
                 }
             });
         }
@@ -204,8 +204,9 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
         var layID = $(this).data("id");
 
-        loadPetugas(); // ambil dropdown dari DB
-        loadDetailLay(layID); // ambil detail tiket
+        loadPetugas(() => {
+            loadDetailLay(layID);
+        });
 
     });
     // kalau butuh input dari user
@@ -265,7 +266,8 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         });
     }
 
-    function loadPetugas() {
+    function loadPetugas(callback) {
+
         $.ajax({
             url: "<?= base_url('Select/get_petugas') ?>",
             method: "GET",
@@ -286,8 +288,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
                 });
 
-                preventDuplicatePetugas();
-
+                if (callback) callback(); // 🔥 jalankan setelah selesai load
             }
         });
     }
@@ -357,13 +358,40 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
                 $('#m_layDiskripsi').html(data.layDiskripsi);
 
-                $("#m_penanggungJawab").html(
-                    data.penanggungJawab ?
-                    '<span class="badge badge-info" style="font-size:18px;">' +
-                    data.penanggungJawab +
-                    '</span>' :
-                    '<span class="text-muted">Belum ditentukan</span>'
-                );
+                // ===============================
+                // 🔥 BAGIAN PENTING (SET PETUGAS)
+                // ===============================
+
+                let petugasDB = data.petugas || []; // pastikan controller kirim array
+
+                $('select[name="petugas[]"]').each(function(index) {
+
+                    let select = $(this);
+
+                    if (petugasDB[index]) {
+                        select.val(petugasDB[index]);
+
+                        // 🔒 lock hanya yang sudah dipilih
+                        select.attr('disabled', true);
+                        select.append('<input type="hidden" name="petugas[]" value="' + select.val() + '">');
+                    } else {
+                        select.val('');
+                        select.prop('disabled', false);
+                    }
+
+                });
+
+                preventDuplicatePetugas();
+
+                // disable tombol simpan jika sudah ada petugas
+                let jumlahPetugas = petugasDB.filter(p => p && p !== "").length;
+
+                if (jumlahPetugas >= 3) {
+                    $('#btnSimpan').hide();
+                } else {
+                    $('#btnSimpan').show();
+                }
+
             }
         });
     }
@@ -376,12 +404,12 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 </script>
 
 <div class="modal fade" id="modalDetail" tabindex="-1">
-    <div class="modal-dialog modal-lg" style="max-width:700px;">
+    <div class="modal-dialog" style="max-width:75%; width:75%; margin:40px auto;">
         <div class="modal-content" style="border-radius:15px;">
 
             <!-- HEADER -->
             <div class="modal-header bg-primary text-white justify-content-center">
-                <h4 class="modal-title text-center w-100" style="font-size:26px;">
+                <h4 class="modal-title text-center w-100" style="font-size:30px;">
                     DATA LAYANAN SARPRAS
                 </h4>
                 <button type="button" class="close text-white position-absolute"
@@ -392,7 +420,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
             <!-- BODY (SCROLLABLE) -->
             <div class="modal-body"
-                style="max-height:75vh; overflow-y:auto; padding:30px; font-size:20px;">
+                style="max-height:75vh; overflow-y:auto; padding:40px; font-size:22px;">
 
                 <!-- Nomor Tiket -->
                 <div class="mb-4">

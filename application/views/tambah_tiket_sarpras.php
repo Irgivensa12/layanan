@@ -61,6 +61,8 @@ if (!$this->session->userdata('userId')) {
                             <input type="date"
                                 class="form-control"
                                 name="layTanggal"
+                                id="layTanggal"
+                                max="<?= date('Y-m-d') ?>"
                                 style="height:50px;font-size:16px;">
                         </div>
 
@@ -132,18 +134,29 @@ if (!$this->session->userdata('userId')) {
                             <input type="date"
                                 class="form-control"
                                 name="layTarget"
+                                id="layTarget"
                                 style="height:50px;font-size:16px;">
                         </div>
 
                     </div>
 
-                    <div class="text-left mt-3">
+                    <div class="d-flex justify-content-between mt-4">
+
+                        <!-- Tombol Kembali (Kiri) -->
+                        <a href="<?= base_url('Controller/tiket_sarpras') ?>"
+                            class="btn btn-secondary"
+                            style="padding:10px 30px;font-size:16px;">
+                            ← Kembali
+                        </a>
+
+                        <!-- Tombol Simpan (Kanan) -->
                         <button type="submit"
                             class="btn btn-primary"
                             onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini?')"
                             style="padding:10px 30px;font-size:16px;">
                             Simpan
                         </button>
+
                     </div>
 
 
@@ -172,3 +185,27 @@ if (!$this->session->userdata('userId')) {
 <script src="<?= base_url('vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
 <script src="<?= base_url('vendor/jquery-easing/jquery.easing.min.js') ?>"></script>
 <script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
+
+<script>
+    $(document).ready(function() {
+
+        // Ambil elemen
+        let tanggal = $('#layTanggal');
+        let target = $('#layTarget');
+
+        // Saat tanggal dipilih
+        tanggal.on('change', function() {
+
+            let valTanggal = $(this).val();
+
+            // set minimal target = tanggal input
+            target.attr('min', valTanggal);
+
+            // kalau target lebih kecil dari tanggal, reset
+            if (target.val() < valTanggal) {
+                target.val('');
+            }
+        });
+
+    });
+</script>
