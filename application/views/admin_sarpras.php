@@ -64,6 +64,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                                 <th>Deskripsi</th>
                                 <th>Status</th>
                                 <th style="width:100px">Detail</th>
+                                <th style="width:100px">Form Sarpras</th>
                             </tr>
                         </thead>
                         <tbody id="tbody" name="tbody" style="color: black;">
@@ -109,6 +110,9 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
 <!-- xlsx -->
 <script type="text/javascript" src="<?= base_url('vendor/xlsx/xlsx.fix.js') ?>"></script>
+
+<!-- library html2pdf -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
     // gunakan Javascript dan jQuery
@@ -172,7 +176,8 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         '<button class="btn btn-success btn-sm statusBtn" data-id="' + data[i].layID + '">OPEN</button>' :
                         '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>',
                         '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
-                        data[i].layID + '" data-toggle="modal" data-target="#modalDetail">Detail</button>'
+                        data[i].layID + '" data-toggle="modal" data-target="#modalDetail">Detail</button>',
+                        '<button class="btn btn-info btn-sm formSarprasBtn" data-id="' + data[i].layID + '" data-toggle="modal" data-target="#modalFormSarpras">Form Sarpras</button>'
                     ]);
                 }
 
@@ -200,7 +205,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         }
     });
 
-    $(document).on("click", ".detailBtn", function() {
+    $(document).on("click", ".detailBtn", function() { // function untuk menampilkan isi detail layanan
 
         var layID = $(this).data("id");
 
@@ -208,38 +213,12 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         loadDetailLay(layID); // ambil detail tiket
 
     });
-    // kalau butuh input dari user
-    // function getContoh2() {
-    //     var test = 'inputtan dari user';
-    //     // var test = $('#nama_input_id).val();
+    $(document).on("click", ".formSarprasBtn", function() { // function untuk menampilkan isi form sarpras dari database
 
-    //     var url = "<?php echo base_url('Insert/contoh2?'); ?>"; //Controller Insert.php, function contoh2()
-    //     var urlBaru = url + "inputAjax=" + test;
+        var layID = $(this).data("id");
+        loadFormSarpras(layID); // ambil modal form sarpras
 
-    //     var html = '';
-    //     var no = 1;
-
-    //     $.ajax({
-    //         url: urlBaru,
-    //         method: "POST",
-    //         dataType: "JSON",
-    //         async: false,
-    //         success: function(data) {
-    //             for (var i = 0; i < data.length; i++) {
-
-    //                 html += '<tr>';
-    //                 html += '<td>' + no + '</td>';
-    //                 html += '<td></td>';
-    //                 html += '<td></td>';
-    //                 html += '<td></td>';
-    //                 html += '</tr>';
-
-    //                 no++;
-    //             }
-    //             $("#tbody").html(html);
-    //         }
-    //     });
-    // }
+    });
 
     function simpanPetugas() { // function untuk menyimpan petugas yang dipilih di modal detail
 
@@ -372,6 +351,73 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         if (confirm("Apakah Anda yakin ingin menyimpan perubahan ini?")) {
             simpanPetugas();
         }
+    }
+
+    function loadFormSarpras(layID) {
+
+        $.ajax({
+            url: "<?= base_url('Select/form_sarpras/') ?>" + layID,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data) {
+
+                var tanggal_db = new Date(data.layTanggal);
+                var options = {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
+                var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
+
+                $("#m_kepada").text(data.penanggungJawab);
+                $("#m_dari").text(data.userNama);
+                $("#m_tanggal").text(tanggal_benar);
+                $("#m_hal").text(data.layHal);
+                $("#m_isi").text(data.layDiskripsi);
+                $("#m_target").text(data.layTarget);
+                $("#m_pic").text(data.penanggungJawab);
+            }
+        });
+    }
+
+    function printFormSarpras() {
+
+        // clone modal biar aman
+        var element = document.querySelector("#modalFormSarpras .modal-content").cloneNode(true);
+
+        // menghapus tombol print
+        element.querySelectorAll("button").forEach(btn => btn.remove());
+
+        // menghilangkan background abu-abu
+        element.querySelectorAll("*").forEach(el => {
+            el.style.background = "white";
+            el.style.color = "black";
+        });
+
+        element.querySelectorAll('.modal-content').forEach(el => {
+            el.style.boxShadow = 'none';
+            el.style.border = 'none';
+        });
+
+        // Mengatur opsi untuk html2pdf
+        var opt = {
+            margin: 0.5,
+            filename: 'SPU-ADM-36 FORM PERMOHONAN LAYANAN SARPRAS',
+            image: {
+                type: 'jpeg',
+                quality: 1
+            },
+            html2canvas: {
+                scale: 2
+            },
+            jsPDF: {
+                unit: 'in',
+                format: 'a4',
+                orientation: 'portrait'
+            }
+        };
+
+        html2pdf().set(opt).from(element).save();
     }
 </script>
 
@@ -508,6 +554,176 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 </div>
             </div>
 
-            </body>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalFormSarpras" tabindex="-1">
+    <div class="modal-dialog" style="max-width:800px; margin:30px auto;">
+        <div class="modal-content" style="border-radius:10px;">
 
-            </html>
+            <!-- HEADER -->
+            <div class="modal-header" style="border-bottom:3px solid black;">
+                <h4 class="modal-title text-center w-100"
+                    style="font-size:28px; font-weight:800; color:black;">
+                    FORM PERMOHONAN LAYANAN SARPRAS
+                </h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- BODY -->
+            <div class="modal-body" style="font-size:20px; padding:35px; line-height:1.8; color:black; font-weight:500;">
+
+                <!-- NO DOK -->
+                <div class="text-center mb-4" style="font-size:18px; font-weight:700;">
+                    No. Dok. KNS/FORM/SPU/ADM/36/01/00
+                </div>
+
+                <!-- KEPADA -->
+                <div class="d-flex mb-3">
+                    <div style="width:150px; font-weight:700;">Kepada</div>
+                    <div style="width:20px;">:</div>
+                    <div id="m_kepada" style="border-bottom:2px solid black; width:100%; min-height:30px;"></div>
+                </div>
+
+                <!-- DARI -->
+                <div class="d-flex mb-3">
+                    <div style="width:150px; font-weight:700;">Dari</div>
+                    <div style="width:20px;">:</div>
+                    <div id="m_dari" style="border-bottom:2px solid black; width:100%; min-height:30px;"></div>
+                </div>
+
+                <!-- TANGGAL -->
+                <div class="d-flex mb-3">
+                    <div style="width:150px; font-weight:700;">Tanggal</div>
+                    <div style="width:20px;">:</div>
+                    <div id="m_tanggal" style="border-bottom:2px solid black; width:100%; min-height:30px;"></div>
+                </div>
+
+                <!-- HAL -->
+                <div class="d-flex mb-4">
+                    <div style="width:150px; font-weight:700;">Hal</div>
+                    <div style="width:20px;">:</div>
+                    <div id="m_hal" style="border-bottom:2px solid black; width:100%; min-height:30px;"></div>
+                </div>
+
+                <!-- ISI -->
+                <div style="font-weight:700; margin-bottom:10px;">
+                    I. Isi Permohonan <i>(diisi oleh pemohon)</i>
+                </div>
+
+                <div id="m_isi" style="border:2px solid black; padding:15px; min-height:140px; margin-bottom:20px;"></div>
+
+                <!-- TARGET -->
+                <div class="d-flex mb-3">
+                    <div style="width:150px; font-weight:700;">Target Waktu</div>
+                    <div style="width:20px;">:</div>
+                    <div id="m_target" style="border-bottom:2px solid black; width:60%; min-height:30px;"></div>
+                </div>
+
+                <!-- PIC -->
+                <div class="d-flex mb-5">
+                    <div style="width:150px; font-weight:700;">PIC</div>
+                    <div style="width:20px;">:</div>
+                    <div id="m_pic" style="border-bottom:2px solid black; width:60%; min-height:30px;"></div>
+                </div>
+
+                <!-- TTD -->
+                <div class="text-center" style="margin-top:50px;">
+                    <div class="row text-center" style="font-size:18px; font-weight:700;">
+                        <div class="col-3">Pemohon</div>
+                        <div class="col-3">Diketahui</div>
+                        <div class="col-3">Disetujui</div>
+                        <div class="col-3">Diterima</div>
+                    </div>
+
+                    <div class="row text-center" style="margin-top:70px; font-size:18px;">
+                        <div class="col-3">(Kanit)</div>
+                        <div class="col-3">(Kabag)</div>
+                        <div class="col-3">(Kadep/Manajer)</div>
+                        <div class="col-3">(Sarpras)</div>
+                    </div>
+                </div>
+
+                <div style="page-break-before: always;">
+
+                    <hr style="border-top:2px solid black; margin:30px 0;">
+
+                    <!-- RENCANA TINDAK LANJUT-->
+                    <h4 style="font-size:26px; font-weight:800;">
+                        II. Rencana Tindak Lanjut <i>(diisi oleh Sarpras)</i>
+                    </h4>
+
+                    <!-- Petugas -->
+                    <div style="display:flex; align-items:center; margin-bottom:15px;">
+                        <div style="width:200px; font-size:20px; font-weight:700;">
+                            Petugas
+                        </div>
+                        <div class="col-md-9">
+                            <input type="text" readonly
+                                style="width:100%; height:45px; border:2px solid black; font-size:18px;">
+                        </div>
+                    </div>
+
+                    <!-- Observasi -->
+                    <div style="display:flex; align-items:center; margin-bottom:15px;">
+                        <div style="width:200px; font-size:20px; font-weight:700;">
+                            Observasi
+                        </div>
+                        <div style="width:200px;">
+                            <input type="text" value=" Sudah / Belum*" readonly
+                                style="width:100%; height:45px; border:2px solid black; font-size:18px;">
+                        </div>
+                        <div style="width:180px; text-align:right; padding-right:10px; font-size:20px;">
+                            Tgl. Observasi
+                        </div>
+
+                        <div style="width:200px;">
+                            <input type="text" readonly
+                                style="width:100%; height:45px; border:2px solid black;">
+                        </div>
+                    </div>
+                    <!-- Status Eksekusi -->
+                    <div style="display:flex; align-items:center; margin-bottom:15px;">
+                        <div style="width:200px; font-size:20px; font-weight:700;">
+                            Status Eksekusi
+                        </div>
+                        <div style="width:200px;">
+                            <input type="text" value=" Sudah / Belum*" readonly
+                                style="width:100%; height:45px; border:2px solid black; font-size:18px;">
+                        </div>
+                        <div style="width:180px; text-align:right; padding-right:10px; font-size:20px;">
+                            Tgl. Eksekusi
+                        </div>
+
+                        <div style="width:200px;">
+                            <input type="text" readonly
+                                style="width:100%; height:45px; border:2px solid black;">
+                        </div>
+                    </div>
+
+                    <!-- Catatan -->
+                    <div style="display:flex; align-items:center; margin-bottom:15px;">
+                        <div style="width:200px; font-size:20px; font-weight:700;">
+                            Status Eksekusi
+                        </div>
+                        <div class="col-md-9">
+                            <textarea readonly
+                                style="width:100%; min-height:120px; border:2px solid black; font-size:20px; background:#f5f5f5;"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- PRINT BUTTON -->
+                    <div class="text-center mt-4">
+                        <button onclick="printFormSarpras()"
+                            style="background:black; color:white; font-size:18px; padding:10px 30px; border:none;">
+                            Print / Save PDF
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+
+    </html>

@@ -163,7 +163,7 @@ class Select extends CI_Controller
     public function get_operator_sim()
     {
         $this->db->select('pegNoreg, pegNama');
-        $this->db->from('db_kbs_hris.ref_pegawai'); 
+        $this->db->from('db_kbs_hris.ref_pegawai');
         $this->db->where_in('pegNoreg', [9722, 2054]);
 
         $data = $this->db->get()->result();
@@ -172,8 +172,8 @@ class Select extends CI_Controller
     }
 
     public function detail_tiket($tikNomor = null)
-{
-    $this->db->select("
+    {
+        $this->db->select("
         t.tikNomor,
         t.tikTanggal,
         t.tikUserID,
@@ -189,18 +189,18 @@ class Select extends CI_Controller
         t.tikTindakan
     ");
 
-    $this->db->from('tb_tiket t');
-    $this->db->join('vuser u', 't.tikUserID = u.userID', 'left');
+        $this->db->from('tb_tiket t');
+        $this->db->join('vuser u', 't.tikUserID = u.userID', 'left');
 
-  
-    $this->db->join('db_kbs_hris.ref_pegawai p', 't.tikOperator = p.pegNoreg', 'left');
 
-    $this->db->where('t.tikNomor', $tikNomor);
+        $this->db->join('db_kbs_hris.ref_pegawai p', 't.tikOperator = p.pegNoreg', 'left');
 
-    $data = $this->db->get()->row_array();
+        $this->db->where('t.tikNomor', $tikNomor);
 
-    echo json_encode($data);
-}
+        $data = $this->db->get()->row_array();
+
+        echo json_encode($data);
+    }
 
     public function detail_tiket_sarpras($tikNomor = null)
     {
@@ -228,7 +228,7 @@ class Select extends CI_Controller
 
         $data = $this->db->get()->row_array();
 
-        // 🔥 ambil nama petugas satu per satu (TETAP)
+        // ambil nama petugas satu per satu (TETAP)
         $petugas = [];
 
         $listPetugas = [
@@ -254,7 +254,67 @@ class Select extends CI_Controller
             }
         }
 
-        // 🔥 tetap gabung jadi 1 baris + tetap ada default
+        // tetap gabung jadi 1 baris + tetap ada default
+        $data['penanggungJawab'] = !empty($petugas)
+            ? implode(', ', $petugas)
+            : 'Belum ditentukan';
+
+        echo json_encode($data);
+    }
+    public function form_sarpras($layID = null)
+    {
+        $this->db->select("
+        layID,
+        layTanggal,
+        layUserID,
+        userNama,
+        layHal,
+        layDiskripsi,
+        layTarget,
+        layPetugas1,
+        layPetugas2,
+        layPetugas3,
+        layPetugas4,
+        layPetugas5,
+        (CASE 
+            WHEN layStatus='Y' THEN 'CLOSE' 
+            ELSE 'OPEN' 
+        END) AS layStatus
+    ");
+
+        $this->db->from('tb_layanan');
+        $this->db->join('vuser', 'layUserID = userID', 'left');
+        $this->db->where('layID', $layID);
+
+        $data = $this->db->get()->row_array();
+
+        // ambil nama petugas satu per satu (TETAP)
+        $petugas = [];
+
+        $listPetugas = [
+            $data['layPetugas1'],
+            $data['layPetugas2'],
+            $data['layPetugas3'],
+            $data['layPetugas4'],
+            $data['layPetugas5']
+        ];
+
+        foreach ($listPetugas as $p) {
+            if (!empty($p)) {
+                $nama = $this->db
+                    ->select('userNama')
+                    ->from('vuser')
+                    ->where('userID', $p)
+                    ->get()
+                    ->row();
+
+                if ($nama) {
+                    $petugas[] = $nama->userNama;
+                }
+            }
+        }
+
+        // tetap gabung jadi 1 baris + tetap ada default
         $data['penanggungJawab'] = !empty($petugas)
             ? implode(', ', $petugas)
             : 'Belum ditentukan';

@@ -93,6 +93,4 @@
 
             redirect('tiket_sim');
         }
-
-      
     }
