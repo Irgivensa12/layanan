@@ -151,7 +151,7 @@ if (!$this->session->userdata('userId')) {
                         <!-- Tombol Simpan (Kanan) -->
                         <button type="submit"
                             class="btn btn-primary"
-                            onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini?')"
+                            onclick="return validasiForm()"
                             style="padding:10px 30px;font-size:16px;">
                             Simpan
                         </button>
@@ -237,4 +237,18 @@ if (!$this->session->userdata('userId')) {
         });
 
     });
+
+    function validasiForm() {
+        let ringkasan = document.getElementsByName('tikRingkasan')[0].value.trim();
+        let deskripsi = document.getElementsByName('tikDeskripsi')[0].value.trim();
+
+        // cek jika kosong semua
+        if (ringkasan === '' && deskripsi === '') {
+            alert('Mohon isi keluhan anda terlebih dahulu');
+            return false;
+        }
+
+        // kalau lolos validasi, baru confirm
+        return confirm('Apakah Anda yakin ingin menyimpan data ini?');
+    }
 </script>

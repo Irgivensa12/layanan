@@ -152,7 +152,7 @@ if (!$this->session->userdata('userId')) {
                         <!-- Tombol Simpan (Kanan) -->
                         <button type="submit"
                             class="btn btn-primary"
-                            onclick="return confirm('Apakah Anda yakin ingin menyimpan data ini?')"
+                            onclick="return validasiSarpras()"
                             style="padding:10px 30px;font-size:16px;">
                             Simpan
                         </button>
@@ -208,4 +208,18 @@ if (!$this->session->userdata('userId')) {
         });
 
     });
+
+    function validasiSarpras() {
+        let keluhan = document.getElementsByName('layHal')[0].value.trim();
+        let deskripsi = document.getElementsByName('layDiskripsi')[0].value.trim();
+
+        // kalau dua-duanya kosong
+        if (keluhan === '' && deskripsi === '') {
+            alert('Mohon isi keluhan anda terlebih dahulu');
+            return false;
+        }
+
+        // kalau lolos validasi → confirm
+        return confirm('Apakah Anda yakin ingin menyimpan data ini?');
+    }
 </script>
