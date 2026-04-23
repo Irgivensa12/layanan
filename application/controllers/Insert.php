@@ -58,21 +58,18 @@
 
         public function tambah_tiket_sarpras()
         {
-            // generate ulang nomor tiket
-            $no_layanan = $this->Model->generate_no_layanan();
-            $data = [
-                'layID'         => $no_layanan,
-                'layTanggal'    => $this->input->post('layTanggal'),
-                'layUserID'    => $this->input->post('layUserID'),
-                'layHal'        => $this->input->post('layHal'),
-                'layDiskripsi'  => $this->input->post('layDiskripsi'),
-                'layTarget'     => $this->input->post('layTarget'),
-                'layStatus'     => 'N',
-            ];
+            $keluhan   = trim($this->input->post('layHal'));
+            $deskripsi = trim($this->input->post('layDiskripsi'));
 
-            $this->Model->insertData_layanan('tb_layanan', $data);
-            redirect('tiket_sarpras'); // setelah simpan, diarahkan ke halaman tiket_sarpras
+            // VALIDASI KOSONG
+            if (empty($keluhan) && empty($deskripsi)) {
+                $this->session->set_flashdata('type', 'alert-danger');
+                $this->session->set_flashdata('pesan', 'Mohon isi keluhan anda terlebih dahulu');
+                redirect('Controller/tambah_tiket_sarpras'); // sesuaikan route
+                return;
+            }
 
+            // VALIDASI TANGGAL
             $tanggal = $this->input->post('layTanggal');
             $target  = $this->input->post('layTarget');
 
@@ -85,40 +82,50 @@
                 echo "Target tidak boleh sebelum tanggal";
                 return;
             }
+
+            // BARU INSERT
+            $no_layanan = $this->Model->generate_no_layanan();
+
+            $data = [
+                'layID'        => $no_layanan,
+                'layTanggal'   => $tanggal,
+                'layUserID'    => $this->input->post('layUserID'),
+                'layHal'       => $keluhan,
+                'layDiskripsi' => $deskripsi,
+                'layTarget'    => $target,
+                'layStatus'    => 'N',
+            ];
+
+            $this->Model->insertData_layanan('tb_layanan', $data);
+
+            redirect('tiket_sarpras');
         }
 
         public function tambah_tiket_sim()
         {
-            // generate ulang nomor tiket
+            $ringkasan = trim($this->input->post('tikRingkasan'));
+            $deskripsi = trim($this->input->post('tikDeskripsi'));
+
+            if (empty($ringkasan) && empty($deskripsi)) {
+                $this->session->set_flashdata('type', 'alert-danger');
+                $this->session->set_flashdata('pesan', 'Mohon isi keluhan anda terlebih dahulu');
+                redirect('Controller/tambah_tiket_sim');
+                return;
+            }
+
+            // baru generate & insert
             $no_tiket = $this->Model->generate_no_tiket();
 
             $data = [
                 'tikNomor'      => $no_tiket,
                 'tikTanggal'    => $this->input->post('tikTanggal'),
                 'tikUserID'     => $this->input->post('tikUserID'),
-                'tikRingkasan'  => $this->input->post('tikRingkasan'),
-                'tikStatus'  => 'N',
-                'tikDeskripsi'  => $this->input->post('tikDeskripsi')
+                'tikRingkasan'  => $ringkasan,
+                'tikStatus'     => 'N',
+                'tikDeskripsi'  => $deskripsi
             ];
 
             $this->Model->insertData_sim('tb_tiket', $data);
-            $tanggal = $this->input->post('tikTanggal');
-            $close   = $this->input->post('tikDateClose');
-
-            if ($tanggal > date('Y-m-d')) {
-                echo "Tanggal tidak valid";
-                return;
-            }
-
-            if ($close < $tanggal) {
-                echo "Tanggal close tidak boleh sebelum tanggal input";
-                return;
-            }
-
-            if ($close > date('Y-m-d')) {
-                echo "Tanggal close tidak boleh melebihi hari ini";
-                return;
-            }
 
             redirect('tiket_sim');
         }
