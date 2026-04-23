@@ -130,7 +130,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
     // menggunakan AJAX untuk membuat tabel dari data tabel
     // AJAX (View) -> Controller -> Model -> dapat hasil
-    function getTiket_Sarpras() {
+     function getTiket_Sarpras() {
 
         $.ajax({
             url: "<?php echo base_url('Select/tiket_sarpras'); ?>",
@@ -138,25 +138,30 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             dataType: "JSON",
             success: function(data) {
                 console.log(data);
-                //var html = '';
+
+                data.sort(function(a, b) {
+                    let numA = parseInt(a.layID.toString().split('-').pop()) || 0;
+                    let numB = parseInt(b.layID.toString().split('-').pop()) || 0;
+                    return numA - numB; // 🔥 ini yang bikin urut 1,2,3
+                });
+
                 table.clear();
 
                 for (var i = 0; i < data.length; i++) {
-                    // Membuat tanggal format Indonesia
-                    var tanggal_db = new Date(data[i].layTanggal); // Mengubah string tanggal dari database menjadi objek Date
 
-                    var options = { // Opsi untuk format tanggal Indonesia
+                    var tanggal_db = new Date(data[i].layTanggal);
+
+                    var options = {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric'
                     };
 
-                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia
+                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
-                    // Membuat tanggal format Indonesia
-                    var tanggal_db = new Date(data[i].layTanggal); // Mengubah string tanggal dari database menjadi objek Date
+                    var tanggal_db = new Date(data[i].layTanggal);
 
-                    var options = { // Opsi untuk format tanggal Indonesia
+                    var options = {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric'
@@ -169,11 +174,11 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                         data[i].layHal,
                         data[i].layDiskripsi,
                         data[i].layStatus == 'N' ?
-                        '<button class="btn btn-success btn-sm" disabled>OPEN</button>' :
+                        '<button class="btn btn-success btn-sm statusBtn" data-id="' + data[i].layID + '">OPEN</button>' :
                         '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>',
                         '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
                         data[i].layID + '" data-toggle="modal" data-target="#modalDetail">Detail</button>',
-                        data[i].layTarget
+                        '<button class="btn btn-info btn-sm formSarprasBtn" data-id="' + data[i].layID + '" data-toggle="modal" data-target="#modalFormSarpras">Form Sarpras</button>'
                     ]);
                 }
 
