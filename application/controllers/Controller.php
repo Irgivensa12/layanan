@@ -75,13 +75,11 @@ class Controller extends CI_Controller
 
         if ($admin == 'Y') {
             $data['role'] = 'Admin';
-        } elseif ($pengguna == 'Y') {
-            $data['role'] = 'Operator'; // belum terpakai 
         } else {
             $data['role'] = 'Pengguna';
         }
 
-        $this->load->view('header', $data);
+        $this->load->view('header');
         $this->load->view('dashboard', $data);
     }
 
@@ -164,19 +162,19 @@ class Controller extends CI_Controller
             return;
         }
 
-        // ❌ VALIDASI OPERATOR
+        // VALIDASI OPERATOR
         if (empty($tiket->tikOperator)) {
             echo json_encode(['status' => 'error', 'message' => 'Operator belum dipilih']);
             return;
         }
 
-        // ❌ VALIDASI TINDAKAN
+        // VALIDASI TINDAKAN
         if (empty(trim($tiket->tikTindakan))) {
             echo json_encode(['status' => 'error', 'message' => 'Tindakan masih kosong']);
             return;
         }
 
-        // ✅ lanjut close
+        // lanjut close
         $data = [
             'tikStatus' => 'Y',
             'tikUserClose' => $this->session->userdata('userId'),
@@ -187,7 +185,7 @@ class Controller extends CI_Controller
 
         echo json_encode(['status' => 'ok']);
     }
-    
+
     public function close_sarpras($layID)
     {
         // ambil data layanan
@@ -210,7 +208,7 @@ class Controller extends CI_Controller
         // filter yang tidak kosong
         $petugasValid = array_filter($petugas);
 
-        // ❌ kalau belum ada petugas
+        // kalau belum ada petugas
         if (count($petugasValid) == 0) {
             echo json_encode([
                 'status' => 'error',
@@ -219,7 +217,7 @@ class Controller extends CI_Controller
             return;
         }
 
-        // ✅ lanjut close
+        // lanjut close
         $data = [
             'layStatus' => 'Y',
             'layCloseUserID' => $this->session->userdata('userId'),
