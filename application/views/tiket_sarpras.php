@@ -280,7 +280,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                     <div class="form-group row align-items-center mb-4">
 
                         <label class="col-md-3 font-weight-bold text-md-right pr-4">
-                            User
+                            Penginput
                         </label>
 
                         <div class="col-md-9">

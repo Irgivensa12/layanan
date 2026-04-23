@@ -508,7 +508,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
                 <!-- User -->
                 <div class="mb-4">
-                    <label class="font-weight-bold">User</label>
+                    <label class="font-weight-bold">Penginput</label>
                     <div id="m_userNama" class="form-control"
                         style="font-size:22px; height:50px;">
                     </div>

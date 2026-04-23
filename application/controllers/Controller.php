@@ -67,7 +67,7 @@ class Controller extends CI_Controller
         }
 
         // cek privilege
-        $pengguna = $this->session->userdata('sarpras');
+        $pengguna = $this->session->userdata('pengguna');
         $admin   = $this->session->userdata('admin');
 
         // Mengambil nama dari session
