@@ -155,8 +155,36 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             margin: 10mm;
         }
 
+        html,
         body {
-            margin: 0;
+            width: 297mm;
+            height: 210mm;
+            overflow: hidden;
+        }
+
+        .print-wrapper {
+            width: 297mm;
+            height: 200mm;
+            /* jangan 210, kasih margin aman */
+            display: flex;
+            gap: 10px;
+            margin: auto;
+        }
+
+        .print-col {
+            width: 50%;
+            height: 100%;
+            padding: 12px;
+            border: 1px solid black;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .sarpras-form {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         button,
@@ -167,6 +195,12 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
         .close-btn {
             display: none !important;
+        }
+
+        .modal,
+        .modal-dialog,
+        .modal-content {
+            all: unset;
         }
     }
 </style>
@@ -306,7 +340,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 data.sort(function(a, b) {
                     let numA = parseInt(a.layID.toString().split('-').pop()) || 0;
                     let numB = parseInt(b.layID.toString().split('-').pop()) || 0;
-                    return numA - numB; // 🔥 ini yang bikin urut 1,2,3
+                    return numA - numB; // ini yang bikin urut 1,2,3
                 });
 
                 table.clear();
@@ -598,7 +632,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
     function printFormSarpras() {
         // ambil elemen modal form sarpras yang sudah diisi datanya
-        var element = document.querySelector("#modalFormSarpras .modal-content").cloneNode(true);
+        var element = document.querySelector("#modalFormSarpras .print-wrapper").cloneNode(true);
 
         // hapus tombol
         element.querySelectorAll("button").forEach(btn => btn.remove());
@@ -609,9 +643,10 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             el.style.border = 'none';
         });
 
+        var no_layanan = document.getElementById("m_layID").textContent.trim();
         var opt = {
             margin: 0.3,
-            filename: 'Form_Sarpras.pdf',
+            filename: 'SPU-ADM-36 FORM PERMOHONAN LAYANAN SARPRAS - ' + no_layanan + '.pdf',
             image: {
                 type: 'jpeg',
                 quality: 1
@@ -772,190 +807,187 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
             <!-- tombol close -->
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <div class="print-content">
-                <!-- BODY -->
-                <div class="modal-body">
+            <!-- BODY -->
+            <div class="modal-body">
 
-                    <div class="print-wrapper">
+                <div class="print-wrapper">
 
-                        <!-- KOLOM KIRI -->
-                        <div class="print-col">
-                            <div class="sarpras-form">
+                    <!-- KOLOM KIRI -->
+                    <div class="print-col">
+                        <div class="sarpras-form">
 
-                                <div class="sarpras-title">
-                                    FORM PERMOHONAN LAYANAN SARPRAS
-                                </div>
-
-                                <div class="sarpras-subtitle">
-                                    No. Dok. KNS/FORM/SPU/ADM/36/01/00
-                                </div>
-
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">Kepada</div>
-                                    <div class="sarpras-line" id="m_kepada"></div>
-                                </div>
-
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">Dari</div>
-                                    <div class="sarpras-line" id="m_dari"></div>
-                                </div>
-
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">Tanggal</div>
-                                    <div class="sarpras-line" id="m_tanggal"></div>
-                                </div>
-
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">Hal</div>
-                                    <div class="sarpras-line" id="m_hal"></div>
-                                </div>
-
-                                <b>I. Isi Permohonan</b>
-                                <div class="sarpras-box" id="m_isi"></div>
-
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">Target</div>
-                                    <div class="sarpras-line" id="m_target"></div>
-                                </div>
-
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">PIC</div>
-                                    <div class="sarpras-line" id="m_pic"></div>
-                                </div>
-
-                                <!-- TTD -->
-                                <div class="sarpras-ttd">
-                                    <div>Pemohon<br><br>(Kanit)</div>
-                                    <div>Diketahui<br><br>(Kabag)</div>
-                                    <div>Disetujui<br><br>(Manajer)</div>
-                                    <div>Diterima<br><br>(Sarpras)</div>
-                                </div>
-
-                                <hr> <!-- Garis Pemisah -->
-
-                                <!-- Rencana Tindak Lanjut -->
-                                <div class="sarpras-rtl">
-                                    <b>II. Rencana Tindak Lanjut</b>
-
-                                    <div>Petugas : ____________</div>
-
-                                    <div class="sarpras-rtl-row">
-                                        <div>Observasi : Sudah / Belum*</div>
-                                        <div>Tgl. Observasi : ____________</div>
-                                    </div>
-
-                                    <div class="sarpras-rtl-row">
-                                        <div>Status Eksekusi: Sudah / Belum*</div>
-                                        <div>Tgl. Eksekusi : ____________</div>
-                                    </div>
-
-                                    <div>
-                                        Catatan: **
-                                        <div class="sarpras-box" style="height:60px;"></div>
-                                    </div>
-                                    <div class="caKaki">
-                                        <div>(*) Coret yang tidak perlu</div>
-                                        <div>(**) Diisi oleh petugas setelah eksekusi</div>
-                                    </div>
-                                </div>
-
+                            <div class="sarpras-title">
+                                FORM PERMOHONAN LAYANAN SARPRAS
                             </div>
-                        </div>
 
-                        <!-- KOLOM KANAN (DUPLIKAT) -->
-                        <div class="print-col">
-                            <!-- DUPLIKAT SAMA PERSIS -->
-                            <div class="sarpras-form">
-
-                                <div class="sarpras-title">
-                                    FORM PERMOHONAN LAYANAN SARPRAS
-                                </div>
-
-                                <div class="sarpras-subtitle">
-                                    No. Dok. KNS/FORM/SPU/ADM/36/01/00
-                                </div>
-
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">Kepada</div>
-                                    <div class="sarpras-line" id="m_kepada2"></div>
-                                </div>
-
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">Dari</div>
-                                    <div class="sarpras-line" id="m_dari2"></div>
-                                </div>
-
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">Tanggal</div>
-                                    <div class="sarpras-line" id="m_tanggal2"></div>
-                                </div>
-
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">Hal</div>
-                                    <div class="sarpras-line" id="m_hal"></div>
-                                </div>
-
-                                <b>I. Isi Permohonan</b>
-                                <div class="sarpras-box" id="m_isi"></div>
-
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">Target</div>
-                                    <div class="sarpras-line" id="m_target2"></div>
-                                </div>
-
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">PIC</div>
-                                    <div class="sarpras-line" id="m_pic2"></div>
-                                </div>
-
-                                <!-- TTD -->
-                                <div class="sarpras-ttd">
-                                    <div>Pemohon<br><br>(Kanit)</div>
-                                    <div>Diketahui<br><br>(Kabag)</div>
-                                    <div>Disetujui<br><br>(Manajer)</div>
-                                    <div>Diterima<br><br>(Sarpras)</div>
-                                </div>
-
-                                <hr> <!-- Garis Pemisah -->
-
-                                <!-- Rencana Tindak Lanjut -->
-                                <div class="sarpras-rtl">
-                                    <b>II. Rencana Tindak Lanjut</b>
-
-                                    <div>Petugas : ____________</div>
-
-                                    <div class="sarpras-rtl-row">
-                                        <div>Observasi : Sudah / Belum*</div>
-                                        <div>Tgl. Observasi : ____________</div>
-                                    </div>
-
-                                    <div class="sarpras-rtl-row">
-                                        <div>Status Eksekusi : Sudah / Belum*</div>
-                                        <div>Tgl. Eksekusi : ____________</div>
-                                    </div>
-
-                                    <div>
-                                        Catatan: **
-                                        <div class="sarpras-box" style="height:60px;"></div>
-                                    </div>
-                                    <div class="caKaki">
-                                        <div>(*) Coret yang tidak perlu</div>
-                                        <div>(**) Diisi oleh petugas setelah eksekusi</div>
-                                    </div>
-                                </div>
-
+                            <div class="sarpras-subtitle">
+                                No. Dok. KNS/FORM/SPU/ADM/36/01/00
                             </div>
-                        </div>
 
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">Kepada</div>
+                                <div class="sarpras-line" id="m_kepada"></div>
+                            </div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">Dari</div>
+                                <div class="sarpras-line" id="m_dari"></div>
+                            </div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">Tanggal</div>
+                                <div class="sarpras-line" id="m_tanggal"></div>
+                            </div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">Hal</div>
+                                <div class="sarpras-line" id="m_hal"></div>
+                            </div>
+
+                            <b>I. Isi Permohonan</b>
+                            <div class="sarpras-box" id="m_isi"></div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">Target</div>
+                                <div class="sarpras-line" id="m_target"></div>
+                            </div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">PIC</div>
+                                <div class="sarpras-line" id="m_pic"></div>
+                            </div>
+
+                            <!-- TTD -->
+                            <div class="sarpras-ttd">
+                                <div>Pemohon<br><br>(Kanit)</div>
+                                <div>Diketahui<br><br>(Kabag)</div>
+                                <div>Disetujui<br><br>(Manajer)</div>
+                                <div>Diterima<br><br>(Sarpras)</div>
+                            </div>
+
+                            <hr> <!-- Garis Pemisah -->
+
+                            <!-- Rencana Tindak Lanjut -->
+                            <div class="sarpras-rtl">
+                                <b>II. Rencana Tindak Lanjut</b>
+
+                                <div>Petugas : ____________</div>
+
+                                <div class="sarpras-rtl-row">
+                                    <div>Observasi : Sudah / Belum*</div>
+                                    <div>Tgl. Observasi : ____________</div>
+                                </div>
+
+                                <div class="sarpras-rtl-row">
+                                    <div>Status Eksekusi: Sudah / Belum*</div>
+                                    <div>Tgl. Eksekusi : ____________</div>
+                                </div>
+
+                                <div>
+                                    Catatan: **
+                                    <div class="sarpras-box" style="height:60px;"></div>
+                                </div>
+                                <div class="caKaki">
+                                    <div>(*) Coret yang tidak perlu</div>
+                                    <div>(**) Diisi oleh petugas setelah eksekusi</div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
 
-                    <!-- BUTTON -->
-                    <div class="text-center mt-3">
-                        <button onclick="printFormSarpras()" class="btn btn-dark">
-                            Print / Save PDF
-                        </button>
+                    <!-- KOLOM KANAN (DUPLIKAT) -->
+                    <div class="print-col">
+                        <!-- DUPLIKAT SAMA PERSIS -->
+                        <div class="sarpras-form">
+
+                            <div class="sarpras-title">
+                                FORM PERMOHONAN LAYANAN SARPRAS
+                            </div>
+
+                            <div class="sarpras-subtitle">
+                                No. Dok. KNS/FORM/SPU/ADM/36/01/00
+                            </div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">Kepada</div>
+                                <div class="sarpras-line" id="m_kepada2"></div>
+                            </div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">Dari</div>
+                                <div class="sarpras-line" id="m_dari2"></div>
+                            </div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">Tanggal</div>
+                                <div class="sarpras-line" id="m_tanggal2"></div>
+                            </div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">Hal</div>
+                                <div class="sarpras-line" id="m_hal"></div>
+                            </div>
+
+                            <b>I. Isi Permohonan</b>
+                            <div class="sarpras-box" id="m_isi"></div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">Target</div>
+                                <div class="sarpras-line" id="m_target2"></div>
+                            </div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">PIC</div>
+                                <div class="sarpras-line" id="m_pic2"></div>
+                            </div>
+
+                            <!-- TTD -->
+                            <div class="sarpras-ttd">
+                                <div>Pemohon<br><br>(Kanit)</div>
+                                <div>Diketahui<br><br>(Kabag)</div>
+                                <div>Disetujui<br><br>(Manajer)</div>
+                                <div>Diterima<br><br>(Sarpras)</div>
+                            </div>
+
+                            <hr> <!-- Garis Pemisah -->
+
+                            <!-- Rencana Tindak Lanjut -->
+                            <div class="sarpras-rtl">
+                                <b>II. Rencana Tindak Lanjut</b>
+
+                                <div>Petugas : ____________</div>
+
+                                <div class="sarpras-rtl-row">
+                                    <div>Observasi : Sudah / Belum*</div>
+                                    <div>Tgl. Observasi : ____________</div>
+                                </div>
+
+                                <div class="sarpras-rtl-row">
+                                    <div>Status Eksekusi : Sudah / Belum*</div>
+                                    <div>Tgl. Eksekusi : ____________</div>
+                                </div>
+
+                                <div>
+                                    Catatan: **
+                                    <div class="sarpras-box" style="height:60px;"></div>
+                                </div>
+                                <div class="caKaki">
+                                    <div>(*) Coret yang tidak perlu</div>
+                                    <div>(**) Diisi oleh petugas setelah eksekusi</div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
 
+                </div>
+
+                <!-- BUTTON -->
+                <div class="text-center mt-3">
+                    <button onclick="printFormSarpras()" class="btn btn-dark">
+                        Print / Save PDF
+                    </button>
                 </div>
             </div>
         </div>
