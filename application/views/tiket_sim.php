@@ -192,56 +192,25 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 };
                 var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
-                $("#m_tikNomor").text(data.tikNomor);
-                $("#m_tikTanggal").text(tanggal_benar);
-                $("#m_userNama").text(data.userNama);
-                $("#m_tikRingkasan").text(data.tikRingkasan);
-                // STATUS SUDAH DARI CONTROLLER (OPEN/CLOSED)
-                $("#m_tikStatus").html(
-                    data.tikStatus === 'OPEN' ?
-                    '<span class="badge badge-success">OPEN</span>' :
-                    '<span class="badge badge-secondary">CLOSED</span>'
-                );
-                $('#m_tikDeskripsi').html(data.tikDeskripsi);
-                $('#m_tikOperator').html(data.operatorNama ?? '-');
-                $('#m_tikTindakan').html(data.tikTindakan);
+                    $("#m_tikNomor").text(data.tikNomor);
+                    $("#m_tikTanggal").text(tanggal_benar);
+                    $("#m_userNama").text(data.userNama);
+                    $("#m_tikRingkasan").text(data.tikRingkasan);
+                    // STATUS SUDAH DARI CONTROLLER (OPEN/CLOSED)
+                    $("#m_tikStatus").html(
+                        data.tikStatus === 'OPEN' ?
+                        '<span class="badge badge-success">OPEN</span>' :
+                        '<span class="badge badge-secondary">CLOSED</span>'
+                    );
+                    $('#m_tikDeskripsi').html(data.tikDeskripsi);
+                    $('#m_tikOperator').html(data.operatorNama ?? '-');
+                    $('#m_tikTindakan').html(data.tikTindakan);
             }
         });
 
     });
 
-    // kalau butuh input dari user
-    function getContoh2() {
-        var test = 'inputtan dari user';
-        // var test = $('#nama_input_id).val();
-
-        var url = "<?php echo base_url('Insert/contoh2?'); ?>"; //Controller Insert.php, function contoh2()
-        var urlBaru = url + "inputAjax=" + test;
-
-        var html = '';
-        var no = 1;
-
-        $.ajax({
-            url: urlBaru,
-            method: "POST",
-            dataType: "JSON",
-            async: false,
-            success: function(data) {
-                for (var i = 0; i < data.length; i++) {
-
-                    html += '<tr>';
-                    html += '<td>' + no + '</td>';
-                    html += '<td></td>';
-                    html += '<td></td>';
-                    html += '<td></td>';
-                    html += '</tr>';
-
-                    no++;
-                }
-                $("#tbody").html(html);
-            }
-        });
-    }
+   
 </script>
 
 <!-- Modal -->
