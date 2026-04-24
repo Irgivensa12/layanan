@@ -302,20 +302,26 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
             dataType: "JSON",
             success: function(data) {
                 console.log(data);
-                //var html = '';
+
+                data.sort(function(a, b) {
+                    let numA = parseInt(a.layID.toString().split('-').pop()) || 0;
+                    let numB = parseInt(b.layID.toString().split('-').pop()) || 0;
+                    return numA - numB; // 🔥 ini yang bikin urut 1,2,3
+                });
+
                 table.clear();
 
                 for (var i = 0; i < data.length; i++) {
-                    // Membuat tanggal format Indonesia
-                    var tanggal_db = new Date(data[i].layTanggal); // Mengubah string tanggal dari database menjadi objek Date
 
-                    var options = { // Opsi untuk format tanggal Indonesia
+                    var tanggal_db = new Date(data[i].layTanggal);
+
+                    var options = {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric'
                     };
 
-                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia
+                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
                     table.row.add([
                         data[i].layID,
