@@ -25,7 +25,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
     .print-wrapper {
         display: flex;
         gap: 20px;
-        allign-items: stretch;
+        align-items: stretch;
     }
 
     /* KOLOM KIRI & KANAN */
@@ -317,15 +317,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
                     var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia
 
-                    // Membuat tanggal format Indonesia
-                    var tanggal_db = new Date(data[i].layTanggal); // Mengubah string tanggal dari database menjadi objek Date
-
-                    var options = { // Opsi untuk format tanggal Indonesia
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    };
-
                     table.row.add([
                         data[i].layID,
                         tanggal_benar,
@@ -579,12 +570,21 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 };
                 var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
+                var raw = data.layTarget.split(' ')[0]; // ambil bagian tanggal saja (sebelum spasi)
+                var tanggal_db = new Date(raw);
+
+                var tgl_targetIdn = tanggal_db.toLocaleDateString('id-ID', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+
                 $("#m_kepada, #m_kepada2").text(data.penanggungJawab);
                 $("#m_dari, #m_dari2").text(data.userNama);
                 $("#m_tanggal, #m_tanggal2").text(tanggal_benar);
                 $("#m_hal, #m_hal2").text(data.layHal);
                 $("#m_isi, #m_isi2").text(data.layDiskripsi);
-                $("#m_target, #m_target2").text(data.layTarget);
+                $("#m_target, #m_target2").text(tgl_targetIdn);
                 $("#m_pic, #m_pic2").text(data.penanggungJawab);
             }
         });
@@ -781,7 +781,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                                 </div>
 
                                 <div class="sarpras-subtitle">
-                                    No. Dok. KKB/ATCH/SPG/MCO/99/09/00
+                                    No. Dok. KNS/FORM/SPU/ADM/36/01/00
                                 </div>
 
                                 <div class="sarpras-row">
@@ -866,7 +866,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                                 </div>
 
                                 <div class="sarpras-subtitle">
-                                    No. Dok. KKB/ATCH/SPG/MCO/99/09/00
+                                    No. Dok. KNS/FORM/SPU/ADM/36/01/00
                                 </div>
 
                                 <div class="sarpras-row">
