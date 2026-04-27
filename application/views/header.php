@@ -95,14 +95,11 @@
                 <span>
 
                     <?php
-                    $sarpras = $this->session->userdata('sarpras');
                     $admin   = $this->session->userdata('admin');
                     $user    = $this->session->userdata('userId');
 
                     if ($admin == 'Y') {
                         $role = 'Admin';
-                    } elseif ($sarpras == 'Y') {
-                        $role = 'Operator';
                     } else {
                         $role = 'User';
                     }
@@ -125,41 +122,26 @@
                 </div>
             </div>
         </li>
-        <!-- <div id="collapseUser" class="collapse" aria-labelledby="headingOne" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Menu:</h6>
-                <a class="collapse-item" href="<?= base_url('Controller/logout') ?>">Logout</a>
-            </div>
-        </div>
-        </li> -->
 
         <hr class="sidebar-divider my-0">
 
-        <!-- <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                aria-expanded="true" aria-controls="collapseTwo" id="menuMenu">
-                <i class="fas fa-fw fa-cog"></i>
-                <span>Tampilan</span>
-            </a>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Menu:</h6>
-                    <a class="collapse-item" href="menu" style="white-space: normal;">Menu</a>
-                    <a class="collapse-item" href="menu" style="white-space: normal;">List Helpdesk</a>
-                    <a class="collapse-item" href="input" style="white-space: normal;">Input Lapor Kerusakan</a>
-
-                </div>
-            </div> -->
-
         <!-- Dashboard -->
-        <?php if ($this->session->userdata('admin') == 'Y' || $this->session->userdata('sarpras') == 'Y') { ?>
+        <?php if ($this->session->userdata('admin') == 'Y') { ?>
             <li class="nav-item">
                 <a class="nav-link" href="<?= base_url('Controller/dashboard') ?>">
                     <i class="fas fa-fw fa-home"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
-        <?php } ?>
+        <?php } else { ?>
+            <!-- Jika USER BIASA -->
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('Controller/dashboard') ?>">
+                    <i class="fas fa-fw fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+        <?php } ?> 
         <!-- MENU TIKET -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse"
@@ -230,31 +212,31 @@
 
         <!-- Admin -->
         <?php if ($this->session->userdata('admin') == 'Y') { ?>
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse"
-                data-target="#collapseAdmin"
-                aria-expanded="true" aria-controls="collapseAdmin">
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse"
+                    data-target="#collapseAdmin"
+                    aria-expanded="true" aria-controls="collapseAdmin">
 
-                <i class="fas fa-fw fa-ticket-alt"></i>
-                <span>Admin</span>
-            </a>
+                    <i class="fas fa-fw fa-ticket-alt"></i>
+                    <span>Admin</span>
+                </a>
 
-            <div id="collapseAdmin" class="collapse"
-                data-parent="#accordionSidebar">
+                <div id="collapseAdmin" class="collapse"
+                    data-parent="#accordionSidebar">
 
-                <div class="bg-white py-2 collapse-inner rounded">
+                    <div class="bg-white py-2 collapse-inner rounded">
 
-                    <a class="collapse-item" href="<?= base_url('Controller/admin_sim') ?>">
-                        Tiket SIM
-                    </a>
+                        <a class="collapse-item" href="<?= base_url('Controller/admin_sim') ?>">
+                            Tiket SIM
+                        </a>
 
-                    <a class="collapse-item" href="<?= base_url('Controller/admin_sarpras') ?>">
-                        Tiket Sarpras
-                    </a>
+                        <a class="collapse-item" href="<?= base_url('Controller/admin_sarpras') ?>">
+                            Tiket Sarpras
+                        </a>
 
+                    </div>
                 </div>
-            </div>
-        </li>
+            </li>
         <?php } ?>
         <hr class="sidebar-divider">
 
