@@ -26,46 +26,6 @@ class Select extends CI_Controller
         echo json_encode($data);
     }
 
-    // public function dashboard()
-    // {
-    //     // hitung tiket SIM
-    //     $this->db->from('tb_tiket');
-    //     $tiket_sim_total = $this->db->count_all_results();
-
-    //     // hitung tiket Sarpras (kalau tabelnya sama bisa diganti)
-    //     $this->db->from('tb_layanan');
-    //     $tiket_sarpras_total = $this->db->count_all_results();
-
-    //     // tiket open
-    //     $this->db->from('tb_tiket');
-    //     $this->db->where('tikStatus', 'N');
-    //     $tiket_sim_open = $this->db->count_all_results();
-
-    //     // tiket close
-    //     $this->db->from('tb_tiket');
-    //     $this->db->where('tikStatus', 'Y');
-    //     $tiket_sim_close = $this->db->count_all_results();
-
-    //     // sarpras open
-    //     $this->db->from('tb_layanan');
-    //     $this->db->where('layStatus', 'N');
-    //     $tiket_sarpras_open = $this->db->count_all_results();
-
-    //     // sarpras close
-    //     $this->db->from('tb_layanan');
-    //     $this->db->where('layStatus', 'Y');
-    //     $tiket_sarpras_close = $this->db->count_all_results();
-
-    //     echo json_encode([
-    //         "tiket_sim_total" => $tiket_sim_total,
-    //         "tiket_sim_open" => $tiket_sim_open,
-    //         "tiket_sim_close" => $tiket_sim_close,
-    //         "tiket_sarpras_total" => $tiket_sarpras_total,
-    //         "tiket_sarpras_open" => $tiket_sarpras_open,
-    //         "tiket_sarpras_close" => $tiket_sarpras_close
-    //     ]);
-    // }
-
     public function dashboard()
     {
         $userId = $this->session->userdata('userId');

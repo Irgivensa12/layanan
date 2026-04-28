@@ -110,14 +110,6 @@ class model extends CI_Model
         $this->db->delete('buku');
     }
 
-
-
-    // public function tiket_sim()
-    // {
-    //     $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
-    //     return $this->db->query($query);
-    // }
-
     public function tiket_sim()
     {
         $admin = $this->session->userdata('admin');
