@@ -117,10 +117,8 @@ if (!$this->session->userdata('helpdesk_userId')) {
                                 rows="5"
                                 placeholder="Deskripsi Keluhan"
                                 style="font-size:16px;padding:12px;">
-</textarea>
+                            </textarea>
                         </div>
-
-
                     </div>
 
                     <!-- Target Waktu -->
@@ -156,14 +154,9 @@ if (!$this->session->userdata('helpdesk_userId')) {
                             style="padding:10px 30px;font-size:16px;">
                             Simpan
                         </button>
-
                     </div>
-
-
-
                 </div>
             </form>
-
         </div>
     </div>
 

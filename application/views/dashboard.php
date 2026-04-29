@@ -205,7 +205,7 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
     <i class="fas fa-angle-up"></i>
 </a>
 
-<!-- Script Section (SAMAKAN DENGAN tiket_sarpras) -->
+<!-- Script Section -->
 <script src="<?= base_url('vendor/jquery/jquery.min.js') ?>"></script>
 <script src="<?= base_url('vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
 <script src="<?= base_url('vendor/jquery-easing/jquery.easing.min.js') ?>"></script>

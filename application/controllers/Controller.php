@@ -108,28 +108,4 @@ class Controller extends CI_Controller
         $this->load->view('header');
         $this->load->view('admin_sarpras');
     }
-
-    // public function daftar_tiket()
-    // {
-    //     $role   = $this->session->userdata('role');
-    //     $userID = $this->session->userdata('helpdesk_userId');
-
-    //     if ($role == 'operator') {
-
-    //         $data = $this->Model->tiket_operator()->result();
-    //     } elseif ($role == 'sim') {
-
-    //         $data = $this->Model->tiket_sim($userID)->result();
-    //     } elseif ($role == 'sarpras') {
-
-    //         $data = $this->Model->tiket_sarpras($userID)->result();
-    //     } else {
-
-    //         $data = [];
-    //     }
-
-    //     echo json_encode($data);
-    // }
-
-   
 }

@@ -43,15 +43,6 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
                 </div>
             </div>
 
-            <!-- Button Tambah
-            <div class="form-group row">
-                <div class="col-sm-2">
-                    <a href="<?= base_url('tambah_tiket_sarpras') ?>" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Tambah
-                    </a>
-                </div>
-            </div> -->
-
             <div class="row">
                 <div class="col">
                     <table id="tabel" class="display nowrap" style="width:100%">

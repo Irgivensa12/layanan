@@ -179,7 +179,7 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
 
         var tikNomor = $(this).data("id");
 
-        // 🔥 ambil detail dulu
+        // ambil data tiket untuk validasi sebelum close
         $.ajax({
             url: "<?= base_url('Select/detail_tiket/') ?>" + tikNomor,
             type: "GET",
@@ -189,7 +189,7 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
                 let operator = data.tikOperator;
                 let tindakan = data.tikTindakan;
 
-                // ❌ VALIDASI
+                // validasi operator dan tindakan sebelum close tiket
                 if (!operator || operator === "") {
                     alert("❌ Tidak bisa menutup tiket!\nOperator belum dipilih.");
                     return;
@@ -200,7 +200,7 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
                     return;
                 }
 
-                // ✅ lanjut close
+                // konfirmasi sebelum close tiket
                 if (confirm("Apakah Anda yakin ingin menutup tiket ini?")) {
 
                     $.ajax({

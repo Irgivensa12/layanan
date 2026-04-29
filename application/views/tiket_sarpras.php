@@ -142,7 +142,7 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
                 data.sort(function(a, b) {
                     let numA = parseInt(a.layID.toString().split('-').pop()) || 0;
                     let numB = parseInt(b.layID.toString().split('-').pop()) || 0;
-                    return numA - numB; // 🔥 ini yang bikin urut 1,2,3
+                    return numA - numB; // Urutkan berdasarkan angka di belakang ID
                 });
 
                 table.clear();
@@ -212,7 +212,7 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
                 $("#m_userNama").text(data.userNama);
                 $("#m_layHal").text(data.layHal);
 
-                // ✅ STATUS SUDAH DARI CONTROLLER (OPEN/CLOSED)
+                // Status dengan badge warna
                 $("#m_layStatus").html(
                     data.layStatus === 'OPEN' ?
                     '<span class="badge badge-success">OPEN</span>' :
@@ -221,7 +221,7 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
 
                 $('#m_layDiskripsi').html(data.layDiskripsi);
 
-                // ✅ PENANGGUNG JAWAB
+                // Tampilkan penanggung jawab atau teks default jika kosong
                 $("#m_penanggungJawab").html(
                     data.penanggungJawab ?
                     data.penanggungJawab :
