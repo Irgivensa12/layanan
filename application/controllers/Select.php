@@ -13,7 +13,6 @@ class Select extends CI_Controller
         $this->load->model("Model");
     }
 
-    
     public function dashboard()
     {
         $userId = $this->session->userdata('helpdesk_userId');
