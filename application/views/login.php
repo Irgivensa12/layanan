@@ -1,11 +1,11 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+// if (!$this->session->userdata('helpdesk_login')) { //jika tidak ada id
 
-//if (isset($_SESSION["id"])) { //jika ada id
-//    redirect('menu');
-//    exit;
-//}
+//     redirect('dashboard');
+//     exit;
+// }
 
 ?>
 

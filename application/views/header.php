@@ -96,7 +96,7 @@
 
                     <?php
                     $admin   = $this->session->userdata('admin');
-                    $user    = $this->session->userdata('userId');
+                    $user    = $this->session->userdata('helpdesk_userId');
 
                     if ($admin == 'Y') {
                         $role = 'Admin';

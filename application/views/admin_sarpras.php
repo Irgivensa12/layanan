@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-if (!$this->session->userdata('userId')) { //jika tidak ada id
+if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
     $this->session->set_flashdata('type', 'alert-danger');
     $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
     redirect();
@@ -403,7 +403,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 if (confirm("Apakah Anda yakin ingin menutup keluhan ini?")) {
 
                     $.ajax({
-                        url: "<?= base_url('Controller/close_sarpras/') ?>" + nomor,
+                        url: "<?= base_url('Insert/close_sarpras/') ?>" + nomor,
                         type: "POST",
                         success: function() {
 
@@ -445,7 +445,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         });
 
         $.ajax({
-            url: "<?= base_url('Controller/simpan_petugas') ?>",
+            url: "<?= base_url('Insert/simpan_petugas') ?>",
             method: "POST", // kirim data menggunakan POST karena mengirim data yang lebih kompleks (array petugas)
             data: {
                 layID: $('#m_layID').text(), // ambil ID layanan dari modal

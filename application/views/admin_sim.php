@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-if (!$this->session->userdata('userId')) { //jika tidak ada id
+if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
     $this->session->set_flashdata('type', 'alert-danger');
     $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
     redirect();
@@ -204,7 +204,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
                 if (confirm("Apakah Anda yakin ingin menutup tiket ini?")) {
 
                     $.ajax({
-                        url: "<?= base_url('Controller/close_tiket/') ?>" + tikNomor,
+                        url: "<?= base_url('Insert/close_tiket/') ?>" + tikNomor,
                         type: "POST",
                         success: function() {
 
@@ -220,39 +220,6 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
         });
 
     });
-
-    // kalau butuh input dari user
-    function getContoh2() {
-        var test = 'inputtan dari user';
-        // var test = $('#nama_input_id).val();
-
-        var url = "<?php echo base_url('Insert/contoh2?'); ?>"; //Controller Insert.php, function contoh2()
-        var urlBaru = url + "inputAjax=" + test;
-
-        var html = '';
-        var no = 1;
-
-        $.ajax({
-            url: urlBaru,
-            method: "POST",
-            dataType: "JSON",
-            async: false,
-            success: function(data) {
-                for (var i = 0; i < data.length; i++) {
-
-                    html += '<tr>';
-                    html += '<td>' + no + '</td>';
-                    html += '<td></td>';
-                    html += '<td></td>';
-                    html += '<td></td>';
-                    html += '</tr>';
-
-                    no++;
-                }
-                $("#tbody").html(html);
-            }
-        });
-    }
 
     function simpanTindakan() {
 
@@ -273,7 +240,7 @@ if (!$this->session->userdata('userId')) { //jika tidak ada id
 
         // Kirim data tindakan ke Controller untuk disimpan ke database
         $.ajax({
-            url: "<?= base_url('Controller/simpan_tindakan') ?>",
+            url: "<?= base_url('Insert/simpan_tindakan') ?>",
             method: "POST",
             data: {
                 tikID: id,

@@ -13,14 +13,6 @@
             $this->load->model("Model");
         }
 
-        public function contoh2()
-        {
-            $inputAjax = $this->input->post('inputAjax');
-
-            $this->Model->contoh2($inputAjax);
-            redirect('menu');
-        }
-
         public function input()
         {
 
@@ -38,23 +30,7 @@
             redirect('menu');
         }
 
-        // public function update()
-        // {
-        //     $id = $this->input->post('tikNomor');
 
-        //     $data = array(
-        //         'tikNomor'      => $this->input->post('tikNomor'),
-        //         'tikTanggal'           => $this->input->post('tikTanggal'),
-        //         'tikUserClose'           => $this->input->post('tikUserClose'),
-        //         'tikRingkasan'        => $this->input->post('tikRingkasan'),
-        //         'tiketStatus'           => $this->input->post('tiketStatus')
-        //     );
-
-        //     $this->db->where('tik_Nomor', $id);
-        //     $this->db->update('tb_tiket', $data);
-
-        //     redirect('menu');
-        // }
 
         public function tambah_tiket_sarpras()
         {
@@ -128,5 +104,170 @@
             $this->Model->insertData_sim('tb_tiket', $data);
 
             redirect('tiket_sim');
+        }
+
+        public function close_tiket($tikNomor)
+        {
+            // ambil data tiket
+            $tiket = $this->db->get_where('tb_tiket', ['tikNomor' => $tikNomor])->row();
+
+            if (!$tiket) {
+                echo json_encode(['status' => 'error', 'message' => 'Data tidak ditemukan']);
+                return;
+            }
+
+            // VALIDASI OPERATOR
+            if (empty($tiket->tikOperator)) {
+                echo json_encode(['status' => 'error', 'message' => 'Operator belum dipilih']);
+                return;
+            }
+
+            // VALIDASI TINDAKAN
+            if (empty(trim($tiket->tikTindakan))) {
+                echo json_encode(['status' => 'error', 'message' => 'Tindakan masih kosong']);
+                return;
+            }
+
+            // lanjut close
+            $data = [
+                'tikStatus' => 'Y',
+                'tikUserClose' => $this->session->userdata('userId'),
+                'tikDateClose' => date('Y-m-d H:i:s')
+            ];
+
+            $this->Model->update_tiket($tikNomor, $data);
+
+            echo json_encode(['status' => 'ok']);
+        }
+
+        public function close_sarpras($layID)
+        {
+            // ambil data layanan
+            $layanan = $this->db->get_where('tb_layanan', ['layID' => $layID])->row();
+
+            if (!$layanan) {
+                echo json_encode(['status' => 'error', 'message' => 'Data tidak ditemukan']);
+                return;
+            }
+
+            // ambil semua petugas
+            $petugas = [
+                $layanan->layPetugas1,
+                $layanan->layPetugas2,
+                $layanan->layPetugas3,
+                $layanan->layPetugas4,
+                $layanan->layPetugas5
+            ];
+
+            // filter yang tidak kosong
+            $petugasValid = array_filter($petugas);
+
+            // kalau belum ada petugas
+            if (count($petugasValid) == 0) {
+                echo json_encode([
+                    'status' => 'error',
+                    'message' => 'Penanggung jawab belum dipilih'
+                ]);
+                return;
+            }
+
+            // lanjut close
+            $data = [
+                'layStatus' => 'Y',
+                'layCloseUserID' => $this->session->userdata('helpdesk_userId'),
+                'layCloseTanggal' => date('Y-m-d H:i:s')
+            ];
+
+            $this->db->where('layID', $layID);
+            $this->db->update('tb_layanan', $data);
+
+            echo json_encode(['status' => 'ok']);
+        }
+
+        public function simpan_petugas() // function untuk menyimpan petugas ke database
+        {
+            $layID   = $this->input->post('layID'); // ID layanan yang akan diupdate petugasnya
+            $petugas = $this->input->post('petugas'); // array petugas yang dikirim dari frontend
+
+            // reset semua petugas menjadi null terlebih dahulu
+            $data = [
+                'layPetugas1' => null,
+                'layPetugas2' => null,
+                'layPetugas3' => null,
+                'layPetugas4' => null,
+                'layPetugas5' => null,
+            ];
+
+            // isi sesuai urutan
+            for ($i = 0; $i < count($petugas); $i++) {
+                $data['layPetugas' . ($i + 1)] = $petugas[$i];
+            }
+
+            $this->db->where('layID', $layID); // pastikan update berdasarkan layID
+            $this->db->update('tb_layanan', $data);
+
+            $this->kirimEmail("SARPRAS", $layID, "irgiv1204@gmail.com");
+
+            echo json_encode(['status' => 'ok']);
+        }
+
+        public function simpan_tindakan() // function untuk menyimpan tindakan ke database
+        {
+            $tikNomor = $this->input->post('tikID'); // nomor tiket yang akan diupdate tindakannya
+            $tindakan = $this->input->post('tikTindakan'); // tindakan yang dikirim dari frontend
+            $operator  = $this->input->post('tikOperator'); // operator yang mengupdate tindakan (bisa dipakai untuk log)
+            $data = [
+                'tikTindakan' => $tindakan,
+                'tikOperator' => $operator
+            ];
+
+            $this->Model->update_tiket($tikNomor, $data); // update data tindakan di database
+
+            // kirim email
+            $this->kirimEmail("SIM", $tikNomor, "irgiv1204@gmail.com");
+
+            echo json_encode(['status' => 'ok']);
+        }
+
+        public function kirimEmail($jenis, $nomor, $userEmail)
+        {
+            $judul = "Update Tiket $jenis";
+            $pesan = "
+                <h3>Penugasan Tiket Baru</h3>
+                <p><b>Jenis:</b> $jenis</p>
+                <p><b>Nomor Tiket:</b> $nomor</p>
+                <p>Silakan cek sistem untuk detail lebih lanjut.</p>
+            ";
+
+            $this->load->library('email');
+            // $config = array();
+            $config['charset'] = 'utf-8';
+            // $config['useragent'] = 'Codeigniter';
+            $config['protocol'] = "smtp"; // protokol yang digunakan untuk mengirim email
+            $config['mailtype'] = "html"; // tipe email yang dikirim, bisa berupa 'text' atau 'html'
+            $config['smtp_host'] = "smtp.gmail.com"; //ubah host email
+            $config['smtp_port'] = "587"; // host port
+            $config['smtp_crypto'] = "tls"; // enkripsi yang digunakan 'tls' yang umum digunakan untuk port 587
+            $config['smtp_user'] = "chandrasekhara176@gmail.com"; // email pengirim
+            $config['smtp_pass'] = "abemlquqfkmuwomb"; // password email (jika menggunakan gmail, gunakan password aplikasi)
+            $config['smtp_timeout'] = 120; // waktu habis untuk koneksi SMTP (dalam detik)
+            $config['crlf'] = "\r\n"; // karakter untuk baris baru dalam header email
+            $config['newline'] = "\r\n"; // karakter untuk baris baru dalam isi email
+            //$config['wordwrap'] = TRUE;
+
+            $this->email->initialize($config); // menginisialisasi konfigurasi email dengan parameter yang telah ditentukan
+            $this->email->set_newline("\r\n"); // mengatur karakter untuk baris baru dalam email, penting untuk memastikan format email yang benar terutama saat menggunakan protokol SMTP
+            $this->email->from('chandrasekhara176@gmail.com', 'PT Kanisius'); //from: email anda, nama profil email
+            $this->email->to('irgiv1204@gmail.com'); // email penerima
+            $this->email->subject($judul); // subject email
+            $this->email->message($pesan); // isi pesan email, dalam hal ini menggunakan format HTML karena mailtype diatur ke 'html'
+
+            if ($this->email->send()) { //kirim email, if sukses:
+                $this->session->set_flashdata('type', 'alert-info');
+                $this->session->set_flashdata('pesan', '<strong>Sukses!</strong> Email terkirim');
+            } else { //if gagal kirim email
+                $this->session->set_flashdata('type', 'alert-danger');
+                $this->session->set_flashdata('pesan', '<strong>Error!</strong> pesan error: <br><br>' . $this->email->print_debugger());
+            }
         }
     }

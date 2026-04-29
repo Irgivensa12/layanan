@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-if (!$this->session->userdata('userId')) {
+if (!$this->session->userdata('helpdesk_userId')) {
     $this->session->set_flashdata('type', 'alert-danger');
     $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
     redirect();
@@ -79,7 +79,7 @@ if (!$this->session->userdata('userId')) {
                             <input type="number"
                                 class="form-control"
                                 name="tikUserID"
-                                value="<?= $this->session->userdata('userId'); ?>"
+                                value="<?= $this->session->userdata('helpdesk_userId'); ?>"
                                 readonly
                                 style="height:50px;font-size:16px;">
                         </div>

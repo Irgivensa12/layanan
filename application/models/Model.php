@@ -20,9 +20,9 @@ class model extends CI_Model
             $firstRow = $user[0];
 
             if (md5($password) == $firstRow['userPass']) {
-                $this->session->set_userdata('login', true);
-                $this->session->set_userdata('userId', $firstRow['userId']);
-                $this->session->set_userdata('userNama', $firstRow['userNama']);
+                $this->session->set_userdata('helpdesk_login', true);
+                $this->session->set_userdata('helpdesk_userId', $firstRow['userId']);
+                $this->session->set_userdata('helpdesk_userNama', $firstRow['userNama']);
                 foreach ($user as $row) {
 
                     // MENU ADMIN
@@ -60,20 +60,6 @@ class model extends CI_Model
     }
 
 
-    //contoh query biasa
-    public function contoh1()
-    {
-        $query = "SELECT id_buku, nama_buku, email_penulis, penerbit, tanggal FROM buku";
-        return $this->db->query($query);
-    }
-
-    //contoh query dengan input dari AJAX
-    public function contoh2($inputAjax)
-    {
-        $query = "SELECT kolom FROM tabel WHERE kolom = '" . $inputAjax . "'";
-        return $this->db->query($query);
-    }
-
     public function insertData_sim($tb_tiket, $data)
     {
         return $this->db->insert($tb_tiket, $data);
@@ -110,18 +96,10 @@ class model extends CI_Model
         $this->db->delete('buku');
     }
 
-
-
-    // public function tiket_sim()
-    // {
-    //     $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
-    //     return $this->db->query($query);
-    // }
-
     public function tiket_sim()
     {
         $admin = $this->session->userdata('admin');
-        $user  = $this->session->userdata('userId');
+        $user  = $this->session->userdata('helpdesk_userId');
 
         if ($admin == 'Y') {
             $query = $this->db->query("
@@ -144,7 +122,7 @@ class model extends CI_Model
     public function tiket_sarpras()
     {
         $admin = $this->session->userdata('admin');
-        $user  = $this->session->userdata('userId');
+        $user  = $this->session->userdata('helpdesk_userId');
 
         if ($admin == 'Y') {
             // admin lihat semua tiket
