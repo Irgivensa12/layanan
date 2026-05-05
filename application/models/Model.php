@@ -105,14 +105,14 @@ class model extends CI_Model
             $query = $this->db->query("
             SELECT * FROM tb_tiket 
             WHERE tikNomor IS NOT NULL AND tikNomor != ''
-            ORDER BY CAST(SUBSTRING(tikNomor, 4) AS UNSIGNED) ASC
+            ORDER BY CAST(SUBSTRING(tikNomor, 4) AS UNSIGNED) DESC
         ");
         } else {
             $query = $this->db->query("
             SELECT * FROM tb_tiket 
             WHERE tikUserID='$user'
             AND tikNomor IS NOT NULL AND tikNomor != ''
-            ORDER BY CAST(SUBSTRING(tikNomor, 4) AS UNSIGNED) ASC
+            ORDER BY CAST(SUBSTRING(tikNomor, 4) AS UNSIGNED) DESC
         ");
         }
 
@@ -126,29 +126,16 @@ class model extends CI_Model
 
         if ($admin == 'Y') {
             // admin lihat semua tiket
-            $query = $this->db->query("SELECT * FROM tb_layanan ORDER BY layStatus DESC");
+            $query = $this->db->query("SELECT * FROM tb_layanan ORDER BY layStatus DESC, CAST(SUBSTRING(layID, 4) AS UNSIGNED) DESC");
         } else {
             // user hanya lihat tiket sendiri
             $query = $this->db->query("SELECT * FROM tb_layanan 
                                    WHERE layUserID='$user'
-                                   ORDER BY layTanggal DESC");
+                                   ORDER BY layTanggal DESC, CAST(SUBSTRING(layID, 4) AS UNSIGNED) DESC");
         }
 
         return $query;
     }
-
-    public function get_dashboard_data()
-    {
-        $pelanggan = $this->db->count_all('tb_pelanggan');
-        $wishlist  = $this->db->count_all('tb_wishlist');
-
-        return [
-            'pelanggan_baru' => $pelanggan,
-            'wishlist_pelanggan' => $wishlist
-        ];
-    } // blm dipakai
-
-
 
     public function getTiket($role, $userID = null)
     {
@@ -180,8 +167,12 @@ class model extends CI_Model
     }
     public function admin_sim()
     {
-        $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
-        return $this->db->query($query);
+        $query = $this->db->query("
+            SELECT * FROM tb_tiket 
+            WHERE tikNomor IS NOT NULL AND tikNomor != ''
+            ORDER BY CAST(SUBSTRING(tikNomor, 4) AS UNSIGNED) DESC
+        ");
+        return $query;
     }
     public function admin_sarpras()
     {

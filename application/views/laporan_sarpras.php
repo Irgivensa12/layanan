@@ -142,7 +142,13 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
             dataType: "JSON",
             success: function(data) {
                 console.log(data);
-                //var html = '';
+
+                data.sort(function(a, b) {
+                    let numA = parseInt(a.layID.toString().split('-').pop()) || 0;
+                    let numB = parseInt(b.layID.toString().split('-').pop()) || 0;
+                    return numB - numA; // Mengurutkan dari yang terbesar ke terkecil (DESC) berdasarkan angka setelah strip (-)
+                });
+                
                 table.clear();
 
                 for (var i = 0; i < data.length; i++) {
