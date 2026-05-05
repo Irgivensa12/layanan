@@ -63,7 +63,8 @@ if (!$this->session->userdata('helpdesk_userId')) {
                                 name="layTanggal"
                                 id="layTanggal"
                                 max="<?= date('Y-m-d') ?>"
-                                style="height:50px;font-size:16px;">
+                                style="height:50px;font-size:16px;"
+                                required>
                         </div>
 
                     </div>
@@ -79,7 +80,7 @@ if (!$this->session->userdata('helpdesk_userId')) {
                             <input type="number"
                                 class="form-control"
                                 name="layUserID"
-                                value="<?= $this->session->userdata('userId'); ?>"
+                                value="<?= $this->session->userdata('helpdesk_userId'); ?>"
                                 readonly
                                 style="height:50px;font-size:16px;">
                         </div>
@@ -98,7 +99,8 @@ if (!$this->session->userdata('helpdesk_userId')) {
                                 class="form-control"
                                 name="layHal"
                                 placeholder="Ringkasan Keluhan"
-                                style="height:50px;font-size:16px;">
+                                style="height:50px;font-size:16px;"
+                                required>
                         </div>
 
                     </div>
@@ -116,8 +118,8 @@ if (!$this->session->userdata('helpdesk_userId')) {
                                 name="layDiskripsi"
                                 rows="5"
                                 placeholder="Deskripsi Keluhan"
-                                style="font-size:16px;padding:12px;">
-                            </textarea>
+                                style="font-size:16px;padding:12px;"
+                                required></textarea>
                         </div>
                     </div>
 
@@ -133,7 +135,8 @@ if (!$this->session->userdata('helpdesk_userId')) {
                                 class="form-control"
                                 name="layTarget"
                                 id="layTarget"
-                                style="height:50px;font-size:16px;">
+                                style="height:50px;font-size:16px;"
+                                required>
                         </div>
 
                     </div>
@@ -203,16 +206,30 @@ if (!$this->session->userdata('helpdesk_userId')) {
     });
 
     function validasiSarpras() {
-        let keluhan = document.getElementsByName('layHal')[0].value.trim();
+        let keluhan = document.getElementsByName('layHal')[0].value.trim(); 
         let deskripsi = document.getElementsByName('layDiskripsi')[0].value.trim();
+        let tanggal = document.getElementsByName('layTanggal')[0].value;
+        let target = document.getElementsByName('layTarget')[0].value;
 
-        // kalau dua-duanya kosong
-        if (keluhan === '' && deskripsi === '') {
-            alert('Mohon isi keluhan anda terlebih dahulu');
+        if (keluhan === '') {
+            alert('Mohon isi keluhan dahulu!');
             return false;
         }
 
-        // kalau lolos validasi → confirm
+        if (deskripsi === '') {
+            alert('Mohon isi deskripsi dahulu!');
+            return false;
+        }
+        
+        if (tanggal === '') {
+            alert('Mohon isi tanggal dahulu!');
+            return false;
+        }
+
+        if (target === '') {
+            alert('Mohon isi target waktu!');
+            return false;
+        }
         return confirm('Apakah Anda yakin ingin menyimpan data ini?');
     }
 </script>

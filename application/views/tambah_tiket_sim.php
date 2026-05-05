@@ -63,7 +63,8 @@ if (!$this->session->userdata('helpdesk_userId')) {
                                 name="tikTanggal"
                                 id="tikTanggal"
                                 max="<?= date('Y-m-d') ?>"
-                                style="height:50px;font-size:16px;">
+                                style="height:50px;font-size:16px;"
+                                required>
                         </div>
 
                     </div>
@@ -98,7 +99,8 @@ if (!$this->session->userdata('helpdesk_userId')) {
                                 class="form-control"
                                 name="tikRingkasan"
                                 placeholder="Ringkasan Keluhan"
-                                style="height:50px;font-size:16px;">
+                                style="height:50px;font-size:16px;"
+                                required>
                         </div>
 
                     </div>
@@ -116,8 +118,8 @@ if (!$this->session->userdata('helpdesk_userId')) {
                                 name="tikDeskripsi"
                                 rows="5"
                                 placeholder="Deskripsi Kerusakan"
-                                style="font-size:16px;padding:12px;">
-</textarea>
+                                style="font-size:16px;padding:12px;"
+                                required></textarea>
                         </div>
 
                     </div>
@@ -231,7 +233,7 @@ if (!$this->session->userdata('helpdesk_userId')) {
                 $(this).val('');
             }
 
-            // ❌ TIDAK ADA LAGI VALIDASI > today
+            // Tidak boleh ada validasi yang melarang tanggal close di masa depan
             // karena boleh masa depan
 
         });
@@ -241,14 +243,23 @@ if (!$this->session->userdata('helpdesk_userId')) {
     function validasiForm() {
         let ringkasan = document.getElementsByName('tikRingkasan')[0].value.trim();
         let deskripsi = document.getElementsByName('tikDeskripsi')[0].value.trim();
+        let tanggal = document.getElementsByName('tikTanggal')[0].value;
 
-        // cek jika kosong semua
-        if (ringkasan === '' && deskripsi === '') {
-            alert('Mohon isi keluhan anda terlebih dahulu');
+        if (tanggal === '') {
+            alert('Mohon isi tanggal dahulu!');
             return false;
         }
 
-        // kalau lolos validasi, baru confirm
+        if (ringkasan === '') {
+            alert('Mohon isi ringkasan dahulu!');
+            return false;
+        }
+
+        if (deskripsi === '') {
+            alert('Mohon isi deskripsi dahulu!');
+            return false;
+        }
+
         return confirm('Apakah Anda yakin ingin menyimpan data ini?');
     }
 </script>
