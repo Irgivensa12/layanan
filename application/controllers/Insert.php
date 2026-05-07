@@ -121,7 +121,7 @@
             if (empty(trim($tiket->tikTindakan))) {
                 echo json_encode(['status' => 'error', 'message' => 'Tindakan masih kosong']);
                 return;
-            }
+            }   
 
             // lanjut close 
             $data = [
