@@ -245,8 +245,14 @@ if (!$this->session->userdata('helpdesk_userId')) {
         let ringkasan = document.getElementsByName('tikRingkasan')[0].value.trim();
         let deskripsi = document.getElementsByName('tikDeskripsi')[0].value.trim();
         let tanggal = document.getElementsByName('tikTanggal')[0].value;
+        let target = document.getElementsByName('tikDateClose')[0].value;
 
-        if (tanggal === '' || ringkasan === '' || deskripsi === '') {
+        if (
+            tanggal === '' ||
+            ringkasan === '' ||
+            deskripsi === '' ||
+            target === ''
+        ) {
             alert('Mohon lengkapi keluhan anda!');
             return false;
         }
