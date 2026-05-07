@@ -205,17 +205,17 @@ if (!$this->session->userdata('helpdesk_userId')) {
 
     });
 
-    function validasiSarpras() {
+    function validasiForm() {
 
-        let keluhan = document.getElementsByName('layHal')[0].value.trim();
-        let deskripsi = document.getElementsByName('layDiskripsi')[0].value.trim();
-        let tanggal = document.getElementsByName('layTanggal')[0].value;
-        let target = document.getElementsByName('layTarget')[0].value;
+        let ringkasan = document.getElementsByName('tikRingkasan')[0].value.trim();
+        let deskripsi = document.getElementsByName('tikDeskripsi')[0].value.trim();
+        let tanggal = document.getElementsByName('tikTanggal')[0].value;
+        let target = document.getElementsByName('tikDateClose')[0].value;
 
         if (
-            keluhan === '' ||
-            deskripsi === '' ||
             tanggal === '' ||
+            ringkasan === '' ||
+            deskripsi === '' ||
             target === ''
         ) {
             alert('Mohon lengkapi keluhan anda!');
