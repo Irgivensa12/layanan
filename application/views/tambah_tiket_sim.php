@@ -241,22 +241,13 @@ if (!$this->session->userdata('helpdesk_userId')) {
     });
 
     function validasiForm() {
+
         let ringkasan = document.getElementsByName('tikRingkasan')[0].value.trim();
         let deskripsi = document.getElementsByName('tikDeskripsi')[0].value.trim();
         let tanggal = document.getElementsByName('tikTanggal')[0].value;
 
-        if (tanggal === '') {
-            alert('Mohon isi tanggal dahulu!');
-            return false;
-        }
-
-        if (ringkasan === '') {
-            alert('Mohon isi ringkasan dahulu!');
-            return false;
-        }
-
-        if (deskripsi === '') {
-            alert('Mohon isi deskripsi dahulu!');
+        if (tanggal === '' || ringkasan === '' || deskripsi === '') {
+            alert('Mohon lengkapi keluhan anda!');
             return false;
         }
 

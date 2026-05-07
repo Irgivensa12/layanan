@@ -206,30 +206,22 @@ if (!$this->session->userdata('helpdesk_userId')) {
     });
 
     function validasiSarpras() {
-        let keluhan = document.getElementsByName('layHal')[0].value.trim(); 
+
+        let keluhan = document.getElementsByName('layHal')[0].value.trim();
         let deskripsi = document.getElementsByName('layDiskripsi')[0].value.trim();
         let tanggal = document.getElementsByName('layTanggal')[0].value;
         let target = document.getElementsByName('layTarget')[0].value;
 
-        if (keluhan === '') {
-            alert('Mohon isi keluhan dahulu!');
+        if (
+            keluhan === '' ||
+            deskripsi === '' ||
+            tanggal === '' ||
+            target === ''
+        ) {
+            alert('Mohon lengkapi keluhan anda!');
             return false;
         }
 
-        if (deskripsi === '') {
-            alert('Mohon isi deskripsi dahulu!');
-            return false;
-        }
-        
-        if (tanggal === '') {
-            alert('Mohon isi tanggal dahulu!');
-            return false;
-        }
-
-        if (target === '') {
-            alert('Mohon isi target waktu!');
-            return false;
-        }
         return confirm('Apakah Anda yakin ingin menyimpan data ini?');
     }
 </script>
