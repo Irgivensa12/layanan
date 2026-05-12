@@ -78,7 +78,7 @@
             if ($this->form_validation->run() == FALSE) {
                 $this->session->set_flashdata('type', 'alert-danger');
                 $this->session->set_flashdata('pesan', validation_errors());
-                redirect('Controller/tambah_tiket_sim');
+                redirect('Controller/tambah_tiket_sim'); 
                 return;
             }
 

@@ -87,6 +87,24 @@ if (!$this->session->userdata('helpdesk_userId')) {
 
                     </div>
 
+                    <!-- Nama Karyawan -->
+                    <div class="form-group row mb-4 align-items-center">
+
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                            Nama Karyawan
+                        </label>
+
+                        <div class="col-md-9">
+                            <input type="text"
+                                class="form-control"
+                                name="tikUserNama"
+                                value="<?= $this->session->userdata('helpdesk_userNama'); ?>"
+                                readonly
+                                style="height:50px;font-size:16px;">
+                        </div>
+
+                    </div>
+
                     <!-- Ringkasan -->
                     <div class="form-group row mb-4 align-items-center">
 
