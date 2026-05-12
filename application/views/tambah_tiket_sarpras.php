@@ -60,12 +60,12 @@ if (!$this->session->userdata('helpdesk_userId')) {
                         <div class="col-md-5">
                             <input type="date"
                                 class="form-control"
-                                name="layTanggal"
-                                id="layTanggal"
                                 value="<?= date('Y-m-d') ?>"
-                                max="<?= date('Y-m-d') ?>"
-                                style="height:50px;font-size:16px;"
-                                required>
+                                disabled>
+
+                            <input type="hidden"
+                                name="layTanggal"
+                                value="<?= date('Y-m-d') ?>">
                         </div>
                     </div>
 
@@ -184,8 +184,6 @@ if (!$this->session->userdata('helpdesk_userId')) {
 <script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
 
 <script>
-   
-
     function validasiForm() {
 
         let ringkasan = document.getElementsByName('tikRingkasan')[0].value.trim();

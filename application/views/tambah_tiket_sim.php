@@ -50,7 +50,7 @@ if (!$this->session->userdata('helpdesk_userId')) {
                         </div>
                     </div>
 
-                   <!-- Tanggal -->
+                    <!-- Tanggal -->
                     <div class="form-group row mb-4 align-items-center">
 
                         <label class="col-md-3 font-weight-bold text-md-right pr-4">
@@ -58,14 +58,14 @@ if (!$this->session->userdata('helpdesk_userId')) {
                         </label>
 
                         <div class="col-md-5">
-                            <input type="date"
+                           <input type="date"
                                 class="form-control"
-                                name="layTanggal"
-                                id="layTanggal"
                                 value="<?= date('Y-m-d') ?>"
-                                max="<?= date('Y-m-d') ?>"
-                                style="height:50px;font-size:16px;"
-                                required>
+                                disabled>
+
+                            <input type="hidden"
+                                name="tikTanggal"
+                                value="<?= date('Y-m-d') ?>">
                         </div>
                     </div>
 
@@ -142,7 +142,7 @@ if (!$this->session->userdata('helpdesk_userId')) {
 
                     </div>
 
-                   
+
 
                     <div class="d-flex justify-content-between mt-4">
 
@@ -191,20 +191,18 @@ if (!$this->session->userdata('helpdesk_userId')) {
 <script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
 
 <script>
-    
-
     function validasiForm() {
 
         let ringkasan = document.getElementsByName('tikRingkasan')[0].value.trim();
         let deskripsi = document.getElementsByName('tikDeskripsi')[0].value.trim();
         let tanggal = document.getElementsByName('tikTanggal')[0].value;
-        
+
 
         if (
             tanggal === '' ||
             ringkasan === '' ||
-            deskripsi === '' 
-           
+            deskripsi === ''
+
         ) {
             alert('Mohon lengkapi keluhan anda!');
             return false;
