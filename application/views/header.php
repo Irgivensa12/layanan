@@ -128,7 +128,7 @@
         <!-- Dashboard -->
         <?php if ($this->session->userdata('admin') == 'Y') { ?>
             <li class="nav-item">
-                <a class="nav-link" href="<?= base_url('Controller/dashboard') ?>">
+                <a class="nav-link" href="<?= base_url('dashboard') ?>">
                     <i class="fas fa-fw fa-home"></i>
                     <span>Dashboard</span>
                 </a>
@@ -136,7 +136,7 @@
         <?php } else { ?>
             <!-- Jika USER BIASA -->
             <li class="nav-item">
-                <a class="nav-link" href="<?= base_url('Controller/dashboard') ?>">
+                <a class="nav-link" href="<?= base_url('dashboard') ?>">
                     <i class="fas fa-fw fa-home"></i>
                     <span>Dashboard</span>
                 </a>
@@ -157,11 +157,11 @@
 
                 <div class="bg-white py-2 collapse-inner rounded">
 
-                    <a class="collapse-item" href="<?= base_url('Controller/tiket_sim') ?>">
+                    <a class="collapse-item" href="<?= base_url('tiket_sim') ?>">
                         Tiket SIM
                     </a>
 
-                    <a class="collapse-item" href="<?= base_url('Controller/tiket_sarpras') ?>">
+                    <a class="collapse-item" href="<?= base_url('tiket_sarpras') ?>">
                         Tiket Sarpras
                     </a>
 
@@ -192,11 +192,11 @@
 
                     <div class="bg-white py-2 collapse-inner rounded">
 
-                        <a class="collapse-item" href="<?= base_url('Controller/laporan_sim') ?>">
+                        <a class="collapse-item" href="<?= base_url('laporan_sim') ?>">
                             Laporan SIM
                         </a>
 
-                        <a class="collapse-item" href="<?= base_url('Controller/laporan_sarpras') ?>">
+                        <a class="collapse-item" href="<?= base_url('laporan_sarpras') ?>">
                             Laporan Sarpras
                         </a>
 
@@ -226,11 +226,11 @@
 
                     <div class="bg-white py-2 collapse-inner rounded">
 
-                        <a class="collapse-item" href="<?= base_url('Controller/admin_sim') ?>">
+                        <a class="collapse-item" href="<?= base_url('admin_sim') ?>">
                             Tiket SIM
                         </a>
 
-                        <a class="collapse-item" href="<?= base_url('Controller/admin_sarpras') ?>">
+                        <a class="collapse-item" href="<?= base_url('admin_sarpras') ?>">
                             Tiket Sarpras
                         </a>
 
