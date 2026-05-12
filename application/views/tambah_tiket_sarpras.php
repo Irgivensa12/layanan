@@ -184,27 +184,7 @@ if (!$this->session->userdata('helpdesk_userId')) {
 <script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
 
 <script>
-    $(document).ready(function() {
-
-        // Ambil elemen
-        let tanggal = $('#layTanggal');
-        let target = $('#layTarget');
-
-        // Saat tanggal dipilih
-        tanggal.on('change', function() {
-
-            let valTanggal = $(this).val();
-
-            // set minimal target = tanggal input
-            target.attr('min', valTanggal);
-
-            // kalau target lebih kecil dari tanggal, reset
-            if (target.val() < valTanggal) {
-                target.val('');
-            }
-        });
-
-    });
+   
 
     function validasiForm() {
 

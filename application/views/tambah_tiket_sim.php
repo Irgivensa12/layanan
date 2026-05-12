@@ -191,57 +191,7 @@ if (!$this->session->userdata('helpdesk_userId')) {
 <script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
 
 <script>
-    $(document).ready(function() {
-
-        let tanggal = $('#tikTanggal');
-        let close = $('#tikDateClose');
-        let today = new Date().toISOString().split('T')[0];
-
-        // validasi tanggal input
-        tanggal.on('change', function() {
-
-            let valTanggal = $(this).val();
-
-            // tidak boleh lebih dari hari ini
-            if (valTanggal > today) {
-                alert('Tanggal tidak boleh lebih dari hari ini!');
-                $(this).val('');
-                return;
-            }
-
-            // set MIN saja (tidak pakai max!)
-            close.attr('min', valTanggal);
-
-            // reset kalau sudah tidak valid
-            if (close.val() && close.val() < valTanggal) {
-                close.val('');
-            }
-
-        });
-
-        // validasi saat input close
-        close.on('change', function() {
-
-            let valTanggal = tanggal.val();
-            let valClose = $(this).val();
-
-            if (valTanggal == '') {
-                alert('Isi tanggal terlebih dahulu!');
-                $(this).val('');
-                return;
-            }
-
-            if (valClose < valTanggal) {
-                alert('Tanggal target tidak boleh sebelum tanggal input!');
-                $(this).val('');
-            }
-
-            // Tidak boleh ada validasi yang melarang tanggal close di masa depan
-            // karena boleh masa depan
-
-        });
-
-    });
+    
 
     function validasiForm() {
 
