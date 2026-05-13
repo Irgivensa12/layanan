@@ -95,11 +95,9 @@ $role = $this->session->userdata('role');
                                 <th>Ringkasan</th>
                                 <th>Status</th>
                                 <th>Detail</th>
-
-                                <?php if ($role == 'admin') { ?>
+                                <?php if ($role != 'admin') { ?>
                                     <th>Action</th>
                                 <?php } ?>
-
                             </tr>
 
                         </thead>
@@ -203,19 +201,6 @@ $role = $this->session->userdata('role');
                         day: 'numeric'
 
                     };
-                    //var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia 
-                    // table.row.add([
-                    //     data[i].tikNomor,
-                    //     tanggal_benar,
-                    //     data[i].tikUserID,
-                    //     data[i].userNama,
-                    //     data[i].tikRingkasan,
-                    //     data[i].tikStatus == 'N' ? // jika tikStatus = N, maka tampilkan tombol OPEN, jika tidak tampilkan tombol CLOSED
-                    //     '<button class="btn btn-success btn-sm statusBtn" data-id="' + data[i].tikNomor + '">OPEN</button>' :
-                    //     '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>',
-
-                    //     '<button class="btn btn-primary btn-sm detailBtn" data-id="' + data[i].tikNomor + '" data-toggle="modal" data-target="#modalDetail">Detail</button>'
-                    // ]);
 
                     var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
@@ -238,47 +223,55 @@ $role = $this->session->userdata('role');
                         data[i].tikNomor +
                         '" data-toggle="modal" data-target="#modalDetail">Detail</button>';
 
-                    // ACTION BUTTON ADMIN
+                    // ACTION BUTTON
                     var actionBtn = '';
 
-                    if (role == 'admin') {
+                    // hanya untuk USER BIASA
+                    if (role != 'admin') {
 
-                        if (data[i].tikStatus == 'OPEN') {
+                        // tiket masih OPEN
+                        if (data[i].tikStatus == 'N') {
 
-                            actionBtn =
-                                '<button class="btn btn-success btn-sm statusBtn" data-id="' +
-                                data[i].tikNomor +
-                                '">Close</button>';
+                            // hanya pemilik tiket
+                            if (data[i].tikUserID == "<?= $this->session->userdata('helpdesk_userId') ?>") {
 
-                        } else {
+                                // operator & tindakan sudah diisi admin
+                                if (
+                                    data[i].tikOperator &&
+                                    data[i].tikOperator.trim() != '' &&
+                                    data[i].tikTindakan &&
+                                    data[i].tikTindakan.trim() != ''
+                                ) {
 
-                            actionBtn =
-                                '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>';
+                                    actionBtn =
+                                        '<button class="btn btn-success btn-sm statusBtn" data-id="' +
+                                        data[i].tikNomor +
+                                        '">Close</button>';
+
+                                } else {
+
+                                    actionBtn =
+                                        '<button class="btn btn-warning btn-sm" disabled>Menunggu Admin</button>';
+                                }
+
+                            } else {
+
+                                actionBtn =
+                                    '<button class="btn btn-secondary btn-sm" disabled>Bukan Tiket Anda</button>';
+                            }
 
                         }
 
+                        // tiket CLOSED
+                        else {
+
+                            actionBtn =
+                                '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>';
+                        }
                     }
 
-                    // ADMIN
+                    // Jika admin hanya tampilkan nomor, tanggal, penginput, nama, ringkasan, status, dan detail
                     if (role == 'admin') {
-
-                        table.row.add([
-
-                            data[i].tikNomor,
-                            tanggal_benar,
-                            data[i].tikUserID,
-                            data[i].userNama,
-                            data[i].tikRingkasan,
-                            statusBtn,
-                            detailBtn,
-                            actionBtn
-
-                        ]);
-
-                    }
-
-                    // USER
-                    else {
 
                         table.row.add([
 
@@ -294,6 +287,23 @@ $role = $this->session->userdata('role');
 
                     }
 
+                    // Jika user biasa tampilkan nomor, tanggal, penginput, nama, ringkasan, status, detail, dan action
+                    else {
+
+                        table.row.add([
+
+                            data[i].tikNomor,
+                            tanggal_benar,
+                            data[i].tikUserID,
+                            data[i].userNama,
+                            data[i].tikRingkasan,
+                            statusBtn,
+                            detailBtn,
+                            actionBtn
+
+                        ]);
+
+                    }
                 }
 
                 table.draw();
@@ -310,52 +320,6 @@ $role = $this->session->userdata('role');
         var tikNomor = $(this).data("id"); // Mengambil data-id dari tombol yang diklik, yaitu tikNomor
 
         loadDetailTik(tikNomor); // Mengambil detail tiket
-
-    });
-
-    $(document).on("click", ".statusBtn", function() {
-
-        var tikNomor = $(this).data("id");
-
-        // Mengambil data tiket untuk validasi sebelum close
-        $.ajax({
-            url: "<?= base_url('Select/detail_tiket/') ?>" + tikNomor,
-            type: "GET",
-            dataType: "JSON",
-            success: function(data) {
-
-                let operator = data.tikOperator;
-                let tindakan = data.tikTindakan;
-
-                // Validasi operator dan tindakan sebelum close tiket
-                if (!operator || operator === "") {
-                    alert("❌ Tidak bisa menutup tiket!\nOperator belum dipilih!");
-                    return;
-                }
-
-                if (!tindakan || tindakan.trim() === "") {
-                    alert("❌ Tidak bisa menutup tiket!\nTindakan masih kosong!");
-                    return;
-                }
-
-                // Mengkonfirmasi sebelum close tiket
-                if (confirm("Apakah Anda yakin ingin menutup tiket ini?")) {
-
-                    $.ajax({
-                        url: "<?= base_url('Insert/close_tiket/') ?>" + tikNomor,
-                        type: "POST",
-                        success: function() {
-
-                            alert("Tiket berhasil ditutup!");
-                            getTiket_SIM();
-
-                        }
-                    });
-
-                }
-
-            }
-        });
 
     });
 
@@ -402,25 +366,37 @@ $role = $this->session->userdata('role');
     function loadOperator(selected = '') {
 
         $.ajax({
+
             url: "<?= base_url('Select/get_operator_sim') ?>",
+
             method: "GET",
+
             dataType: "JSON",
+
             success: function(data) {
-                console.log(data);
+
                 let select = $('#tikOperator');
+
                 select.empty();
+
                 select.append('<option value="">-- Pilih Operator --</option>');
 
                 $.each(data, function(i, op) {
-                    let selectedAttr = (op.pegNoreg == selected) ? 'selected' : '';
+
                     select.append(
-                        '<option value="' + op.pegNoreg + '" ' + selectedAttr + '>' + op.pegNama + '</option>'
+                        '<option value="' + op.pegNoreg + '">' +
+                        op.pegNama +
+                        '</option>'
                     );
+
                 });
 
-            }
-        });
+                // pilih operator setelah option selesai dibuat
+                select.val(selected);
 
+            }
+
+        });
     }
 
     function loadDetailTik(tikNomor) {
@@ -435,34 +411,76 @@ $role = $this->session->userdata('role');
 
             success: function(data) {
 
-                var tanggal_db = new Date(data.tikTanggal);
-                var options = {
+                console.log(data);
+                console.log("ROLE :", role);
 
+                var tanggal_db = new Date(data.tikTanggal);
+
+                var options = {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'
-
                 };
 
                 var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
+                // DATA UMUM
                 $("#m_tikNomor").text(data.tikNomor);
                 $("#m_tikTanggal").text(tanggal_benar);
                 $("#m_userNama").text(data.userNama);
                 $("#m_tikRingkasan").text(data.tikRingkasan);
+                $("#m_tikDeskripsi").html(data.tikDeskripsi);
 
+                // STATUS
                 $("#m_tikStatus").html(
-                    data.tikStatus === 'OPEN' ?
+                    data.tikStatus == 'N' ?
                     '<span class="badge badge-success">OPEN</span>' :
                     '<span class="badge badge-secondary">CLOSED</span>'
                 );
 
-                $('#m_tikDeskripsi').html(data.tikDeskripsi);
+                // =========================
+                // ADMIN
+                // =========================
+                if (role === 'admin') {
 
-                $('#m_tikOperator').html(data.operatorNama ?? '-');
+                    // tampilkan operator dropdown
+                    loadOperator(data.tikOperator);
 
-                $('#m_tikTindakan').html(data.tikTindakan ?? '-');
+                    // isi tindakan
+                    $('#tikTindakan').val(data.tikTindakan ?? '');
 
+                    // OPEN
+                    if (data.tikStatus == 'N') {
+
+                        $('#tikOperator').prop('disabled', false);
+
+                        $('#tikTindakan').prop('readonly', false);
+
+                        $('#btnSimpan').show();
+
+                    }
+
+                    // CLOSED
+                    else {
+
+                        $('#tikOperator').prop('disabled', true);
+
+                        $('#tikTindakan').prop('readonly', true);
+
+                        $('#btnSimpan').hide();
+                    }
+
+                }
+
+                // =========================
+                // USER
+                // =========================
+                else {
+
+                    $('#m_tikOperator').html(data.operatorNama ?? '-');
+
+                    $('#m_tikTindakan').html(data.tikTindakan ?? '-');
+                }
             }
 
         });
@@ -645,10 +663,18 @@ $role = $this->session->userdata('role');
 
                         <div class="col-md-9">
 
-                            <div id="m_tikOperator"
-                                class="form-control d-flex align-items-center"
-                                style="height:38px;font-size:14px;">
-                            </div>
+                            <?php if ($role == 'admin') { ?>
+
+                                <select id="tikOperator" class="form-control"></select>
+
+                            <?php } else { ?>
+
+                                <div id="m_tikOperator"
+                                    class="form-control d-flex align-items-center"
+                                    style="height:38px;font-size:14px;">
+                                </div>
+
+                            <?php } ?>
 
                         </div>
 
@@ -663,10 +689,20 @@ $role = $this->session->userdata('role');
 
                         <div class="col-md-9">
 
-                            <div id="m_tikTindakan"
-                                class="form-control"
-                                style="font-size:14px;padding:10px;min-height:120px;">
-                            </div>
+                            <?php if ($role == 'admin') { ?>
+
+                                <textarea id="tikTindakan"
+                                    class="form-control"
+                                    rows="5"></textarea>
+
+                            <?php } else { ?>
+
+                                <div id="m_tikTindakan"
+                                    class="form-control"
+                                    style="font-size:14px;padding:10px;min-height:120px;">
+                                </div>
+
+                            <?php } ?>
 
                         </div>
                     </div>
@@ -684,13 +720,17 @@ $role = $this->session->userdata('role');
                 </button>
 
                 <!-- Simpan -->
-                <button type="button"
-                    id="btnSimpan"
-                    class="btn btn-success"
-                    style="font-size:20px; padding:10px 40px;"
-                    onclick="konfirmasiSimpan()">
-                    Simpan
-                </button>
+                <?php if ($role == 'admin') { ?>
+
+                    <button type="button"
+                        id="btnSimpan"
+                        class="btn btn-success"
+                        style="font-size:20px; padding:10px 40px;"
+                        onclick="konfirmasiSimpan()">
+                        Simpan
+                    </button>
+
+                <?php } ?>
 
             </div>
         </div>
