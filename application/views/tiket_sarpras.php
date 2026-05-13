@@ -97,7 +97,11 @@ $admin = $this->session->userdata('admin');
 
                                 <th>Keluhan</th>
                                 <th>Deskripsi</th>
-                                <th>Status</th>
+
+                                <?php if ($admin != 'Y') { ?>
+                                    <th>Status</th>
+                                <?php } ?>
+
                                 <th>Detail</th>
 
                                 <?php if ($admin == 'Y') { ?>
@@ -258,7 +262,7 @@ $admin = $this->session->userdata('admin');
                             actionBtn =
                                 '<button class="btn btn-success btn-sm statusBtn" data-id="' +
                                 data[i].layID +
-                                '">CLOSE</button>';
+                                '">OPEN</button>';
 
                         } else {
 
@@ -282,7 +286,6 @@ $admin = $this->session->userdata('admin');
                             data[i].layUserID,
                             data[i].layHal,
                             data[i].layDiskripsi,
-                            statusText,
                             detailBtn,
                             formSarprasBtn,
                             actionBtn
@@ -447,7 +450,7 @@ $admin = $this->session->userdata('admin');
 
                 $("#m_layStatus").html(
 
-                    data.layStatus === 'OPEN' ?
+                    data.layStatus === 'N' ?
                     '<span class="badge badge-success">OPEN</span>' :
                     '<span class="badge badge-secondary">CLOSED</span>'
 
