@@ -1,217 +1,436 @@
-<?php
-defined('BASEPATH') or exit('No direct script access allowed');
+    <?php
+    defined('BASEPATH') or exit('No direct script access allowed');
 
-if (!$this->session->userdata('helpdesk_userId')) {
-    $this->session->set_flashdata('type', 'alert-danger');
-    $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
-    redirect();
-    exit;
-}
+    if (!$this->session->userdata('helpdesk_userId')) {
+        $this->session->set_flashdata('type', 'alert-danger');
+        $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
+        redirect();
+        exit;
+    }
 
-$admin = $this->session->userdata('admin');
-?>
+    $admin = $this->session->userdata('admin');
+    ?>
 
-<div id="content-wrapper" class="d-flex flex-column">
+    <div id="content-wrapper" class="d-flex flex-column">
 
-    <div id="content">
+        <div id="content">
 
-        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
-            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                <i class="fa fa-bars"></i>
-            </button>
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
 
-            <ul class="navbar-nav ml-auto">
-                <img src="<?= base_url('img/kanisius.png') ?>">
-            </ul>
+                <ul class="navbar-nav ml-auto">
+                    <img src="<?= base_url('img/kanisius.png') ?>">
+                </ul>
 
-        </nav>
+            </nav>
 
-        <div class="container-fluid">
+            <div class="container-fluid">
 
-            <!-- JUDUL -->
-            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <!-- JUDUL -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
 
-                <h1 class="h3 mb-0 text-gray-800">
+                    <h1 class="h3 mb-0 text-gray-800">
 
-                    <?= ($admin == 'Y') ? 'Halaman Admin SARPRAS' : 'List Semua Keluhan SARPRAS'; ?>
+                        <?= ($admin == 'Y') ? 'Halaman Admin SARPRAS' : 'List Semua Keluhan SARPRAS'; ?>
 
-                </h1>
-
-            </div>
-
-            <!-- ALERT -->
-            <div class="form-group row">
-
-                <div class="col-sm-12">
-
-                    <?php if (isset($_SESSION["pesan"])) { ?>
-
-                        <div class="alert <?= $_SESSION['type'] ?> alert-dismissible">
-
-                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-
-                            <?= $_SESSION['pesan'] ?>
-
-                        </div>
-
-                    <?php unset($_SESSION['pesan']);
-                    } ?>
+                    </h1>
 
                 </div>
 
-            </div>
+                <!-- ALERT -->
+                <div class="form-group row">
 
-            <!-- BUTTON TAMBAH -->
-            <div class="form-group row">
+                    <div class="col-sm-12">
 
-                <div class="col-sm-2">
+                        <?php if (isset($_SESSION["pesan"])) { ?>
 
-                    <a href="<?= base_url('tambah_tiket_sarpras') ?>" class="btn btn-primary">
+                            <div class="alert <?= $_SESSION['type'] ?> alert-dismissible">
 
-                        <i class="fas fa-plus"></i> Tambah
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 
-                    </a>
+                                <?= $_SESSION['pesan'] ?>
 
-                </div>
+                            </div>
 
-            </div>
+                        <?php unset($_SESSION['pesan']);
+                        } ?>
 
-            <!-- TABLE -->
-            <div class="row">
-
-                <div class="col">
-
-                    <table id="tabel" class="display nowrap" style="width:100%">
-
-                        <thead style="color: black;">
-
-                            <tr>
-
-                                <th>No</th>
-                                <th>Tanggal</th>
-
-                                <?php if ($admin == 'Y') { ?>
-                                    <th>Penginput</th>
-                                <?php } ?>
-
-                                <th>Keluhan</th>
-                                <th>Deskripsi</th>
-
-                                <?php if ($admin != 'Y') { ?>
-                                    <th>Status</th>
-                                <?php } ?>
-
-                                <th>Detail</th>
-
-                                <?php if ($admin == 'Y') { ?>
-                                    <th>Form Sarpras</th>
-                                    <th>Action</th>
-                                <?php } ?>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody id="tbody" style="color:black;">
-
-                        </tbody>
-
-                    </table>
+                    </div>
 
                 </div>
 
-            </div>
+                <!-- BUTTON TAMBAH -->
+                <div class="form-group row">
 
-            <br>
+                    <div class="col-sm-2">
+
+                        <a href="<?= base_url('tambah_tiket_sarpras') ?>" class="btn btn-primary">
+
+                            <i class="fas fa-plus"></i> Tambah
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <!-- TABLE -->
+                <div class="row">
+
+                    <div class="col">
+
+                        <table id="tabel" class="display nowrap" style="width:100%">
+
+                            <thead style="color: black;">
+
+                                <tr>
+
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+
+                                    <?php if ($admin == 'Y') { ?>
+                                        <th>Penginput</th>
+                                    <?php } ?>
+
+                                    <th>Keluhan</th>
+                                    <th>Deskripsi</th>
+
+                                    <?php if ($admin != 'Y') { ?>
+                                        <th>Status</th>
+                                    <?php } ?>
+
+                                    <th>Detail</th>
+
+                                    <?php if ($admin == 'Y') { ?>
+                                        <th>Form Sarpras</th>
+                                        <th>Action</th>
+                                    <?php } ?>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="tbody" style="color:black;">
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+            </div>
 
         </div>
+
+        <!-- FOOTER -->
+        <footer class="sticky-footer bg-white">
+
+            <div class="container my-auto">
+
+                <div class="copyright text-center my-auto">
+
+                    <span>© <?= date("Y"); ?> PT Kanisius.</span>
+
+                </div>
+
+            </div>
+
+        </footer>
 
     </div>
 
-    <!-- FOOTER -->
-    <footer class="sticky-footer bg-white">
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
 
-        <div class="container my-auto">
+    <!-- JS -->
+    <script src="<?= base_url('vendor/jquery/jquery.min.js') ?>"></script>
+    <script src="<?= base_url('vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
+    <script src="<?= base_url('vendor/jquery-easing/jquery.easing.min.js') ?>"></script>
+    <script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
 
-            <div class="copyright text-center my-auto">
+    <!-- DATATABLE -->
+    <link rel="stylesheet" href="<?= base_url('vendor/datatables/jquery.dataTables.min.css') ?>">
 
-                <span>© <?= date("Y"); ?> PT Kanisius.</span>
+    <script src="<?= base_url('vendor/datatables/jquery.dataTables.min.js') ?>"></script>
 
-            </div>
+    <script>
+        var table;
+        var admin = "<?= $admin ?>";
 
-        </div>
+        $(document).ready(function() {
 
-    </footer>
+            $('#menuTiket').trigger('click');
 
-</div>
+            table = $('#tabel').DataTable({
+                "scrollX": true,
+                "scrollY": "400px",
+                "select": true,
+                "bSort": false
+            });
 
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
+            getTiket_Sarpras();
 
-<!-- JS -->
-<script src="<?= base_url('vendor/jquery/jquery.min.js') ?>"></script>
-<script src="<?= base_url('vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
-<script src="<?= base_url('vendor/jquery-easing/jquery.easing.min.js') ?>"></script>
-<script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
-
-<!-- DATATABLE -->
-<link rel="stylesheet" href="<?= base_url('vendor/datatables/jquery.dataTables.min.css') ?>">
-
-<script src="<?= base_url('vendor/datatables/jquery.dataTables.min.js') ?>"></script>
-
-<script>
-    var table;
-    var admin = "<?= $admin ?>";
-
-    $(document).ready(function() {
-
-        $('#menuTiket').trigger('click');
-
-        table = $('#tabel').DataTable({
-            "scrollX": true,
-            "scrollY": "400px",
-            "select": true,
-            "bSort": false
         });
 
-        getTiket_Sarpras();
+        // =========================
+        // GET DATA
+        // =========================
 
-    });
+        function getTiket_Sarpras() {
 
-    // =========================
-    // GET DATA
-    // =========================
+            $.ajax({
 
-    function getTiket_Sarpras() {
+                url: "<?php echo base_url('Select/tiket_sarpras'); ?>",
 
-        $.ajax({
+                method: "POST",
 
-            url: "<?php echo base_url('Select/tiket_sarpras'); ?>",
+                dataType: "JSON",
 
-            method: "POST",
+                success: function(data) {
 
-            dataType: "JSON",
+                    console.log(data);
 
-            success: function(data) {
+                    table.clear();
 
-                console.log(data);
+                    data.sort(function(a, b) {
 
-                table.clear();
+                        let numA = parseInt(a.layID.toString().split('-').pop()) || 0;
+                        let numB = parseInt(b.layID.toString().split('-').pop()) || 0;
 
-                data.sort(function(a, b) {
+                        return numB - numA;
 
-                    let numA = parseInt(a.layID.toString().split('-').pop()) || 0;
-                    let numB = parseInt(b.layID.toString().split('-').pop()) || 0;
+                    });
 
-                    return numB - numA;
+                    for (var i = 0; i < data.length; i++) {
+
+                        var tanggal_db = new Date(data[i].layTanggal);
+
+                        var options = {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        };
+
+                        var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
+
+                        // STATUS
+
+                        var statusText = '';
+
+                        if (data[i].layStatus == 'N') {
+
+                            statusText =
+                                '<span class="badge badge-success">OPEN</span>';
+
+                        } else {
+
+                            statusText =
+                                '<span class="badge badge-secondary">CLOSED</span>';
+
+                        }
+
+                        // DETAIL BUTTON
+
+                        var detailBtn =
+                            '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
+                            data[i].layID +
+                            '" data-toggle="modal" data-target="#modalDetail">Detail</button>';
+
+                        // FORM SARPRAS
+
+                        var formSarprasBtn =
+                            '<button class="btn btn-info btn-sm formSarprasBtn" data-id="' +
+                            data[i].layID +
+                            '" data-toggle="modal" data-target="#modalFormSarpras">Form Sarpras</button>';
+
+                        // ACTION ADMIN
+
+                        var actionBtn = '';
+
+                        if (admin == 'Y') {
+
+                            if (data[i].layStatus == 'N') {
+
+                                actionBtn =
+                                    '<button class="btn btn-success btn-sm statusBtn" data-id="' +
+                                    data[i].layID +
+                                    '">OPEN</button>';
+
+                            } else {
+
+                                actionBtn =
+                                    '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>';
+
+                            }
+
+                        }
+
+                        // =========================
+                        // ADMIN
+                        // =========================
+
+                        if (admin == 'Y') {
+
+                            table.row.add([
+
+                                data[i].layID,
+                                tanggal_benar,
+                                data[i].layUserID,
+                                data[i].layHal,
+                                data[i].layDiskripsi,
+                                detailBtn,
+                                formSarprasBtn,
+                                actionBtn
+
+                            ]);
+
+                        }
+
+                        // =========================
+                        // USER
+                        // =========================
+                        else {
+
+                            table.row.add([
+
+                                data[i].layID,
+                                tanggal_benar,
+                                data[i].layHal,
+                                data[i].layDiskripsi,
+                                statusText,
+                                detailBtn
+
+                            ]);
+
+                        }
+
+                    }
+
+                    table.draw();
+
+                }
+
+            });
+
+        }
+
+        // =========================
+        // DETAIL
+        // =========================
+
+        $(document).on("click", ".detailBtn", function() {
+
+            var layID = $(this).data("id");
+
+            if (admin == 'Y') {
+
+                loadPetugas(() => {
+
+                    loadDetailLay(layID);
 
                 });
 
-                for (var i = 0; i < data.length; i++) {
+            } else {
 
-                    var tanggal_db = new Date(data[i].layTanggal);
+                loadDetailLay(layID);
+
+            }
+
+        });
+
+        // =========================
+        // FORM SARPRAS
+        // =========================
+
+        $(document).on("click", ".formSarprasBtn", function() {
+
+            var layID = $(this).data("id");
+
+            loadFormSarpras(layID);
+
+        });
+
+        // =========================
+        // CLOSE TIKET
+        // =========================
+
+        $(document).on("click", ".statusBtn", function() {
+
+            var nomor = $(this).data("id");
+
+            $.ajax({
+
+                url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + nomor,
+
+                type: "GET",
+
+                dataType: "JSON",
+
+                success: function(data) {
+
+                    let petugas = data.petugas || [];
+
+                    let petugasValid = petugas.filter(p => p && p !== "");
+
+                    if (petugasValid.length === 0) {
+
+                        alert("❌ Tidak bisa menutup layanan keluhan!\nSilakan pilih penanggung jawab terlebih dahulu.");
+
+                        return;
+
+                    }
+
+                    if (confirm("Apakah Anda yakin ingin menutup keluhan ini?")) {
+
+                        $.ajax({
+
+                            url: "<?= base_url('Insert/close_sarpras/') ?>" + nomor,
+
+                            type: "POST",
+
+                            success: function() {
+
+                                alert("Tiket berhasil ditutup!");
+
+                                getTiket_Sarpras();
+
+                            }
+
+                        });
+
+                    }
+
+                }
+
+            });
+
+        });
+
+        // =========================
+        // LOAD DETAIL
+        // =========================
+
+        function loadDetailLay(layID) {
+
+            $.ajax({
+
+                url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + layID,
+
+                type: "GET",
+
+                dataType: "JSON",
+
+                success: function(data) {
+
+                    var tanggal_db = new Date(data.layTanggal);
 
                     var options = {
                         year: 'numeric',
@@ -221,787 +440,507 @@ $admin = $this->session->userdata('admin');
 
                     var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
-                    // STATUS
+                    $("#m_layID").text(data.layID);
 
-                    var statusText = '';
+                    $("#m_layTanggal").text(tanggal_benar);
 
-                    if (data[i].layStatus == 'N') {
+                    $("#m_userNama").text(data.userNama);
 
-                        statusText =
-                            '<span class="badge badge-success">OPEN</span>';
+                    $("#m_layHal").text(data.layHal);
 
-                    } else {
+                    $("#m_layStatus").html(
 
-                        statusText =
-                            '<span class="badge badge-secondary">CLOSED</span>';
+                        data.layStatus === 'N' ?
+                        '<span class="badge badge-success">OPEN</span>' :
+                        '<span class="badge badge-secondary">CLOSED</span>'
 
-                    }
+                    );
 
-                    // DETAIL BUTTON
+                    $('#m_layDiskripsi').html(data.layDiskripsi);
 
-                    var detailBtn =
-                        '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
-                        data[i].layID +
-                        '" data-toggle="modal" data-target="#modalDetail">Detail</button>';
-
-                    // FORM SARPRAS
-
-                    var formSarprasBtn =
-                        '<button class="btn btn-info btn-sm formSarprasBtn" data-id="' +
-                        data[i].layID +
-                        '" data-toggle="modal" data-target="#modalFormSarpras">Form Sarpras</button>';
-
-                    // ACTION ADMIN
-
-                    var actionBtn = '';
-
-                    if (admin == 'Y') {
-
-                        if (data[i].layStatus == 'N') {
-
-                            actionBtn =
-                                '<button class="btn btn-success btn-sm statusBtn" data-id="' +
-                                data[i].layID +
-                                '">OPEN</button>';
-
-                        } else {
-
-                            actionBtn =
-                                '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>';
-
-                        }
-
-                    }
+                    $("#m_penanggungJawab").html(
+                        data.penanggungJawab ?
+                        data.penanggungJawab :
+                        '<span class="text-muted">Belum ditentukan</span>'
+                    );
 
                     // =========================
-                    // ADMIN
+                    // ADMIN PETUGAS
                     // =========================
 
                     if (admin == 'Y') {
 
-                        table.row.add([
+                        let petugasDB = data.petugas || [];
 
-                            data[i].layID,
-                            tanggal_benar,
-                            data[i].layUserID,
-                            data[i].layHal,
-                            data[i].layDiskripsi,
-                            detailBtn,
-                            formSarprasBtn,
-                            actionBtn
+                        $('select[name="petugas[]"]').each(function(index) {
 
-                        ]);
+                            let select = $(this);
 
-                    }
+                            if (petugasDB[index]) {
 
-                    // =========================
-                    // USER
-                    // =========================
-                    else {
+                                select.val(petugasDB[index]);
 
-                        table.row.add([
+                                select.attr('disabled', true);
 
-                            data[i].layID,
-                            tanggal_benar,
-                            data[i].layHal,
-                            data[i].layDiskripsi,
-                            statusText,
-                            detailBtn
+                            } else {
 
-                        ]);
+                                select.val('');
+
+                                select.prop('disabled', false);
+
+                            }
+
+                        });
+
+                        preventDuplicatePetugas();
 
                     }
 
                 }
-
-                table.draw();
-
-            }
-
-        });
-
-    }
-
-    // =========================
-    // DETAIL
-    // =========================
-
-    $(document).on("click", ".detailBtn", function() {
-
-        var layID = $(this).data("id");
-
-        if (admin == 'Y') {
-
-            loadPetugas(() => {
-
-                loadDetailLay(layID);
 
             });
 
-        } else {
+        }
 
-            loadDetailLay(layID);
+        // =========================
+        // LOAD PETUGAS
+        // =========================
+
+        function loadPetugas(callback) {
+
+            $.ajax({
+
+                url: "<?= base_url('Select/get_petugas') ?>",
+
+                method: "GET",
+
+                dataType: "JSON",
+
+                success: function(data) {
+
+                    $('select[name="petugas[]"]').each(function() {
+
+                        var select = $(this);
+
+                        select.empty();
+
+                        select.append('<option value="">-- Pilih Petugas --</option>');
+
+                        $.each(data, function(i, p) {
+
+                            select.append(
+                                '<option value="' + p.pegNoreg + '">' + p.pegNama + '</option>'
+                            );
+
+                        });
+
+                    });
+
+                    if (callback) callback();
+
+                }
+
+            });
 
         }
 
-    });
+        // =========================
+        // DUPLIKAT PETUGAS
+        // =========================
 
-    // =========================
-    // FORM SARPRAS
-    // =========================
+        function preventDuplicatePetugas() {
 
-    $(document).on("click", ".formSarprasBtn", function() {
+            let selectedValues = [];
 
-        var layID = $(this).data("id");
+            $('select[name="petugas[]"]').each(function() {
 
-        loadFormSarpras(layID);
+                let val = $(this).val();
 
-    });
+                if (val !== "") {
 
-    // =========================
-    // CLOSE TIKET
-    // =========================
-
-    $(document).on("click", ".statusBtn", function() {
-
-        var nomor = $(this).data("id");
-
-        $.ajax({
-
-            url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + nomor,
-
-            type: "GET",
-
-            dataType: "JSON",
-
-            success: function(data) {
-
-                let petugas = data.petugas || [];
-
-                let petugasValid = petugas.filter(p => p && p !== "");
-
-                if (petugasValid.length === 0) {
-
-                    alert("❌ Tidak bisa menutup layanan keluhan!\nSilakan pilih penanggung jawab terlebih dahulu.");
-
-                    return;
+                    selectedValues.push(val);
 
                 }
 
-                if (confirm("Apakah Anda yakin ingin menutup keluhan ini?")) {
+            });
 
-                    $.ajax({
+            $('select[name="petugas[]"] option').prop('disabled', false);
 
-                        url: "<?= base_url('Insert/close_sarpras/') ?>" + nomor,
+            $('select[name="petugas[]"]').each(function() {
 
-                        type: "POST",
+                let currentSelect = $(this);
 
-                        success: function() {
+                let currentVal = currentSelect.val();
 
-                            alert("Tiket berhasil ditutup!");
+                currentSelect.find('option').each(function() {
 
-                            getTiket_Sarpras();
+                    let optionVal = $(this).val();
 
-                        }
+                    if (selectedValues.includes(optionVal) && optionVal !== currentVal) {
 
-                    });
+                        $(this).prop('disabled', true);
 
-                }
-
-            }
-
-        });
-
-    });
-
-    // =========================
-    // LOAD DETAIL
-    // =========================
-
-    function loadDetailLay(layID) {
-
-        $.ajax({
-
-            url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + layID,
-
-            type: "GET",
-
-            dataType: "JSON",
-
-            success: function(data) {
-
-                var tanggal_db = new Date(data.layTanggal);
-
-                var options = {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                };
-
-                var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
-
-                $("#m_layID").text(data.layID);
-
-                $("#m_layTanggal").text(tanggal_benar);
-
-                $("#m_userNama").text(data.userNama);
-
-                $("#m_layHal").text(data.layHal);
-
-                $("#m_layStatus").html(
-
-                    data.layStatus === 'N' ?
-                    '<span class="badge badge-success">OPEN</span>' :
-                    '<span class="badge badge-secondary">CLOSED</span>'
-
-                );
-
-                $('#m_layDiskripsi').html(data.layDiskripsi);
-
-                $("#m_penanggungJawab").html(
-                    data.penanggungJawab ?
-                    data.penanggungJawab :
-                    '<span class="text-muted">Belum ditentukan</span>'
-                );
-
-                // =========================
-                // ADMIN PETUGAS
-                // =========================
-
-                if (admin == 'Y') {
-
-                    let petugasDB = data.petugas || [];
-
-                    $('select[name="petugas[]"]').each(function(index) {
-
-                        let select = $(this);
-
-                        if (petugasDB[index]) {
-
-                            select.val(petugasDB[index]);
-
-                            select.attr('disabled', true);
-
-                        } else {
-
-                            select.val('');
-
-                            select.prop('disabled', false);
-
-                        }
-
-                    });
-
-                    preventDuplicatePetugas();
-
-                }
-
-            }
-
-        });
-
-    }
-
-    // =========================
-    // LOAD PETUGAS
-    // =========================
-
-    function loadPetugas(callback) {
-
-        $.ajax({
-
-            url: "<?= base_url('Select/get_petugas') ?>",
-
-            method: "GET",
-
-            dataType: "JSON",
-
-            success: function(data) {
-
-                $('select[name="petugas[]"]').each(function() {
-
-                    var select = $(this);
-
-                    select.empty();
-
-                    select.append('<option value="">-- Pilih Petugas --</option>');
-
-                    $.each(data, function(i, p) {
-
-                        select.append(
-                            '<option value="' + p.pegNoreg + '">' + p.pegNama + '</option>'
-                        );
-
-                    });
+                    }
 
                 });
 
-                if (callback) callback();
+            });
 
-            }
+        }
 
-        });
+        $(document).on('change', 'select[name="petugas[]"]', function() {
 
-    }
-
-    // =========================
-    // DUPLIKAT PETUGAS
-    // =========================
-
-    function preventDuplicatePetugas() {
-
-        let selectedValues = [];
-
-        $('select[name="petugas[]"]').each(function() {
-
-            let val = $(this).val();
-
-            if (val !== "") {
-
-                selectedValues.push(val);
-
-            }
+            preventDuplicatePetugas();
 
         });
 
-        $('select[name="petugas[]"] option').prop('disabled', false);
+        // =========================
+        // SIMPAN PETUGAS
+        // =========================
 
-        $('select[name="petugas[]"]').each(function() {
+        function simpanPetugas() {
 
-            let currentSelect = $(this);
+            var petugas = [];
 
-            let currentVal = currentSelect.val();
+            $('select[name="petugas[]"]').each(function() {
 
-            currentSelect.find('option').each(function() {
+                if ($(this).val() != '') {
 
-                let optionVal = $(this).val();
-
-                if (selectedValues.includes(optionVal) && optionVal !== currentVal) {
-
-                    $(this).prop('disabled', true);
+                    petugas.push($(this).val());
 
                 }
 
             });
 
-        });
+            $.ajax({
 
-    }
+                url: "<?= base_url('Insert/simpan_petugas') ?>",
 
-    $(document).on('change', 'select[name="petugas[]"]', function() {
+                method: "POST",
 
-        preventDuplicatePetugas();
+                data: {
 
-    });
+                    layID: $('#m_layID').text(),
 
-    // =========================
-    // SIMPAN PETUGAS
-    // =========================
+                    petugas: petugas
 
-    function simpanPetugas() {
+                },
 
-        var petugas = [];
+                success: function(res) {
 
-        $('select[name="petugas[]"]').each(function() {
+                    alert("Pilihan Petugas Berhasil disimpan!");
 
-            if ($(this).val() != '') {
+                    $('#modalDetail').modal('hide');
 
-                petugas.push($(this).val());
+                    getTiket_Sarpras();
 
-            }
+                }
 
-        });
-
-        $.ajax({
-
-            url: "<?= base_url('Insert/simpan_petugas') ?>",
-
-            method: "POST",
-
-            data: {
-
-                layID: $('#m_layID').text(),
-
-                petugas: petugas
-
-            },
-
-            success: function(res) {
-
-                alert("Pilihan Petugas Berhasil disimpan!");
-
-                $('#modalDetail').modal('hide');
-
-                getTiket_Sarpras();
-
-            }
-
-        });
-
-    }
-
-    function konfirmasiSimpan() {
-
-        if (confirm("Apakah Anda yakin ingin menyimpan perubahan ini?")) {
-
-            simpanPetugas();
+            });
 
         }
 
-    }
-</script>
-<!-- MODAL DETAIL -->
-<div class="modal fade" id="modalDetail" tabindex="-1">
+        function konfirmasiSimpan() {
+
+            if (confirm("Apakah Anda yakin ingin menyimpan perubahan ini?")) {
+
+                simpanPetugas();
+
+            }
+
+        }
+        
+        $(document).on("click", ".formSarprasBtn", function() { // function untuk menampilkan isi form sarpras dari database
+
+            var layID = $(this).data("id");
+            loadFormSarpras(layID); // ambil modal form sarpras
+
+        });
+
+
+        function loadFormSarpras(layID) {
+
+            $.ajax({
+                url: "<?= base_url('Select/form_sarpras/') ?>" + layID,
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+
+                    var tanggal_db = new Date(data.layTanggal);
+                    var options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
+
+                    var raw = data.layTarget.split(' ')[0]; // ambil bagian tanggal saja (sebelum spasi)
+                    var tanggal_db = new Date(raw);
+
+                    var tgl_targetIdn = tanggal_db.toLocaleDateString('id-ID', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+
+                    $("#m_kepada, #m_kepada2").text(data.penanggungJawab);
+                    $("#m_dari, #m_dari2").text(data.userNama);
+                    $("#m_tanggal, #m_tanggal2").text(tanggal_benar);
+                    $("#m_hal, #m_hal2").text(data.layHal);
+                    $("#m_isi, #m_isi2").text(data.layDiskripsi);
+                    $("#m_target, #m_target2").text(tgl_targetIdn);
+                    $("#m_pic, #m_pic2").text(data.penanggungJawab);
+                }
+            });
+        }
+
+        function printFormSarpras() {
+            // ambil elemen modal form sarpras yang sudah diisi datanya
+            var element = document.querySelector("#modalFormSarpras .print-wrapper").cloneNode(true);
+
+            // hapus tombol
+            element.querySelectorAll("button").forEach(btn => btn.remove());
+
+            // hapus style modal bootstrap
+            element.querySelectorAll('.modal-content').forEach(el => {
+                el.style.boxShadow = 'none';
+                el.style.border = 'none';
+            });
+
+            var no_layanan = document.getElementById("m_layID").textContent.trim();
+            var opt = {
+                margin: 0.3,
+                filename: 'SPU-ADM-36 FORM PERMOHONAN LAYANAN SARPRAS - ' + no_layanan + '.pdf',
+                image: {
+                    type: 'jpeg',
+                    quality: 1
+                },
+                html2canvas: {
+                    scale: 2
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'landscape' // gunakan landscape untuk kertas A4 horizontal
+                }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+    <!-- MODAL DETAIL -->
+    <div class="modal fade" id="modalDetail" tabindex="-1">
+
+        <div class="modal-dialog" style="max-width:65%; width:65%; margin:20px auto;">
+
+            <div class="modal-content" style="border-radius:12px;">
+
+                <!-- HEADER -->
+                <div class="modal-header bg-primary text-white py-2">
+
+                    <h4 class="modal-title text-center w-100" style="font-size:20px;">
+                        DATA LAYANAN SARPRAS
+                    </h4>
+
+                    <button type="button"
+                        class="close text-white"
+                        data-dismiss="modal"
+                        style="font-size:24px;">
 
-    <div class="modal-dialog" style="max-width:65%; width:65%; margin:20px auto;">
+                        &times;
 
-        <div class="modal-content" style="border-radius:12px;">
-
-            <!-- HEADER -->
-            <div class="modal-header bg-primary text-white py-2">
-
-                <h4 class="modal-title text-center w-100" style="font-size:20px;">
-                    DATA LAYANAN SARPRAS
-                </h4>
-
-                <button type="button"
-                    class="close text-white"
-                    data-dismiss="modal"
-                    style="font-size:24px;">
-
-                    &times;
-
-                </button>
-
-            </div>
-
-            <!-- BODY -->
-            <div class="modal-body" style="font-size:14px; padding:20px;">
-
-                <div class="container-fluid">
-
-                    <!-- NOMOR -->
-                    <div class="form-group row mb-3">
-
-                        <label class="col-md-3 font-weight-bold text-md-right">
-                            Nomor Tiket
-                        </label>
-
-                        <div class="col-md-9">
-
-                            <div id="m_layID"
-                                class="form-control d-flex align-items-center"
-                                style="height:38px;font-size:14px;">
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <!-- TANGGAL -->
-                    <div class="form-group row mb-3">
-
-                        <label class="col-md-3 font-weight-bold text-md-right">
-                            Tanggal
-                        </label>
-
-                        <div class="col-md-9">
-
-                            <div id="m_layTanggal"
-                                class="form-control d-flex align-items-center"
-                                style="height:38px;font-size:14px;">
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <!-- USER -->
-                    <div class="form-group row mb-3">
-
-                        <label class="col-md-3 font-weight-bold text-md-right">
-                            Penginput
-                        </label>
-
-                        <div class="col-md-9">
-
-                            <div id="m_userNama"
-                                class="form-control d-flex align-items-center"
-                                style="height:38px;font-size:14px;">
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <!-- STATUS -->
-                    <div class="form-group row mb-3">
-
-                        <label class="col-md-3 font-weight-bold text-md-right">
-                            Status
-                        </label>
-
-                        <div class="col-md-9">
-
-                            <div id="m_layStatus"
-                                class="d-flex align-items-center"
-                                style="height:38px;font-size:16px;font-weight:bold;">
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <!-- KELUHAN -->
-                    <div class="form-group row mb-3">
-
-                        <label class="col-md-3 font-weight-bold text-md-right pt-2">
-                            Keluhan
-                        </label>
-
-                        <div class="col-md-9">
-
-                            <div id="m_layHal"
-                                class="form-control"
-                                style="font-size:14px;padding:10px;min-height:80px;">
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <!-- DESKRIPSI -->
-                    <div class="form-group row mb-3">
-
-                        <label class="col-md-3 font-weight-bold text-md-right pt-2">
-                            Deskripsi
-                        </label>
-
-                        <div class="col-md-9">
-
-                            <div id="m_layDiskripsi"
-                                class="form-control"
-                                style="font-size:14px;padding:10px;min-height:120px;">
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <!-- PENANGGUNG JAWAB -->
-                    <div class="form-group row mb-3">
-
-                        <label class="col-md-3 font-weight-bold text-md-right pt-2">
-                            Penanggung Jawab
-                        </label>
-
-                        <div class="col-md-9">
-
-                            <div id="m_penanggungJawab"
-                                class="form-control"
-                                style="font-size:14px;padding:10px;min-height:80px;">
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <!-- KHUSUS ADMIN -->
-                    <?php if ($admin == 'Y') { ?>
-
-                        <hr>
-
-                        <h5 class="text-primary font-weight-bold mb-3">
-                            Assign Petugas
-                        </h5>
-
-                        <div class="form-group">
-                            <label>Petugas 1</label>
-                            <select name="petugas[]" class="form-control">
-                                <option value="">-- Pilih Petugas --</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Petugas 2</label>
-                            <select name="petugas[]" class="form-control">
-                                <option value="">-- Pilih Petugas --</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Petugas 3</label>
-                            <select name="petugas[]" class="form-control">
-                                <option value="">-- Pilih Petugas --</option>
-                            </select>
-                        </div>
-
-                        <div class="text-right">
-
-                            <button type="button"
-                                id="btnSimpan"
-                                class="btn btn-success"
-                                onclick="konfirmasiSimpan()">
-
-                                Simpan Petugas
-
-                            </button>
-
-                        </div>
-
-                    <?php } ?>
+                    </button>
 
                 </div>
 
-            </div>
+                <!-- BODY -->
+                <div class="modal-body" style="font-size:14px; padding:20px;">
 
-            <!-- FOOTER -->
-            <div class="modal-footer justify-content-center py-2">
+                    <div class="container-fluid">
 
-                <button type="button"
-                    class="btn btn-danger"
-                    style="font-size:14px;padding:6px 24px;"
-                    data-dismiss="modal">
+                        <!-- NOMOR -->
+                        <div class="form-group row mb-3">
 
-                    Tutup
+                            <label class="col-md-3 font-weight-bold text-md-right">
+                                Nomor Tiket
+                            </label>
 
-                </button>
+                            <div class="col-md-9">
 
-            </div>
+                                <div id="m_layID"
+                                    class="form-control d-flex align-items-center"
+                                    style="height:38px;font-size:14px;">
+                                </div>
 
-        </div>
-
-    </div>
-
-</div>
-
-<!-- MODAL FORM SARPRAS -->
-<div class="modal fade" id="modalFormSarpras" tabindex="-1">
-
-    <div class="modal-dialog" style="max-width:1000px;">
-
-        <div class="modal-content">
-
-            <!-- tombol close -->
-            <button type="button" class="close" data-dismiss="modal">
-                &times;
-            </button>
-
-            <!-- BODY -->
-            <div class="modal-body">
-
-                <div class="print-wrapper">
-
-                    <!-- KOLOM KIRI -->
-                    <div class="print-col">
-
-                        <div class="sarpras-form">
-
-                            <div class="sarpras-title">
-                                FORM PERMOHONAN LAYANAN SARPRAS
-                            </div>
-
-                            <div class="sarpras-subtitle">
-                                No. Dok. KNS/FORM/SPU/ADM/36/01/00
-                            </div>
-
-                            <div class="sarpras-row">
-                                <div class="sarpras-label">Kepada</div>
-                                <div class="sarpras-line" id="m_kepada"></div>
-                            </div>
-
-                            <div class="sarpras-row">
-                                <div class="sarpras-label">Dari</div>
-                                <div class="sarpras-line" id="m_dari"></div>
-                            </div>
-
-                            <div class="sarpras-row">
-                                <div class="sarpras-label">Tanggal</div>
-                                <div class="sarpras-line" id="m_tanggal"></div>
-                            </div>
-
-                            <div class="sarpras-row">
-                                <div class="sarpras-label">Hal</div>
-                                <div class="sarpras-line" id="m_hal"></div>
-                            </div>
-
-                            <b>I. Isi Permohonan</b>
-
-                            <div class="sarpras-box" id="m_isi"></div>
-
-                            <div class="sarpras-row">
-                                <div class="sarpras-label">Target</div>
-                                <div class="sarpras-line" id="m_target"></div>
-                            </div>
-
-                            <div class="sarpras-row">
-                                <div class="sarpras-label">PIC</div>
-                                <div class="sarpras-line" id="m_pic"></div>
                             </div>
 
                         </div>
 
-                    </div>
+                        <!-- TANGGAL -->
+                        <div class="form-group row mb-3">
 
-                    <!-- KOLOM KANAN -->
-                    <div class="print-col">
+                            <label class="col-md-3 font-weight-bold text-md-right">
+                                Tanggal
+                            </label>
 
-                        <div class="sarpras-form">
+                            <div class="col-md-9">
 
-                            <div class="sarpras-title">
-                                FORM PERMOHONAN LAYANAN SARPRAS
-                            </div>
+                                <div id="m_layTanggal"
+                                    class="form-control d-flex align-items-center"
+                                    style="height:38px;font-size:14px;">
+                                </div>
 
-                            <div class="sarpras-subtitle">
-                                No. Dok. KNS/FORM/SPU/ADM/36/01/00
-                            </div>
-
-                            <div class="sarpras-row">
-                                <div class="sarpras-label">Kepada</div>
-                                <div class="sarpras-line" id="m_kepada2"></div>
-                            </div>
-
-                            <div class="sarpras-row">
-                                <div class="sarpras-label">Dari</div>
-                                <div class="sarpras-line" id="m_dari2"></div>
-                            </div>
-
-                            <div class="sarpras-row">
-                                <div class="sarpras-label">Tanggal</div>
-                                <div class="sarpras-line" id="m_tanggal2"></div>
-                            </div>
-
-                            <div class="sarpras-row">
-                                <div class="sarpras-label">Hal</div>
-                                <div class="sarpras-line" id="m_hal2"></div>
-                            </div>
-
-                            <b>I. Isi Permohonan</b>
-
-                            <div class="sarpras-box" id="m_isi2"></div>
-
-                            <div class="sarpras-row">
-                                <div class="sarpras-label">Target</div>
-                                <div class="sarpras-line" id="m_target2"></div>
-                            </div>
-
-                            <div class="sarpras-row">
-                                <div class="sarpras-label">PIC</div>
-                                <div class="sarpras-line" id="m_pic2"></div>
                             </div>
 
                         </div>
+
+                        <!-- USER -->
+                        <div class="form-group row mb-3">
+
+                            <label class="col-md-3 font-weight-bold text-md-right">
+                                Penginput
+                            </label>
+
+                            <div class="col-md-9">
+
+                                <div id="m_userNama"
+                                    class="form-control d-flex align-items-center"
+                                    style="height:38px;font-size:14px;">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- STATUS -->
+                        <div class="form-group row mb-3">
+
+                            <label class="col-md-3 font-weight-bold text-md-right">
+                                Status
+                            </label>
+
+                            <div class="col-md-9">
+
+                                <div id="m_layStatus"
+                                    class="d-flex align-items-center"
+                                    style="height:38px;font-size:16px;font-weight:bold;">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- KELUHAN -->
+                        <div class="form-group row mb-3">
+
+                            <label class="col-md-3 font-weight-bold text-md-right pt-2">
+                                Keluhan
+                            </label>
+
+                            <div class="col-md-9">
+
+                                <div id="m_layHal"
+                                    class="form-control"
+                                    style="font-size:14px;padding:10px;min-height:80px;">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- DESKRIPSI -->
+                        <div class="form-group row mb-3">
+
+                            <label class="col-md-3 font-weight-bold text-md-right pt-2">
+                                Deskripsi
+                            </label>
+
+                            <div class="col-md-9">
+
+                                <div id="m_layDiskripsi"
+                                    class="form-control"
+                                    style="font-size:14px;padding:10px;min-height:120px;">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- PENANGGUNG JAWAB -->
+                        <div class="form-group row mb-3">
+
+                            <label class="col-md-3 font-weight-bold text-md-right pt-2">
+                                Penanggung Jawab
+                            </label>
+
+                            <div class="col-md-9">
+
+                                <div id="m_penanggungJawab"
+                                    class="form-control"
+                                    style="font-size:14px;padding:10px;min-height:80px;">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- KHUSUS ADMIN -->
+                        <?php if ($admin == 'Y') { ?>
+
+                            <hr>
+
+                            <h5 class="text-primary font-weight-bold mb-3">
+                                Assign Petugas
+                            </h5>
+
+                            <div class="form-group">
+                                <label>Petugas 1</label>
+                                <select name="petugas[]" class="form-control">
+                                    <option value="">-- Pilih Petugas --</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Petugas 2</label>
+                                <select name="petugas[]" class="form-control">
+                                    <option value="">-- Pilih Petugas --</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Petugas 3</label>
+                                <select name="petugas[]" class="form-control">
+                                    <option value="">-- Pilih Petugas --</option>
+                                </select>
+                            </div>
+
+                            <div class="text-right">
+
+                                <button type="button"
+                                    id="btnSimpan"
+                                    class="btn btn-success"
+                                    onclick="konfirmasiSimpan()">
+
+                                    Simpan Petugas
+
+                                </button>
+
+                            </div>
+
+                        <?php } ?>
 
                     </div>
 
                 </div>
 
-                <!-- BUTTON -->
-                <div class="text-center mt-3">
+                <!-- FOOTER -->
+                <div class="modal-footer justify-content-center py-2">
 
-                    <button onclick="printFormSarpras()" class="btn btn-dark">
+                    <button type="button"
+                        class="btn btn-danger"
+                        style="font-size:14px;padding:6px 24px;"
+                        data-dismiss="modal">
 
-                        Print / Save PDF
+                        Tutup
 
                     </button>
 
@@ -1013,6 +952,198 @@ $admin = $this->session->userdata('admin');
 
     </div>
 
-</div>
+    <!-- MODAL FORM SARPRAS -->
+    <div class="modal fade" id="modalFormSarpras" tabindex="-1">
+        <div class="modal-dialog" style="max-width:1000px;">
+            <div class="modal-content">
 
-</html>
+                <!-- tombol close -->
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <!-- BODY -->
+                <div class="modal-body">
+
+                    <div class="print-wrapper">
+
+                        <!-- KOLOM KIRI -->
+                        <div class="print-col">
+                            <div class="sarpras-form">
+
+                                <div class="sarpras-title">
+                                    FORM PERMOHONAN LAYANAN SARPRAS
+                                </div>
+
+                                <div class="sarpras-subtitle">
+                                    No. Dok. KNS/FORM/SPU/ADM/36/01/00
+                                </div>
+
+                                <div class="sarpras-row">
+                                    <div class="sarpras-label">Kepada</div>
+                                    <div class="sarpras-line" id="m_kepada"></div>
+                                </div>
+
+                                <div class="sarpras-row">
+                                    <div class="sarpras-label">Dari</div>
+                                    <div class="sarpras-line" id="m_dari"></div>
+                                </div>
+
+                                <div class="sarpras-row">
+                                    <div class="sarpras-label">Tanggal</div>
+                                    <div class="sarpras-line" id="m_tanggal"></div>
+                                </div>
+
+                                <div class="sarpras-row">
+                                    <div class="sarpras-label">Hal</div>
+                                    <div class="sarpras-line" id="m_hal"></div>
+                                </div>
+
+                                <b>I. Isi Permohonan</b>
+                                <div class="sarpras-box" id="m_isi"></div>
+
+                                <div class="sarpras-row">
+                                    <div class="sarpras-label">Target</div>
+                                    <div class="sarpras-line" id="m_target"></div>
+                                </div>
+
+                                <div class="sarpras-row">
+                                    <div class="sarpras-label">PIC</div>
+                                    <div class="sarpras-line" id="m_pic"></div>
+                                </div>
+
+                                <!-- TTD -->
+                                <div class="sarpras-ttd">
+                                    <div>Pemohon<br><br>(Kanit)</div>
+                                    <div>Diketahui<br><br>(Kabag)</div>
+                                    <div>Disetujui<br><br>(Manajer)</div>
+                                    <div>Diterima<br><br>(Sarpras)</div>
+                                </div>
+
+                                <hr> <!-- Garis Pemisah -->
+
+                                <!-- Rencana Tindak Lanjut -->
+                                <div class="sarpras-rtl">
+                                    <b>II. Rencana Tindak Lanjut</b>
+
+                                    <div>Petugas : ____________</div>
+
+                                    <div class="sarpras-rtl-row">
+                                        <div>Observasi : Sudah / Belum*</div>
+                                        <div>Tgl. Observasi : ____________</div>
+                                    </div>
+
+                                    <div class="sarpras-rtl-row">
+                                        <div>Status Eksekusi: Sudah / Belum*</div>
+                                        <div>Tgl. Eksekusi : ____________</div>
+                                    </div>
+
+                                    <div>
+                                        Catatan: **
+                                        <div class="sarpras-box" style="height:60px;"></div>
+                                    </div>
+                                    <div class="caKaki">
+                                        <div>(*) Coret yang tidak perlu</div>
+                                        <div>(**) Diisi oleh petugas setelah eksekusi</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- KOLOM KANAN (DUPLIKAT) -->
+                        <div class="print-col">
+                            <!-- DUPLIKAT SAMA PERSIS -->
+                            <div class="sarpras-form">
+
+                                <div class="sarpras-title">
+                                    FORM PERMOHONAN LAYANAN SARPRAS
+                                </div>
+
+                                <div class="sarpras-subtitle">
+                                    No. Dok. KNS/FORM/SPU/ADM/36/01/00
+                                </div>
+
+                                <div class="sarpras-row">
+                                    <div class="sarpras-label">Kepada</div>
+                                    <div class="sarpras-line" id="m_kepada2"></div>
+                                </div>
+
+                                <div class="sarpras-row">
+                                    <div class="sarpras-label">Dari</div>
+                                    <div class="sarpras-line" id="m_dari2"></div>
+                                </div>
+
+                                <div class="sarpras-row">
+                                    <div class="sarpras-label">Tanggal</div>
+                                    <div class="sarpras-line" id="m_tanggal2"></div>
+                                </div>
+
+                                <div class="sarpras-row">
+                                    <div class="sarpras-label">Hal</div>
+                                    <div class="sarpras-line" id="m_hal"></div>
+                                </div>
+
+                                <b>I. Isi Permohonan</b>
+                                <div class="sarpras-box" id="m_isi"></div>
+
+                                <div class="sarpras-row">
+                                    <div class="sarpras-label">Target</div>
+                                    <div class="sarpras-line" id="m_target2"></div>
+                                </div>
+
+                                <div class="sarpras-row">
+                                    <div class="sarpras-label">PIC</div>
+                                    <div class="sarpras-line" id="m_pic2"></div>
+                                </div>
+
+                                <!-- TTD -->
+                                <div class="sarpras-ttd">
+                                    <div>Pemohon<br><br>(Kanit)</div>
+                                    <div>Diketahui<br><br>(Kabag)</div>
+                                    <div>Disetujui<br><br>(Manajer)</div>
+                                    <div>Diterima<br><br>(Sarpras)</div>
+                                </div>
+
+                                <hr> <!-- Garis Pemisah -->
+
+                                <!-- Rencana Tindak Lanjut -->
+                                <div class="sarpras-rtl">
+                                    <b>II. Rencana Tindak Lanjut</b>
+
+                                    <div>Petugas : ____________</div>
+
+                                    <div class="sarpras-rtl-row">
+                                        <div>Observasi : Sudah / Belum*</div>
+                                        <div>Tgl. Observasi : ____________</div>
+                                    </div>
+
+                                    <div class="sarpras-rtl-row">
+                                        <div>Status Eksekusi : Sudah / Belum*</div>
+                                        <div>Tgl. Eksekusi : ____________</div>
+                                    </div>
+
+                                    <div>
+                                        Catatan: **
+                                        <div class="sarpras-box" style="height:60px;"></div>
+                                    </div>
+                                    <div class="caKaki">
+                                        <div>(*) Coret yang tidak perlu</div>
+                                        <div>(**) Diisi oleh petugas setelah eksekusi</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- BUTTON -->
+                    <div class="text-center mt-3">
+                        <button onclick="printFormSarpras()" class="btn btn-dark">
+                            Print / Save PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        </html>
