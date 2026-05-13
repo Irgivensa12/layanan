@@ -101,6 +101,20 @@ class model extends CI_Model
         $admin = $this->session->userdata('admin');
         $user  = $this->session->userdata('helpdesk_userId');
 
+        $status = $this->input->get('status');
+
+        // FILTER STATUS
+        $filterStatus = "";
+
+        if ($status == 'open') {
+
+            $filterStatus = " AND tikStatus='N' ";
+        } elseif ($status == 'close') {
+
+            $filterStatus = " AND tikStatus='Y' ";
+        }
+
+        // ADMIN
         if ($admin == 'Y') {
             // Mengambil semua kolom dari tabel tiket dan nama user dari tabel vUser
             // dan LEFT JOIN untuk menggabungkan tabel tiket dan vUser berdasarkan tikUserID dan userID
@@ -143,6 +157,20 @@ class model extends CI_Model
         $admin = $this->session->userdata('admin');
         $user  = $this->session->userdata('helpdesk_userId');
 
+        $status = $this->input->get('status');
+
+        // FILTER STATUS
+        $filterStatus = "";
+
+        if ($status == 'open') {
+
+            $filterStatus = " AND layStatus='N' ";
+        } elseif ($status == 'close') {
+
+            $filterStatus = " AND layStatus='Y' ";
+        }
+
+        // ADMIN
         if ($admin == 'Y') {
 
             // Admin bisa lihat semua tiket + nama user
@@ -166,19 +194,6 @@ class model extends CI_Model
 
         return $query;
     }
-
-    public function get_dashboard_data()
-    {
-        $pelanggan = $this->db->count_all('tb_pelanggan');
-        $wishlist  = $this->db->count_all('tb_wishlist');
-
-        return [
-            'pelanggan_baru' => $pelanggan,
-            'wishlist_pelanggan' => $wishlist
-        ];
-    } // blm dipakai
-
-
 
     public function getTiket($role, $userID = null)
     {
@@ -210,8 +225,12 @@ class model extends CI_Model
     }
     public function admin_sim()
     {
-        $query = "SELECT tikNomor, tikTanggal, tikTanggal2, tikUserID, tikMesinID, tikRingkasan, tikDeskripsi, tikOperator, tikTindakan, tikStatus, tikUserClose, tikDateClose FROM tb_tiket";
-        return $this->db->query($query);
+        $query = $this->db->query("
+            SELECT * FROM tb_tiket 
+            WHERE tikNomor IS NOT NULL AND tikNomor != ''
+            ORDER BY CAST(SUBSTRING(tikNomor, 4) AS UNSIGNED) DESC
+        ");
+        return $query;
     }
     public function admin_sarpras()
     {

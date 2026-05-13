@@ -1,21 +1,22 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-if (!$this->session->userdata('helpdesk_userId')) { // Jika tidak ada id
+if (!$this->session->userdata('helpdesk_userId')) {
     $this->session->set_flashdata('type', 'alert-danger');
     $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
     redirect();
     exit;
 }
 
+$role = $this->session->userdata('role');
 ?>
-<!-- untuk daftar menu dst, cek header.php-->
 
 <div id="content-wrapper" class="d-flex flex-column">
 
     <div id="content">
 
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
             <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                 <i class="fa fa-bars"></i>
             </button>
@@ -23,68 +24,116 @@ if (!$this->session->userdata('helpdesk_userId')) { // Jika tidak ada id
             <ul class="navbar-nav ml-auto">
                 <img src="<?= base_url('img/kanisius.png') ?>">
             </ul>
+
         </nav>
 
         <div class="container-fluid">
 
+            <!-- JUDUL -->
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Tiket SIM</h1>
+
+                <h1 class="h3 mb-0 text-gray-800">
+
+                    <?= ($role == 'admin') ? 'Halaman Admin SIM' : 'List Semua Kerusakan SIM'; ?>
+
+                </h1>
+
             </div>
 
+            <!-- ALERT -->
             <div class="form-group row">
+
                 <div class="col-sm-12">
+
                     <?php if (isset($_SESSION["pesan"])) { ?>
+
                         <div class="alert <?= $_SESSION['type'] ?> alert-dismissible">
+
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+
                             <?= $_SESSION['pesan'] ?>
+
                         </div>
+
                     <?php unset($_SESSION['pesan']);
                     } ?>
+
                 </div>
+
             </div>
 
-            <!-- Button Tambah -->
+            <!-- BUTTON TAMBAH -->
             <div class="form-group row">
+
                 <div class="col-sm-2">
+
                     <a href="<?= base_url('Controller/tambah_tiket_sim') ?>" class="btn btn-primary">
+
                         <i class="fas fa-plus"></i> Tambah
+
                     </a>
+
                 </div>
+
             </div>
 
+            <!-- TABLE -->
             <div class="row">
+
                 <div class="col">
+
                     <table id="tabel" class="display nowrap" style="width:100%">
+
                         <thead style="color: black;">
+
                             <tr>
-                                <th style="width:10px">No</th>
+
+                                <th>No</th>
                                 <th>Tanggal</th>
                                 <th>Penginput</th>
                                 <th>Nama</th>
                                 <th>Ringkasan</th>
                                 <th>Status</th>
                                 <th>Detail</th>
+
+                                <?php if ($role == 'admin') { ?>
+                                    <th>Action</th>
+                                <?php } ?>
+
                             </tr>
+
                         </thead>
-                        <tbody id="tbody" name="tbody" style="color: black;">
+
+                        <tbody id="tbody" style="color:black;">
 
                         </tbody>
+
                     </table>
+
                 </div>
+
             </div>
+
             <br>
+
         </div>
+
     </div>
 
+    <!-- FOOTER -->
     <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
-            <div class="copyright text-center my-auto">
-                <span>© <?php echo date("Y"); ?> PT Kanisius.</span>
-            </div>
-        </div>
-    </footer>
 
-</div>
+        <div class="container my-auto">
+
+            <div class="copyright text-center my-auto">
+
+                <span>© <?= date("Y"); ?> PT Kanisius.</span>
+
+            </div>
+
+        </div>
+
+    </footer>
 
 </div>
 
@@ -92,23 +141,16 @@ if (!$this->session->userdata('helpdesk_userId')) { // Jika tidak ada id
     <i class="fas fa-angle-up"></i>
 </a>
 
-<!-- Harus Menggunakan base_url karena asset dipanggil relatif terhadap URL aktif -->
+<!-- JS -->
 <script src="<?= base_url('vendor/jquery/jquery.min.js') ?>"></script>
 <script src="<?= base_url('vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
 <script src="<?= base_url('vendor/jquery-easing/jquery.easing.min.js') ?>"></script>
 <script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
 
-<!-- DataTables -->
-<link rel="stylesheet" type="text/css" href="<?= base_url('vendor/datatables/jquery.dataTables.min.css') ?>">
-<script type="text/javascript" charset="utf8" src="<?= base_url('vendor/datatables/jquery.dataTables.min.js') ?>"></script>
-<script type="text/javascript" charset="utf8" src="<?= base_url('vendor/datatables/dataTables.select.min.js') ?>"></script>
+<!-- DATATABLE -->
+<link rel="stylesheet" href="<?= base_url('vendor/datatables/jquery.dataTables.min.css') ?>">
 
-<!-- CKEditor -->
-<script src="<?= base_url('vendor/ckeditor/ckeditor.js') ?>"></script>
-<script src="<?= base_url('vendor/ckeditor/translations/id.js') ?>"></script>
-
-<!-- xlsx -->
-<script type="text/javascript" src="<?= base_url('vendor/xlsx/xlsx.fix.js') ?>"></script>
+<script src="<?= base_url('vendor/datatables/jquery.dataTables.min.js') ?>"></script>
 
 <script>
     // Menggunakan Javascript dan jQuery
@@ -116,15 +158,20 @@ if (!$this->session->userdata('helpdesk_userId')) { // Jika tidak ada id
 
     var table;
 
+    var role = "<?= $role ?>";
+
     $(document).ready(function() {
         $('#menuTiket').trigger('onclick');
         table = $('#tabel').DataTable({ //https://datatables.net/reference/option/
             "scrollX": true,
-            "scrollY": "400px", // Membuat tabel bisa discroll vertikal dengan tinggi 400px
+            "scrollY": "400px",
             "select": true,
             "bSort": false
+
         });
-        getTiket_SIM(); // Memanggil function get
+
+        getTiket_SIM();
+
     });
 
     // Menggunakan AJAX untuk membuat tabel dari data tabel
@@ -132,22 +179,29 @@ if (!$this->session->userdata('helpdesk_userId')) { // Jika tidak ada id
     function getTiket_SIM() {
 
         $.ajax({
-            url: "<?php echo base_url('Select/tiket_sim'); ?>",
+
+            url: "<?php echo base_url('Select/tiket_sim'); ?>?status=<?= $this->input->get('status') ?>",
+
             method: "POST",
+
             dataType: "JSON",
+
             success: function(data) {
+
                 console.log(data);
-                //var html = '';
+
                 table.clear();
 
                 for (var i = 0; i < data.length; i++) {
-                    // Membuat tanggal format Indonesia
-                    var tanggal_db = new Date(data[i].tikTanggal); // Mengubah string tanggal dari database menjadi objek Date
 
-                    var options = { // Opsi untuk format tanggal Indonesia
+                    var tanggal_db = new Date(data[i].tikTanggal);
+
+                    var options = {
+
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric'
+
                     };
                     var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia 
                     table.row.add([
@@ -162,14 +216,93 @@ if (!$this->session->userdata('helpdesk_userId')) { // Jika tidak ada id
 
                         '<button class="btn btn-primary btn-sm detailBtn" data-id="' + data[i].tikNomor + '" data-toggle="modal" data-target="#modalDetail">Detail</button>'
                     ]);
+
+                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
+
+                    // STATUS
+                    var statusBtn = '';
+
+                    if (data[i].tikStatus == 'N') {
+
+                        statusBtn = '<span class="badge badge-success">OPEN</span>';
+
+                    } else {
+
+                        statusBtn = '<span class="badge badge-secondary">CLOSED</span>';
+
+                    }
+
+                    // DETAIL BUTTON
+                    var detailBtn =
+                        '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
+                        data[i].tikNomor +
+                        '" data-toggle="modal" data-target="#modalDetail">Detail</button>';
+
+                    // ACTION BUTTON ADMIN
+                    var actionBtn = '';
+
+                    if (role == 'admin') {
+
+                        if (data[i].tikStatus == 'N') {
+
+                            actionBtn =
+                                '<button class="btn btn-success btn-sm statusBtn" data-id="' +
+                                data[i].tikNomor +
+                                '">Close</button>';
+
+                        } else {
+
+                            actionBtn =
+                                '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>';
+
+                        }
+
+                    }
+
+                    // ADMIN
+                    if (role == 'admin') {
+
+                        table.row.add([
+
+                            data[i].tikNomor,
+                            tanggal_benar,
+                            data[i].userNama,
+                            data[i].tikRingkasan,
+                            statusBtn,
+                            detailBtn,
+                            actionBtn
+
+                        ]);
+
+                    }
+
+                    // USER
+                    else {
+
+                        table.row.add([
+
+                            data[i].tikNomor,
+                            tanggal_benar,
+                            data[i].tikRingkasan,
+                            statusBtn,
+                            detailBtn
+
+                        ]);
+
+                    }
+
                 }
 
                 table.draw();
+
             }
+
         });
+
     }
 
-    $(document).on("click", ".detailBtn", function() { // Event listener untuk tombol detail
+    // DETAIL
+    $(document).on("click", ".detailBtn", function() {
 
         var tikNomor = $(this).data("id"); // Mengambil data-id dari tombol yang diklik, yaitu tikNomor
 
@@ -290,16 +423,22 @@ if (!$this->session->userdata('helpdesk_userId')) { // Jika tidak ada id
     function loadDetailTik(tikNomor) {
 
         $.ajax({
+
             url: "<?= base_url('Select/detail_tiket/') ?>" + tikNomor,
+
             type: "GET",
+
             dataType: "JSON",
+
             success: function(data) {
 
                 var tanggal_db = new Date(data.tikTanggal);
                 var options = {
+
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'
+
                 };
 
                 var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
@@ -317,178 +456,229 @@ if (!$this->session->userdata('helpdesk_userId')) { // Jika tidak ada id
 
                 $('#m_tikDeskripsi').html(data.tikDeskripsi);
 
-                // Menampilkan operator dan tindakan di modal
-                $('#m_tikOperator').html(data.tikOperator);
-                $('#m_tikTindakan').html(data.tikTindakan);
+                $('#m_tikOperator').html(data.operatorNama ?? '-');
 
-                // Muat dropdown operator dengan opsi dari database, dan set nilai yang dipilih sesuai data tiket
-                loadOperator(data.tikOperator);
-                $('#tikOperator').val(data.tikOperator);
-                $('#tikTindakan').val(data.tikTindakan);
-
-                // Jika status tiket "OPEN"
-                if (data.tikStatus == 'OPEN') {
-                    $('#tikOperator').prop('readonly', false); // operator bisa diubah jika tiket masih OPEN
-                    $('#tikTindakan').prop('readonly', false); // tindakan bisa diubah jika tiket masih OPEN
-                    $('#btnSimpan').show(); // tampilkan tombol simpan jika tiket masih OPEN
-                } else {
-                    $('#tikOperator').prop('readonly', true); // operator tidak bisa diubah jika tiket sudah CLOSED
-                    $('#tikTindakan').prop('readonly', true); // tindakan tidak bisa diubah jika tiket sudah CLOSED
-                    $('#btnSimpan').hide(); // sembunyikan tombol simpan jika tiket sudah CLOSED
-                }
-
+                $('#m_tikTindakan').html(data.tikTindakan ?? '-');
 
             }
+
         });
 
-    }
+    });
+
+    // CLOSE TIKET ADMIN
+    $(document).on("click", ".statusBtn", function() {
+
+        var tikNomor = $(this).data("id");
+
+        if (confirm("Apakah yakin ingin menutup tiket ini?")) {
+
+            $.ajax({
+
+                url: "<?= base_url('Insert/close_tiket/') ?>" + tikNomor,
+
+                type: "POST",
+
+                success: function() {
+
+                    alert("Tiket berhasil ditutup!");
+
+                    getTiket_SIM();
+
+                }
+
+            });
+
+        }
+
+    });
 </script>
+
+<!-- MODAL -->
 <div class="modal fade" id="modalDetail" tabindex="-1">
-    <div class="modal-dialog" style="max-width:75%; width:75%; margin:40px auto;">
-        <div class="modal-content" style="border-radius:15px;">
+
+    <!-- UKURAN DISAMAKAN DENGAN SARPRAS -->
+    <div class="modal-dialog" style="max-width:65%; width:65%; margin:20px auto;">
+
+        <div class="modal-content" style="border-radius:12px;">
 
             <!-- HEADER -->
-            <div class="modal-header bg-primary text-white">
-                <h4 class="modal-title text-center w-100" style="font-size:26px;">
+            <div class="modal-header bg-primary text-white py-2">
+
+                <h4 class="modal-title text-center w-100" style="font-size:20px;">
+
                     DATA LAYANAN SIM
+
                 </h4>
-                <button type="button" class="close text-white" data-dismiss="modal" style="font-size:30px;">&times;</button>
+
+                <button type="button"
+                    class="close text-white"
+                    data-dismiss="modal"
+                    style="font-size:24px;">
+
+                    &times;
+
+                </button>
+
             </div>
 
             <!-- BODY -->
-            <div class="modal-body" style="font-size:20px; padding:40px;">
+            <div class="modal-body" style="font-size:14px; padding:20px;">
 
                 <div class="container-fluid">
 
-                    <!-- Nomor Tiket -->
-                    <div class="form-group row align-items-center mb-4">
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                    <!-- NOMOR -->
+                    <div class="form-group row mb-3">
+
+                        <label class="col-md-3 font-weight-bold text-md-right">
                             Nomor Tiket
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_tikNomor" class="form-control d-flex align-items-center"
-                                style="height:55px;font-size:20px;">
+
+                            <div id="m_tikNomor"
+                                class="form-control d-flex align-items-center"
+                                style="height:38px;font-size:14px;">
                             </div>
+
                         </div>
+
                     </div>
 
+                    <!-- TANGGAL -->
+                    <div class="form-group row mb-3">
 
-                    <!-- Tanggal -->
-                    <div class="form-group row align-items-center mb-4">
-
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                        <label class="col-md-3 font-weight-bold text-md-right">
                             Tanggal
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_tikTanggal" class="form-control d-flex align-items-center"
-                                style="height:55px;font-size:20px;width:300px;">
+
+                            <div id="m_tikTanggal"
+                                class="form-control d-flex align-items-center"
+                                style="height:38px;font-size:14px;">
                             </div>
+
                         </div>
 
                     </div>
 
+                    <!-- USER -->
+                    <div class="form-group row mb-3">
 
-                    <!-- User -->
-                    <div class="form-group row align-items-center mb-4">
-
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                        <label class="col-md-3 font-weight-bold text-md-right">
                             Penginput
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_userNama" class="form-control d-flex align-items-center"
-                                style="height:55px;font-size:20px;">
+
+                            <div id="m_userNama"
+                                class="form-control d-flex align-items-center"
+                                style="height:38px;font-size:14px;">
                             </div>
+
                         </div>
 
                     </div>
 
-                    <!-- Status -->
-                    <div class="form-group row align-items-center mb-4">
+                    <!-- STATUS -->
+                    <div class="form-group row mb-3">
 
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                        <label class="col-md-3 font-weight-bold text-md-right">
                             Status
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_tikStatus" class="d-flex align-items-center font-weight-bold"
-                                style="font-size:28px;">
+
+                            <div id="m_tikStatus"
+                                class="d-flex align-items-center"
+                                style="height:38px;font-size:16px;font-weight:bold;">
                             </div>
+
                         </div>
 
                     </div>
 
+                    <!-- RINGKASAN -->
+                    <div class="form-group row mb-3">
 
-                    <!-- Ringkasan -->
-                    <div class="form-group row mb-4">
-
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-3">
+                        <label class="col-md-3 font-weight-bold text-md-right pt-2">
                             Ringkasan
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_tikRingkasan" class="form-control"
-                                style="font-size:20px;padding:20px;min-height:120px;">
+
+                            <div id="m_tikRingkasan"
+                                class="form-control"
+                                style="font-size:14px;padding:10px;min-height:80px;">
                             </div>
+
                         </div>
 
                     </div>
 
+                    <!-- DESKRIPSI -->
+                    <div class="form-group row mb-3">
 
-                    <!-- Deskripsi -->
-                    <div class="form-group row">
-
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-3">
-                            Deskripsi Kerusakan
+                        <label class="col-md-3 font-weight-bold text-md-right pt-2">
+                            Deskripsi
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_tikDeskripsi" class="form-control"
-                                style="font-size:20px;padding:20px;min-height:200px;">
+
+                            <div id="m_tikDeskripsi"
+                                class="form-control"
+                                style="font-size:14px;padding:10px;min-height:120px;">
                             </div>
+
                         </div>
 
                     </div>
 
-                    <!-- Operator -->
-                    <div class="form-group row align-items-center mb-4">
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                    <!-- OPERATOR -->
+                    <div class="form-group row mb-3">
+
+                        <label class="col-md-3 font-weight-bold text-md-right">
                             Operator
                         </label>
 
                         <div class="col-md-9">
-                            <select name="tikOperator" id="tikOperator"
-                                class="form-control"
-                                style="height:55px;font-size:20px;">
-                                <option value="">-- Pilih Operator --</option>
-                            </select>
+
+                            <div id="m_tikOperator"
+                                class="form-control d-flex align-items-center"
+                                style="height:38px;font-size:14px;">
+                            </div>
+
+                        </div>
 
                         </div>
                     </div>
-                    <!-- Tindakan -->
-                    <div class="form-group row">
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-3">
-                            Tindakan <span class="text-danger">*</span>
+
+                    <!-- TINDAKAN -->
+                    <div class="form-group row mb-3">
+
+                        <label class="col-md-3 font-weight-bold text-md-right pt-2">
+                            Tindakan
                         </label>
 
                         <div class="col-md-9">
-                            <textarea name="tikTindakan" id="tikTindakan"
+
+                            <div id="m_tikTindakan"
                                 class="form-control"
-                                style="font-size:20px;padding:20px;min-height:200px;"
-                                placeholder="Masukkan tindakan yang ingin dilakukan"
-                                required></textarea>
+                                style="font-size:14px;padding:10px;min-height:120px;">
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- FOOTER BUTTON -->
-            <div class="modal-footer px-4 py-3 d-flex justify-content-between">
-                <!-- Tutup-->
+
+            <!-- FOOTER -->
+            <div class="modal-footer justify-content-center py-2">
+
                 <button type="button"
                     class="btn btn-danger"
-                    style="font-size:20px; padding:10px 40px;"
+                    style="font-size:14px;padding:6px 24px;"
                     data-dismiss="modal">
                     Tutup
                 </button>
@@ -504,7 +694,9 @@ if (!$this->session->userdata('helpdesk_userId')) { // Jika tidak ada id
 
             </div>
         </div>
+
     </div>
+
 </div>
 
 </body>

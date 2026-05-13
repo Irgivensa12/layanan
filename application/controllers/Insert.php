@@ -34,74 +34,69 @@
 
         public function tambah_tiket_sarpras()
         {
-            $keluhan   = trim($this->input->post('layHal'));
-            $deskripsi = trim($this->input->post('layDiskripsi'));
+            $this->load->library('form_validation');
 
-            // VALIDASI KOSONG
-            if (empty($keluhan) && empty($deskripsi)) {
+            $this->form_validation->set_rules('layTanggal', 'Tanggal', 'required');
+            $this->form_validation->set_rules('layHal', 'Keluhan', 'required');
+            $this->form_validation->set_rules('layDiskripsi', 'Deskripsi', 'required');
+
+            if ($this->form_validation->run() == FALSE) {
                 $this->session->set_flashdata('type', 'alert-danger');
-                $this->session->set_flashdata('pesan', 'Mohon isi keluhan anda terlebih dahulu');
-                redirect('Controller/tambah_tiket_sarpras'); // sesuaikan route
+                $this->session->set_flashdata('pesan', validation_errors());
+                redirect('Controller/tambah_tiket_sarpras');
                 return;
             }
 
-            // VALIDASI TANGGAL
-            $tanggal = $this->input->post('layTanggal');
-            $target  = $this->input->post('layTarget');
-
-            if ($tanggal > date('Y-m-d')) {
-                echo "Tanggal tidak boleh lebih dari hari ini";
-                return;
-            }
-
-            if ($target < $tanggal) {
-                echo "Target tidak boleh sebelum tanggal";
-                return;
-            }
-
-            // BARU INSERT
             $no_layanan = $this->Model->generate_no_layanan();
 
             $data = [
-                'layID'        => $no_layanan,
-                'layTanggal'   => $tanggal,
-                'layUserID'    => $this->input->post('layUserID'),
-                'layHal'       => $keluhan,
-                'layDiskripsi' => $deskripsi,
-                'layTarget'    => $target,
-                'layStatus'    => 'N',
+                'layID'         => $no_layanan,
+                'layTanggal'    => $this->input->post('layTanggal'),
+                'layUserID'     => $this->input->post('layUserID'),
+                'layHal'        => trim($this->input->post('layHal')),
+                'layDiskripsi'  => trim($this->input->post('layDiskripsi')),
+                'layTarget'     => $this->input->post('layTarget'),
+                'layStatus'     => 'N'
             ];
 
             $this->Model->insertData_layanan('tb_layanan', $data);
+
+            $this->session->set_flashdata('type', 'alert-success');
+            $this->session->set_flashdata('pesan', 'Layanan berhasil ditambahkan!');
 
             redirect('tiket_sarpras');
         }
 
         public function tambah_tiket_sim()
         {
-            $ringkasan = trim($this->input->post('tikRingkasan'));
-            $deskripsi = trim($this->input->post('tikDeskripsi'));
+            $this->load->library('form_validation');
 
-            if (empty($ringkasan) && empty($deskripsi)) {
+            $this->form_validation->set_rules('tikTanggal', 'Tanggal', 'required');
+            $this->form_validation->set_rules('tikRingkasan', 'Ringkasan', 'required');
+            $this->form_validation->set_rules('tikDeskripsi', 'Deskripsi', 'required');
+
+            if ($this->form_validation->run() == FALSE) {
                 $this->session->set_flashdata('type', 'alert-danger');
-                $this->session->set_flashdata('pesan', 'Mohon isi keluhan anda terlebih dahulu');
-                redirect('Controller/tambah_tiket_sim');
+                $this->session->set_flashdata('pesan', validation_errors());
+                redirect('Controller/tambah_tiket_sim'); 
                 return;
             }
 
-            // baru generate & insert
             $no_tiket = $this->Model->generate_no_tiket();
 
             $data = [
                 'tikNomor'      => $no_tiket,
                 'tikTanggal'    => $this->input->post('tikTanggal'),
                 'tikUserID'     => $this->input->post('tikUserID'),
-                'tikRingkasan'  => $ringkasan,
+                'tikRingkasan'  => trim($this->input->post('tikRingkasan')),
                 'tikStatus'     => 'N',
-                'tikDeskripsi'  => $deskripsi
+                'tikDeskripsi'  => trim($this->input->post('tikDeskripsi'))
             ];
 
             $this->Model->insertData_sim('tb_tiket', $data);
+
+            $this->session->set_flashdata('type', 'alert-success');
+            $this->session->set_flashdata('pesan', 'Tiket berhasil dibuat!');
 
             redirect('tiket_sim');
         }
@@ -126,9 +121,9 @@
             if (empty(trim($tiket->tikTindakan))) {
                 echo json_encode(['status' => 'error', 'message' => 'Tindakan masih kosong']);
                 return;
-            }
+            }   
 
-            // lanjut close
+            // lanjut close 
             $data = [
                 'tikStatus' => 'Y',
                 'tikUserClose' => $this->session->userdata('userId'),

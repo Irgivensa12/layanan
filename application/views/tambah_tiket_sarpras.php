@@ -60,12 +60,13 @@ if (!$this->session->userdata('helpdesk_userId')) {
                         <div class="col-md-5">
                             <input type="date"
                                 class="form-control"
-                                name="layTanggal"
-                                id="layTanggal"
-                                max="<?= date('Y-m-d') ?>"
-                                style="height:50px;font-size:16px;">
-                        </div>
+                                value="<?= date('Y-m-d') ?>"
+                                disabled>
 
+                            <input type="hidden"
+                                name="layTanggal"
+                                value="<?= date('Y-m-d') ?>">
+                        </div>
                     </div>
 
                     <!-- ID Karyawan -->
@@ -79,7 +80,24 @@ if (!$this->session->userdata('helpdesk_userId')) {
                             <input type="number"
                                 class="form-control"
                                 name="layUserID"
-                                value="<?= $this->session->userdata('userId'); ?>"
+                                value="<?= $this->session->userdata('helpdesk_userId'); ?>"
+                                readonly
+                                style="height:50px;font-size:16px;">
+                        </div>
+                    </div>
+
+                    <!-- Nama Karyawan -->
+                    <div class="form-group row mb-4 align-items-center">
+
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                            Nama Karyawan
+                        </label>
+
+                        <div class="col-md-9">
+                            <input type="text"
+                                class="form-control"
+                                name="tikUserNama"
+                                value="<?= $this->session->userdata('helpdesk_userNama'); ?>"
                                 readonly
                                 style="height:50px;font-size:16px;">
                         </div>
@@ -98,7 +116,8 @@ if (!$this->session->userdata('helpdesk_userId')) {
                                 class="form-control"
                                 name="layHal"
                                 placeholder="Ringkasan Keluhan"
-                                style="height:50px;font-size:16px;">
+                                style="height:50px;font-size:16px;"
+                                required>
                         </div>
 
                     </div>
@@ -116,32 +135,17 @@ if (!$this->session->userdata('helpdesk_userId')) {
                                 name="layDiskripsi"
                                 rows="5"
                                 placeholder="Deskripsi Keluhan"
-                                style="font-size:16px;padding:12px;">
-                            </textarea>
+                                style="font-size:16px;padding:12px;"
+                                required></textarea>
                         </div>
                     </div>
 
-                    <!-- Target Waktu -->
-                    <div class="form-group row mb-4 align-items-center">
 
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
-                            Target Waktu
-                        </label>
-
-                        <div class="col-md-5">
-                            <input type="date"
-                                class="form-control"
-                                name="layTarget"
-                                id="layTarget"
-                                style="height:50px;font-size:16px;">
-                        </div>
-
-                    </div>
 
                     <div class="d-flex justify-content-between mt-4">
 
                         <!-- Tombol Kembali (Kiri) -->
-                        <a href="<?= base_url('Controller/tiket_sarpras') ?>"
+                        <a href="<?= base_url('tiket_sarpras') ?>"
                             class="btn btn-secondary"
                             style="padding:10px 30px;font-size:16px;">
                             ← Kembali
@@ -180,39 +184,23 @@ if (!$this->session->userdata('helpdesk_userId')) {
 <script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
 
 <script>
-    $(document).ready(function() {
+    function validasiForm() {
 
-        // Ambil elemen
-        let tanggal = $('#layTanggal');
-        let target = $('#layTarget');
+        let ringkasan = document.getElementsByName('tikRingkasan')[0].value.trim();
+        let deskripsi = document.getElementsByName('tikDeskripsi')[0].value.trim();
+        let tanggal = document.getElementsByName('tikTanggal')[0].value;
 
-        // Saat tanggal dipilih
-        tanggal.on('change', function() {
 
-            let valTanggal = $(this).val();
+        if (
+            tanggal === '' ||
+            ringkasan === '' ||
+            deskripsi === ''
 
-            // set minimal target = tanggal input
-            target.attr('min', valTanggal);
-
-            // kalau target lebih kecil dari tanggal, reset
-            if (target.val() < valTanggal) {
-                target.val('');
-            }
-        });
-
-    });
-
-    function validasiSarpras() {
-        let keluhan = document.getElementsByName('layHal')[0].value.trim();
-        let deskripsi = document.getElementsByName('layDiskripsi')[0].value.trim();
-
-        // kalau dua-duanya kosong
-        if (keluhan === '' && deskripsi === '') {
-            alert('Mohon isi keluhan anda terlebih dahulu');
+        ) {
+            alert('Mohon lengkapi keluhan anda!');
             return false;
         }
 
-        // kalau lolos validasi → confirm
         return confirm('Apakah Anda yakin ingin menyimpan data ini?');
     }
 </script>

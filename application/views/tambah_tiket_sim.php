@@ -58,14 +58,15 @@ if (!$this->session->userdata('helpdesk_userId')) {
                         </label>
 
                         <div class="col-md-5">
-                            <input type="date"
+                           <input type="date"
                                 class="form-control"
-                                name="tikTanggal"
-                                id="tikTanggal"
-                                max="<?= date('Y-m-d') ?>"
-                                style="height:50px;font-size:16px;">
-                        </div>
+                                value="<?= date('Y-m-d') ?>"
+                                disabled>
 
+                            <input type="hidden"
+                                name="tikTanggal"
+                                value="<?= date('Y-m-d') ?>">
+                        </div>
                     </div>
 
                     <!-- ID Karyawan -->
@@ -86,6 +87,23 @@ if (!$this->session->userdata('helpdesk_userId')) {
 
                     </div>
 
+                    <!-- Nama Karyawan -->
+                    <div class="form-group row mb-4 align-items-center">
+
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                            Nama Karyawan
+                        </label>
+
+                        <div class="col-md-9">
+                            <input type="text"
+                                class="form-control"
+                                name="tikUserNama"
+                                value="<?= $this->session->userdata('helpdesk_userNama'); ?>"
+                                readonly
+                                style="height:50px;font-size:16px;">
+                        </div>
+
+                    </div>
                     <!-- Ringkasan -->
                     <div class="form-group row mb-4 align-items-center">
 
@@ -98,7 +116,8 @@ if (!$this->session->userdata('helpdesk_userId')) {
                                 class="form-control"
                                 name="tikRingkasan"
                                 placeholder="Ringkasan Keluhan"
-                                style="height:50px;font-size:16px;">
+                                style="height:50px;font-size:16px;"
+                                required>
                         </div>
 
                     </div>
@@ -116,33 +135,18 @@ if (!$this->session->userdata('helpdesk_userId')) {
                                 name="tikDeskripsi"
                                 rows="5"
                                 placeholder="Deskripsi Kerusakan"
-                                style="font-size:16px;padding:12px;">
-</textarea>
+                                style="font-size:16px;padding:12px;"
+                                required></textarea>
                         </div>
 
                     </div>
 
-                    <!-- Tanggal Close -->
-                    <div class="form-group row mb-4 align-items-center">
 
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
-                            Tanggal Close
-                        </label>
-
-                        <div class="col-md-5">
-                            <input type="date"
-                                class="form-control"
-                                name="tikDateClose"
-                                id="tikDateClose"
-                                style="height:50px;font-size:16px;">
-                        </div>
-
-                    </div>
 
                     <div class="d-flex justify-content-between mt-4">
 
                         <!-- Tombol Kembali (Kiri) -->
-                        <a href="<?= base_url('Controller/tiket_sim') ?>"
+                        <a href="<?= base_url('tiket_sim') ?>"
                             class="btn btn-secondary"
                             style="padding:10px 30px;font-size:16px;">
                             ← Kembali
@@ -186,69 +190,23 @@ if (!$this->session->userdata('helpdesk_userId')) {
 <script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
 
 <script>
-    $(document).ready(function() {
-
-        let tanggal = $('#tikTanggal');
-        let close = $('#tikDateClose');
-        let today = new Date().toISOString().split('T')[0];
-
-        // validasi tanggal input
-        tanggal.on('change', function() {
-
-            let valTanggal = $(this).val();
-
-            // tidak boleh lebih dari hari ini
-            if (valTanggal > today) {
-                alert('Tanggal tidak boleh lebih dari hari ini!');
-                $(this).val('');
-                return;
-            }
-
-            // set MIN saja (tidak pakai max!)
-            close.attr('min', valTanggal);
-
-            // reset kalau sudah tidak valid
-            if (close.val() && close.val() < valTanggal) {
-                close.val('');
-            }
-
-        });
-
-        // validasi saat input close
-        close.on('change', function() {
-
-            let valTanggal = tanggal.val();
-            let valClose = $(this).val();
-
-            if (valTanggal == '') {
-                alert('Isi tanggal terlebih dahulu!');
-                $(this).val('');
-                return;
-            }
-
-            if (valClose < valTanggal) {
-                alert('Tanggal target tidak boleh sebelum tanggal input!');
-                $(this).val('');
-            }
-
-            // ❌ TIDAK ADA LAGI VALIDASI > today
-            // karena boleh masa depan
-
-        });
-
-    });
-
     function validasiForm() {
+
         let ringkasan = document.getElementsByName('tikRingkasan')[0].value.trim();
         let deskripsi = document.getElementsByName('tikDeskripsi')[0].value.trim();
+        let tanggal = document.getElementsByName('tikTanggal')[0].value;
 
-        // cek jika kosong semua
-        if (ringkasan === '' && deskripsi === '') {
-            alert('Mohon isi keluhan anda terlebih dahulu');
+
+        if (
+            tanggal === '' ||
+            ringkasan === '' ||
+            deskripsi === ''
+
+        ) {
+            alert('Mohon lengkapi keluhan anda!');
             return false;
         }
 
-        // kalau lolos validasi, baru confirm
         return confirm('Apakah Anda yakin ingin menyimpan data ini?');
     }
 </script>

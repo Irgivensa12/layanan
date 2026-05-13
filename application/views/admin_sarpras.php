@@ -340,7 +340,7 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
                 data.sort(function(a, b) {
                     let numA = parseInt(a.layID.toString().split('-').pop()) || 0;
                     let numB = parseInt(b.layID.toString().split('-').pop()) || 0;
-                    return numA - numB; // ini yang bikin urut 1,2,3
+                    return numB- numA; // Mengurutkan dari yang terbesar ke terkecil (DESC) berdasarkan angka setelah strip (-)
                 });
 
                 table.clear();
