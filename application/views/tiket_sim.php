@@ -22,7 +22,7 @@ $role = $this->session->userdata('role');
             </button>
 
             <ul class="navbar-nav ml-auto">
-                <img src="<?= base_url('img/kanisius.png') ?>">
+                <img src="<?= base_url('img/kariban.png') ?>">
             </ul>
 
         </nav>
@@ -127,7 +127,7 @@ $role = $this->session->userdata('role');
 
             <div class="copyright text-center my-auto">
 
-                <span>© <?= date("Y"); ?> PT Kanisius.</span>
+                <span>© <?= date("Y"); ?> PT Kariban.</span>
 
             </div>
 
@@ -161,7 +161,7 @@ $role = $this->session->userdata('role');
     var role = "<?= $role ?>";
 
     $(document).ready(function() {
-        $('#menuTiket').trigger('onclick');
+        $('#menuTiket').trigger('click');
         table = $('#tabel').DataTable({ //https://datatables.net/reference/option/
             "scrollX": true,
             "scrollY": "400px",
@@ -203,19 +203,19 @@ $role = $this->session->userdata('role');
                         day: 'numeric'
 
                     };
-                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia 
-                    table.row.add([
-                        data[i].tikNomor,
-                        tanggal_benar,
-                        data[i].tikUserID,
-                        data[i].userNama,
-                        data[i].tikRingkasan,
-                        data[i].tikStatus == 'N' ? // jika tikStatus = N, maka tampilkan tombol OPEN, jika tidak tampilkan tombol CLOSED
-                        '<button class="btn btn-success btn-sm statusBtn" data-id="' + data[i].tikNomor + '">OPEN</button>' :
-                        '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>',
+                    //var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia 
+                    // table.row.add([
+                    //     data[i].tikNomor,
+                    //     tanggal_benar,
+                    //     data[i].tikUserID,
+                    //     data[i].userNama,
+                    //     data[i].tikRingkasan,
+                    //     data[i].tikStatus == 'N' ? // jika tikStatus = N, maka tampilkan tombol OPEN, jika tidak tampilkan tombol CLOSED
+                    //     '<button class="btn btn-success btn-sm statusBtn" data-id="' + data[i].tikNomor + '">OPEN</button>' :
+                    //     '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>',
 
-                        '<button class="btn btn-primary btn-sm detailBtn" data-id="' + data[i].tikNomor + '" data-toggle="modal" data-target="#modalDetail">Detail</button>'
-                    ]);
+                    //     '<button class="btn btn-primary btn-sm detailBtn" data-id="' + data[i].tikNomor + '" data-toggle="modal" data-target="#modalDetail">Detail</button>'
+                    // ]);
 
                     var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
@@ -266,6 +266,7 @@ $role = $this->session->userdata('role');
 
                             data[i].tikNomor,
                             tanggal_benar,
+                            data[i].tikUserID,
                             data[i].userNama,
                             data[i].tikRingkasan,
                             statusBtn,
@@ -283,6 +284,8 @@ $role = $this->session->userdata('role');
 
                             data[i].tikNomor,
                             tanggal_benar,
+                            data[i].tikUserID,
+                            data[i].userNama,
                             data[i].tikRingkasan,
                             statusBtn,
                             detailBtn
@@ -463,9 +466,7 @@ $role = $this->session->userdata('role');
             }
 
         });
-
-    });
-
+    }
     // CLOSE TIKET ADMIN
     $(document).on("click", ".statusBtn", function() {
 
@@ -651,7 +652,6 @@ $role = $this->session->userdata('role');
 
                         </div>
 
-                        </div>
                     </div>
 
                     <!-- TINDAKAN -->
