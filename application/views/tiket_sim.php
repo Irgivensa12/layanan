@@ -232,7 +232,7 @@ $role = $this->session->userdata('role');
 
                     if (role == 'admin') {
 
-                        if (data[i].tikStatus == 'N') {
+                        if (data[i].tikStatus == 'OPEN') {
 
                             actionBtn =
                                 '<button class="btn btn-success btn-sm statusBtn" data-id="' +

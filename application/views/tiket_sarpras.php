@@ -96,10 +96,12 @@ $admin = $this->session->userdata('admin');
                                 <?php } ?>
 
                                 <th>Keluhan</th>
+                                <th>Deskripsi</th>
                                 <th>Status</th>
                                 <th>Detail</th>
 
                                 <?php if ($admin == 'Y') { ?>
+                                    <th>Form Sarpras</th>
                                     <th>Action</th>
                                 <?php } ?>
 
@@ -157,7 +159,6 @@ $admin = $this->session->userdata('admin');
 
 <script>
     var table;
-
     var admin = "<?= $admin ?>";
 
     $(document).ready(function() {
@@ -165,24 +166,25 @@ $admin = $this->session->userdata('admin');
         $('#menuTiket').trigger('click');
 
         table = $('#tabel').DataTable({
-
             "scrollX": true,
             "scrollY": "400px",
             "select": true,
             "bSort": false
-
         });
 
         getTiket_Sarpras();
 
     });
 
-    // GET DATA TIKET
+    // =========================
+    // GET DATA
+    // =========================
+
     function getTiket_Sarpras() {
 
         $.ajax({
 
-            url: "<?php echo base_url('Select/tiket_sarpras'); ?>?status=<?= $this->input->get('status') ?>",
+            url: "<?php echo base_url('Select/tiket_sarpras'); ?>",
 
             method: "POST",
 
@@ -194,40 +196,59 @@ $admin = $this->session->userdata('admin');
 
                 table.clear();
 
+                data.sort(function(a, b) {
+
+                    let numA = parseInt(a.layID.toString().split('-').pop()) || 0;
+                    let numB = parseInt(b.layID.toString().split('-').pop()) || 0;
+
+                    return numB - numA;
+
+                });
+
                 for (var i = 0; i < data.length; i++) {
 
                     var tanggal_db = new Date(data[i].layTanggal);
 
                     var options = {
-
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric'
-
                     };
 
                     var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
                     // STATUS
-                    var statusBtn = '';
+
+                    var statusText = '';
 
                     if (data[i].layStatus == 'N') {
 
-                        statusBtn = '<span class="badge badge-success">OPEN</span>';
+                        statusText =
+                            '<span class="badge badge-success">OPEN</span>';
 
                     } else {
 
-                        statusBtn = '<span class="badge badge-secondary">CLOSED</span>';
+                        statusText =
+                            '<span class="badge badge-secondary">CLOSED</span>';
 
                     }
 
                     // DETAIL BUTTON
+
                     var detailBtn =
                         '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
                         data[i].layID +
                         '" data-toggle="modal" data-target="#modalDetail">Detail</button>';
 
-                    // ACTION BUTTON ADMIN
+                    // FORM SARPRAS
+
+                    var formSarprasBtn =
+                        '<button class="btn btn-info btn-sm formSarprasBtn" data-id="' +
+                        data[i].layID +
+                        '" data-toggle="modal" data-target="#modalFormSarpras">Form Sarpras</button>';
+
+                    // ACTION ADMIN
+
                     var actionBtn = '';
 
                     if (admin == 'Y') {
@@ -237,7 +258,7 @@ $admin = $this->session->userdata('admin');
                             actionBtn =
                                 '<button class="btn btn-success btn-sm statusBtn" data-id="' +
                                 data[i].layID +
-                                '">Close</button>';
+                                '">CLOSE</button>';
 
                         } else {
 
@@ -248,7 +269,10 @@ $admin = $this->session->userdata('admin');
 
                     }
 
+                    // =========================
                     // ADMIN
+                    // =========================
+
                     if (admin == 'Y') {
 
                         table.row.add([
@@ -257,15 +281,19 @@ $admin = $this->session->userdata('admin');
                             tanggal_benar,
                             data[i].layUserID,
                             data[i].layHal,
-                            statusBtn,
+                            data[i].layDiskripsi,
+                            statusText,
                             detailBtn,
+                            formSarprasBtn,
                             actionBtn
 
                         ]);
 
                     }
 
+                    // =========================
                     // USER
+                    // =========================
                     else {
 
                         table.row.add([
@@ -273,7 +301,8 @@ $admin = $this->session->userdata('admin');
                             data[i].layID,
                             tanggal_benar,
                             data[i].layHal,
-                            statusBtn,
+                            data[i].layDiskripsi,
+                            statusText,
                             detailBtn
 
                         ]);
@@ -290,10 +319,103 @@ $admin = $this->session->userdata('admin');
 
     }
 
+    // =========================
     // DETAIL
+    // =========================
+
     $(document).on("click", ".detailBtn", function() {
 
         var layID = $(this).data("id");
+
+        if (admin == 'Y') {
+
+            loadPetugas(() => {
+
+                loadDetailLay(layID);
+
+            });
+
+        } else {
+
+            loadDetailLay(layID);
+
+        }
+
+    });
+
+    // =========================
+    // FORM SARPRAS
+    // =========================
+
+    $(document).on("click", ".formSarprasBtn", function() {
+
+        var layID = $(this).data("id");
+
+        loadFormSarpras(layID);
+
+    });
+
+    // =========================
+    // CLOSE TIKET
+    // =========================
+
+    $(document).on("click", ".statusBtn", function() {
+
+        var nomor = $(this).data("id");
+
+        $.ajax({
+
+            url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + nomor,
+
+            type: "GET",
+
+            dataType: "JSON",
+
+            success: function(data) {
+
+                let petugas = data.petugas || [];
+
+                let petugasValid = petugas.filter(p => p && p !== "");
+
+                if (petugasValid.length === 0) {
+
+                    alert("❌ Tidak bisa menutup layanan keluhan!\nSilakan pilih penanggung jawab terlebih dahulu.");
+
+                    return;
+
+                }
+
+                if (confirm("Apakah Anda yakin ingin menutup keluhan ini?")) {
+
+                    $.ajax({
+
+                        url: "<?= base_url('Insert/close_sarpras/') ?>" + nomor,
+
+                        type: "POST",
+
+                        success: function() {
+
+                            alert("Tiket berhasil ditutup!");
+
+                            getTiket_Sarpras();
+
+                        }
+
+                    });
+
+                }
+
+            }
+
+        });
+
+    });
+
+    // =========================
+    // LOAD DETAIL
+    // =========================
+
+    function loadDetailLay(layID) {
 
         $.ajax({
 
@@ -308,11 +430,9 @@ $admin = $this->session->userdata('admin');
                 var tanggal_db = new Date(data.layTanggal);
 
                 var options = {
-
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'
-
                 };
 
                 var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
@@ -327,14 +447,8 @@ $admin = $this->session->userdata('admin');
 
                 $("#m_layStatus").html(
 
-                    data.layStatus === 'OPEN'
-
-                    ?
-
-                    '<span class="badge badge-success">OPEN</span>'
-
-                    :
-
+                    data.layStatus === 'OPEN' ?
+                    '<span class="badge badge-success">OPEN</span>' :
                     '<span class="badge badge-secondary">CLOSED</span>'
 
                 );
@@ -347,43 +461,195 @@ $admin = $this->session->userdata('admin');
                     '<span class="text-muted">Belum ditentukan</span>'
                 );
 
+                // =========================
+                // ADMIN PETUGAS
+                // =========================
+
+                if (admin == 'Y') {
+
+                    let petugasDB = data.petugas || [];
+
+                    $('select[name="petugas[]"]').each(function(index) {
+
+                        let select = $(this);
+
+                        if (petugasDB[index]) {
+
+                            select.val(petugasDB[index]);
+
+                            select.attr('disabled', true);
+
+                        } else {
+
+                            select.val('');
+
+                            select.prop('disabled', false);
+
+                        }
+
+                    });
+
+                    preventDuplicatePetugas();
+
+                }
+
             }
 
         });
 
-    });
+    }
 
-    // CLOSE TIKET ADMIN
-    $(document).on("click", ".statusBtn", function() {
+    // =========================
+    // LOAD PETUGAS
+    // =========================
 
-        var layID = $(this).data("id");
+    function loadPetugas(callback) {
 
-        if (confirm("Apakah yakin ingin menutup tiket ini?")) {
+        $.ajax({
 
-            $.ajax({
+            url: "<?= base_url('Select/get_petugas') ?>",
 
-                url: "<?= base_url('Insert/close_tiket_sarpras/') ?>" + layID,
+            method: "GET",
 
-                type: "POST",
+            dataType: "JSON",
 
-                success: function() {
+            success: function(data) {
 
-                    alert("Tiket berhasil ditutup!");
+                $('select[name="petugas[]"]').each(function() {
 
-                    getTiket_Sarpras();
+                    var select = $(this);
+
+                    select.empty();
+
+                    select.append('<option value="">-- Pilih Petugas --</option>');
+
+                    $.each(data, function(i, p) {
+
+                        select.append(
+                            '<option value="' + p.pegNoreg + '">' + p.pegNama + '</option>'
+                        );
+
+                    });
+
+                });
+
+                if (callback) callback();
+
+            }
+
+        });
+
+    }
+
+    // =========================
+    // DUPLIKAT PETUGAS
+    // =========================
+
+    function preventDuplicatePetugas() {
+
+        let selectedValues = [];
+
+        $('select[name="petugas[]"]').each(function() {
+
+            let val = $(this).val();
+
+            if (val !== "") {
+
+                selectedValues.push(val);
+
+            }
+
+        });
+
+        $('select[name="petugas[]"] option').prop('disabled', false);
+
+        $('select[name="petugas[]"]').each(function() {
+
+            let currentSelect = $(this);
+
+            let currentVal = currentSelect.val();
+
+            currentSelect.find('option').each(function() {
+
+                let optionVal = $(this).val();
+
+                if (selectedValues.includes(optionVal) && optionVal !== currentVal) {
+
+                    $(this).prop('disabled', true);
 
                 }
 
             });
 
-        }
+        });
+
+    }
+
+    $(document).on('change', 'select[name="petugas[]"]', function() {
+
+        preventDuplicatePetugas();
 
     });
+
+    // =========================
+    // SIMPAN PETUGAS
+    // =========================
+
+    function simpanPetugas() {
+
+        var petugas = [];
+
+        $('select[name="petugas[]"]').each(function() {
+
+            if ($(this).val() != '') {
+
+                petugas.push($(this).val());
+
+            }
+
+        });
+
+        $.ajax({
+
+            url: "<?= base_url('Insert/simpan_petugas') ?>",
+
+            method: "POST",
+
+            data: {
+
+                layID: $('#m_layID').text(),
+
+                petugas: petugas
+
+            },
+
+            success: function(res) {
+
+                alert("Pilihan Petugas Berhasil disimpan!");
+
+                $('#modalDetail').modal('hide');
+
+                getTiket_Sarpras();
+
+            }
+
+        });
+
+    }
+
+    function konfirmasiSimpan() {
+
+        if (confirm("Apakah Anda yakin ingin menyimpan perubahan ini?")) {
+
+            simpanPetugas();
+
+        }
+
+    }
 </script>
-<!-- MODAL -->
+<!-- MODAL DETAIL -->
 <div class="modal fade" id="modalDetail" tabindex="-1">
 
-    <!-- DIPERKECIL -->
     <div class="modal-dialog" style="max-width:65%; width:65%; margin:20px auto;">
 
         <div class="modal-content" style="border-radius:12px;">
@@ -392,9 +658,7 @@ $admin = $this->session->userdata('admin');
             <div class="modal-header bg-primary text-white py-2">
 
                 <h4 class="modal-title text-center w-100" style="font-size:20px;">
-
                     DATA LAYANAN SARPRAS
-
                 </h4>
 
                 <button type="button"
@@ -539,6 +803,51 @@ $admin = $this->session->userdata('admin');
 
                     </div>
 
+                    <!-- KHUSUS ADMIN -->
+                    <?php if ($admin == 'Y') { ?>
+
+                        <hr>
+
+                        <h5 class="text-primary font-weight-bold mb-3">
+                            Assign Petugas
+                        </h5>
+
+                        <div class="form-group">
+                            <label>Petugas 1</label>
+                            <select name="petugas[]" class="form-control">
+                                <option value="">-- Pilih Petugas --</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Petugas 2</label>
+                            <select name="petugas[]" class="form-control">
+                                <option value="">-- Pilih Petugas --</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Petugas 3</label>
+                            <select name="petugas[]" class="form-control">
+                                <option value="">-- Pilih Petugas --</option>
+                            </select>
+                        </div>
+
+                        <div class="text-right">
+
+                            <button type="button"
+                                id="btnSimpan"
+                                class="btn btn-success"
+                                onclick="konfirmasiSimpan()">
+
+                                Simpan Petugas
+
+                            </button>
+
+                        </div>
+
+                    <?php } ?>
+
                 </div>
 
             </div>
@@ -554,6 +863,146 @@ $admin = $this->session->userdata('admin');
                     Tutup
 
                 </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- MODAL FORM SARPRAS -->
+<div class="modal fade" id="modalFormSarpras" tabindex="-1">
+
+    <div class="modal-dialog" style="max-width:1000px;">
+
+        <div class="modal-content">
+
+            <!-- tombol close -->
+            <button type="button" class="close" data-dismiss="modal">
+                &times;
+            </button>
+
+            <!-- BODY -->
+            <div class="modal-body">
+
+                <div class="print-wrapper">
+
+                    <!-- KOLOM KIRI -->
+                    <div class="print-col">
+
+                        <div class="sarpras-form">
+
+                            <div class="sarpras-title">
+                                FORM PERMOHONAN LAYANAN SARPRAS
+                            </div>
+
+                            <div class="sarpras-subtitle">
+                                No. Dok. KNS/FORM/SPU/ADM/36/01/00
+                            </div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">Kepada</div>
+                                <div class="sarpras-line" id="m_kepada"></div>
+                            </div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">Dari</div>
+                                <div class="sarpras-line" id="m_dari"></div>
+                            </div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">Tanggal</div>
+                                <div class="sarpras-line" id="m_tanggal"></div>
+                            </div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">Hal</div>
+                                <div class="sarpras-line" id="m_hal"></div>
+                            </div>
+
+                            <b>I. Isi Permohonan</b>
+
+                            <div class="sarpras-box" id="m_isi"></div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">Target</div>
+                                <div class="sarpras-line" id="m_target"></div>
+                            </div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">PIC</div>
+                                <div class="sarpras-line" id="m_pic"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- KOLOM KANAN -->
+                    <div class="print-col">
+
+                        <div class="sarpras-form">
+
+                            <div class="sarpras-title">
+                                FORM PERMOHONAN LAYANAN SARPRAS
+                            </div>
+
+                            <div class="sarpras-subtitle">
+                                No. Dok. KNS/FORM/SPU/ADM/36/01/00
+                            </div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">Kepada</div>
+                                <div class="sarpras-line" id="m_kepada2"></div>
+                            </div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">Dari</div>
+                                <div class="sarpras-line" id="m_dari2"></div>
+                            </div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">Tanggal</div>
+                                <div class="sarpras-line" id="m_tanggal2"></div>
+                            </div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">Hal</div>
+                                <div class="sarpras-line" id="m_hal2"></div>
+                            </div>
+
+                            <b>I. Isi Permohonan</b>
+
+                            <div class="sarpras-box" id="m_isi2"></div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">Target</div>
+                                <div class="sarpras-line" id="m_target2"></div>
+                            </div>
+
+                            <div class="sarpras-row">
+                                <div class="sarpras-label">PIC</div>
+                                <div class="sarpras-line" id="m_pic2"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- BUTTON -->
+                <div class="text-center mt-3">
+
+                    <button onclick="printFormSarpras()" class="btn btn-dark">
+
+                        Print / Save PDF
+
+                    </button>
+
+                </div>
 
             </div>
 
