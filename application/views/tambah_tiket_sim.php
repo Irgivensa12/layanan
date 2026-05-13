@@ -147,7 +147,7 @@ if (!$this->session->userdata('helpdesk_userId')) {
                     <div class="d-flex justify-content-between mt-4">
 
                         <!-- Tombol Kembali (Kiri) -->
-                        <a href="<?= base_url('Controller/tiket_sim') ?>"
+                        <a href="<?= base_url('tiket_sim') ?>"
                             class="btn btn-secondary"
                             style="padding:10px 30px;font-size:16px;">
                             ← Kembali
