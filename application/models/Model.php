@@ -101,18 +101,52 @@ class model extends CI_Model
         $admin = $this->session->userdata('admin');
         $user  = $this->session->userdata('helpdesk_userId');
 
+        $status = $this->input->get('status');
+
+        // FILTER STATUS
+        $filterStatus = "";
+
+        if ($status == 'open') {
+
+            $filterStatus = " AND tikStatus='N' ";
+        } elseif ($status == 'close') {
+
+            $filterStatus = " AND tikStatus='Y' ";
+        }
+
+        // ADMIN
         if ($admin == 'Y') {
+
             $query = $this->db->query("
-            SELECT * FROM tb_tiket 
-            WHERE tikNomor IS NOT NULL AND tikNomor != ''
+
+            SELECT * FROM tb_tiket
+
+            WHERE tikNomor IS NOT NULL
+            AND tikNomor != ''
+
+            $filterStatus
+
             ORDER BY CAST(SUBSTRING(tikNomor, 4) AS UNSIGNED) DESC
+
         ");
-        } else {
+        }
+
+        // USER
+        else {
+
             $query = $this->db->query("
-            SELECT * FROM tb_tiket 
+
+            SELECT * FROM tb_tiket
+
             WHERE tikUserID='$user'
-            AND tikNomor IS NOT NULL AND tikNomor != ''
+
+            AND tikNomor IS NOT NULL
+            AND tikNomor != ''
+
+            $filterStatus
+
             ORDER BY CAST(SUBSTRING(tikNomor, 4) AS UNSIGNED) DESC
+
         ");
         }
 
@@ -124,14 +158,51 @@ class model extends CI_Model
         $admin = $this->session->userdata('admin');
         $user  = $this->session->userdata('helpdesk_userId');
 
+        $status = $this->input->get('status');
+
+        // FILTER STATUS
+        $filterStatus = "";
+
+        if ($status == 'open') {
+
+            $filterStatus = " AND layStatus='N' ";
+        } elseif ($status == 'close') {
+
+            $filterStatus = " AND layStatus='Y' ";
+        }
+
+        // ADMIN
         if ($admin == 'Y') {
-            // admin lihat semua tiket
-            $query = $this->db->query("SELECT * FROM tb_layanan ORDER BY layStatus DESC, CAST(SUBSTRING(layID, 4) AS UNSIGNED) DESC");
+
+            $query = $this->db->query("
+
+            SELECT * FROM tb_layanan
+
+            WHERE layID IS NOT NULL
+            AND layID != ''
+
+            $filterStatus
+
+            ORDER BY CAST(SUBSTRING(layID, 4) AS UNSIGNED) DESC
+
+        ");
         } else {
-            // user hanya lihat tiket sendiri
-            $query = $this->db->query("SELECT * FROM tb_layanan 
-                                   WHERE layUserID='$user'
-                                   ORDER BY layTanggal DESC, CAST(SUBSTRING(layID, 4) AS UNSIGNED) DESC");
+
+            // USER
+            $query = $this->db->query("
+
+            SELECT * FROM tb_layanan
+
+            WHERE layUserID='$user'
+
+            AND layID IS NOT NULL
+            AND layID != ''
+
+            $filterStatus
+
+            ORDER BY CAST(SUBSTRING(layID, 4) AS UNSIGNED) DESC
+
+        ");
         }
 
         return $query;

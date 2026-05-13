@@ -210,34 +210,7 @@
         }
         ?>
 
-        <!-- Admin -->
-        <?php if ($this->session->userdata('admin') == 'Y') { ?>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse"
-                    data-target="#collapseAdmin"
-                    aria-expanded="true" aria-controls="collapseAdmin">
-
-                    <i class="fas fa-fw fa-ticket-alt"></i>
-                    <span>Admin</span>
-                </a>
-
-                <div id="collapseAdmin" class="collapse"
-                    data-parent="#accordionSidebar">
-
-                    <div class="bg-white py-2 collapse-inner rounded">
-
-                        <a class="collapse-item" href="<?= base_url('admin_sim') ?>">
-                            Tiket SIM
-                        </a>
-
-                        <a class="collapse-item" href="<?= base_url('admin_sarpras') ?>">
-                            Tiket Sarpras
-                        </a>
-
-                    </div>
-                </div>
-            </li>
-        <?php } ?>
+        
         <hr class="sidebar-divider">
 
 
