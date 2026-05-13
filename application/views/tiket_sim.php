@@ -22,7 +22,7 @@ $role = $this->session->userdata('role');
             </button>
 
             <ul class="navbar-nav ml-auto">
-                <img src="<?= base_url('img/kanisius.png') ?>">
+                <img src="<?= base_url('img/kariban.png') ?>">
             </ul>
 
         </nav>
@@ -90,11 +90,8 @@ $role = $this->session->userdata('role');
 
                                 <th>No</th>
                                 <th>Tanggal</th>
-
-                                <?php if ($role == 'admin') { ?>
-                                    <th>Penginput</th>
-                                <?php } ?>
-
+                                <th>Penginput</th>
+                                <th>Nama</th>
                                 <th>Ringkasan</th>
                                 <th>Status</th>
                                 <th>Detail</th>
@@ -130,7 +127,7 @@ $role = $this->session->userdata('role');
 
             <div class="copyright text-center my-auto">
 
-                <span>© <?= date("Y"); ?> PT Kanisius.</span>
+                <span>© <?= date("Y"); ?> PT Kariban.</span>
 
             </div>
 
@@ -156,16 +153,16 @@ $role = $this->session->userdata('role');
 <script src="<?= base_url('vendor/datatables/jquery.dataTables.min.js') ?>"></script>
 
 <script>
+    // Menggunakan Javascript dan jQuery
+    // Bisa cek untuk contoh membuat form: https://getbootstrap.com/docs/4.0/components/forms/
+
     var table;
 
     var role = "<?= $role ?>";
 
     $(document).ready(function() {
-
         $('#menuTiket').trigger('click');
-
-        table = $('#tabel').DataTable({
-
+        table = $('#tabel').DataTable({ //https://datatables.net/reference/option/
             "scrollX": true,
             "scrollY": "400px",
             "select": true,
@@ -177,7 +174,8 @@ $role = $this->session->userdata('role');
 
     });
 
-    // GET DATA TIKET
+    // Menggunakan AJAX untuk membuat tabel dari data tabel
+    // AJAX (View) -> Controller -> Model -> dapat hasil
     function getTiket_SIM() {
 
         $.ajax({
@@ -205,6 +203,19 @@ $role = $this->session->userdata('role');
                         day: 'numeric'
 
                     };
+                    //var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia 
+                    // table.row.add([
+                    //     data[i].tikNomor,
+                    //     tanggal_benar,
+                    //     data[i].tikUserID,
+                    //     data[i].userNama,
+                    //     data[i].tikRingkasan,
+                    //     data[i].tikStatus == 'N' ? // jika tikStatus = N, maka tampilkan tombol OPEN, jika tidak tampilkan tombol CLOSED
+                    //     '<button class="btn btn-success btn-sm statusBtn" data-id="' + data[i].tikNomor + '">OPEN</button>' :
+                    //     '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>',
+
+                    //     '<button class="btn btn-primary btn-sm detailBtn" data-id="' + data[i].tikNomor + '" data-toggle="modal" data-target="#modalDetail">Detail</button>'
+                    // ]);
 
                     var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
@@ -255,6 +266,7 @@ $role = $this->session->userdata('role');
 
                             data[i].tikNomor,
                             tanggal_benar,
+                            data[i].tikUserID,
                             data[i].userNama,
                             data[i].tikRingkasan,
                             statusBtn,
@@ -272,6 +284,8 @@ $role = $this->session->userdata('role');
 
                             data[i].tikNomor,
                             tanggal_benar,
+                            data[i].tikUserID,
+                            data[i].userNama,
                             data[i].tikRingkasan,
                             statusBtn,
                             detailBtn
@@ -293,7 +307,123 @@ $role = $this->session->userdata('role');
     // DETAIL
     $(document).on("click", ".detailBtn", function() {
 
+        var tikNomor = $(this).data("id"); // Mengambil data-id dari tombol yang diklik, yaitu tikNomor
+
+        loadDetailTik(tikNomor); // Mengambil detail tiket
+
+    });
+
+    $(document).on("click", ".statusBtn", function() {
+
         var tikNomor = $(this).data("id");
+
+        // Mengambil data tiket untuk validasi sebelum close
+        $.ajax({
+            url: "<?= base_url('Select/detail_tiket/') ?>" + tikNomor,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data) {
+
+                let operator = data.tikOperator;
+                let tindakan = data.tikTindakan;
+
+                // Validasi operator dan tindakan sebelum close tiket
+                if (!operator || operator === "") {
+                    alert("❌ Tidak bisa menutup tiket!\nOperator belum dipilih!");
+                    return;
+                }
+
+                if (!tindakan || tindakan.trim() === "") {
+                    alert("❌ Tidak bisa menutup tiket!\nTindakan masih kosong!");
+                    return;
+                }
+
+                // Mengkonfirmasi sebelum close tiket
+                if (confirm("Apakah Anda yakin ingin menutup tiket ini?")) {
+
+                    $.ajax({
+                        url: "<?= base_url('Insert/close_tiket/') ?>" + tikNomor,
+                        type: "POST",
+                        success: function() {
+
+                            alert("Tiket berhasil ditutup!");
+                            getTiket_SIM();
+
+                        }
+                    });
+
+                }
+
+            }
+        });
+
+    });
+
+    function simpanTindakan() {
+
+        var operator = $('#tikOperator').val();
+        var tindakan = $('#tikTindakan').val();
+        var id = $('#m_tikNomor').text(); // ambil ID tiket
+
+        // Validasi input tindakan
+        if (operator == '') { // Jika operator belum dipilih
+            alert('Operator wajib dipilih!');
+            return;
+        }
+
+        if (tindakan.trim() == '') { // Jika tindakan masih kosong atau hanya berisi spasi
+            alert('Tindakan wajib diisi!');
+            return;
+        }
+
+        // Kirim data tindakan ke Controller untuk disimpan ke database
+        $.ajax({
+            url: "<?= base_url('Insert/simpan_tindakan') ?>",
+            method: "POST",
+            data: {
+                tikID: id,
+                tikOperator: operator,
+                tikTindakan: tindakan
+            },
+            success: function(res) {
+                alert('Data Berhasil disimpan!');
+                $('#modalDetail').modal('hide');
+                getTiket_SIM(); // untuk refresh
+            }
+        });
+    }
+
+    function konfirmasiSimpan() {
+        if (confirm("Apakah Anda yakin ingin menyimpan tindakan ini?")) {
+            simpanTindakan();
+        }
+    }
+
+    function loadOperator(selected = '') {
+
+        $.ajax({
+            url: "<?= base_url('Select/get_operator_sim') ?>",
+            method: "GET",
+            dataType: "JSON",
+            success: function(data) {
+                console.log(data);
+                let select = $('#tikOperator');
+                select.empty();
+                select.append('<option value="">-- Pilih Operator --</option>');
+
+                $.each(data, function(i, op) {
+                    let selectedAttr = (op.pegNoreg == selected) ? 'selected' : '';
+                    select.append(
+                        '<option value="' + op.pegNoreg + '" ' + selectedAttr + '>' + op.pegNama + '</option>'
+                    );
+                });
+
+            }
+        });
+
+    }
+
+    function loadDetailTik(tikNomor) {
 
         $.ajax({
 
@@ -306,7 +436,6 @@ $role = $this->session->userdata('role');
             success: function(data) {
 
                 var tanggal_db = new Date(data.tikTanggal);
-
                 var options = {
 
                     year: 'numeric',
@@ -318,25 +447,14 @@ $role = $this->session->userdata('role');
                 var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
                 $("#m_tikNomor").text(data.tikNomor);
-
                 $("#m_tikTanggal").text(tanggal_benar);
-
                 $("#m_userNama").text(data.userNama);
-
                 $("#m_tikRingkasan").text(data.tikRingkasan);
 
                 $("#m_tikStatus").html(
-
-                    data.tikStatus === 'OPEN'
-
-                    ?
-
-                    '<span class="badge badge-success">OPEN</span>'
-
-                    :
-
+                    data.tikStatus === 'OPEN' ?
+                    '<span class="badge badge-success">OPEN</span>' :
                     '<span class="badge badge-secondary">CLOSED</span>'
-
                 );
 
                 $('#m_tikDeskripsi').html(data.tikDeskripsi);
@@ -348,9 +466,7 @@ $role = $this->session->userdata('role');
             }
 
         });
-
-    });
-
+    }
     // CLOSE TIKET ADMIN
     $(document).on("click", ".statusBtn", function() {
 
@@ -553,11 +669,8 @@ $role = $this->session->userdata('role');
                             </div>
 
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
 
             <!-- FOOTER -->
@@ -567,13 +680,19 @@ $role = $this->session->userdata('role');
                     class="btn btn-danger"
                     style="font-size:14px;padding:6px 24px;"
                     data-dismiss="modal">
-
                     Tutup
+                </button>
 
+                <!-- Simpan -->
+                <button type="button"
+                    id="btnSimpan"
+                    class="btn btn-success"
+                    style="font-size:20px; padding:10px 40px;"
+                    onclick="konfirmasiSimpan()">
+                    Simpan
                 </button>
 
             </div>
-
         </div>
 
     </div>

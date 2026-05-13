@@ -116,37 +116,36 @@ class model extends CI_Model
 
         // ADMIN
         if ($admin == 'Y') {
-
+            // Mengambil semua kolom dari tabel tiket dan nama user dari tabel vUser
+            // dan LEFT JOIN untuk menggabungkan tabel tiket dan vUser berdasarkan tikUserID dan userID
             $query = $this->db->query("
+            SELECT 
+                t.*, 
+                u.userNama
+            FROM tb_tiket t
+            LEFT JOIN vUser u 
+                ON u.userId = t.tikUserID
 
-            SELECT * FROM tb_tiket
+            WHERE t.tikNomor IS NOT NULL 
+            AND t.tikNomor != ''
 
-            WHERE tikNomor IS NOT NULL
-            AND tikNomor != ''
-
-            $filterStatus
-
-            ORDER BY CAST(SUBSTRING(tikNomor, 4) AS UNSIGNED) DESC
-
+            ORDER BY CAST(SUBSTRING(t.tikNomor, 4) AS UNSIGNED) ASC
         ");
-        }
-
-        // USER
-        else {
+        } else {
 
             $query = $this->db->query("
+            SELECT 
+                t.*,
+                u.userNama
+            FROM tb_tiket t
+            LEFT JOIN vUser u 
+                ON u.userId = t.tikUserID
 
-            SELECT * FROM tb_tiket
+            WHERE t.tikUserID='$user'
+            AND t.tikNomor IS NOT NULL 
+            AND t.tikNomor != ''
 
-            WHERE tikUserID='$user'
-
-            AND tikNomor IS NOT NULL
-            AND tikNomor != ''
-
-            $filterStatus
-
-            ORDER BY CAST(SUBSTRING(tikNomor, 4) AS UNSIGNED) DESC
-
+            ORDER BY CAST(SUBSTRING(t.tikNomor, 4) AS UNSIGNED) ASC
         ");
         }
 
@@ -174,34 +173,22 @@ class model extends CI_Model
         // ADMIN
         if ($admin == 'Y') {
 
+            // Admin bisa lihat semua tiket + nama user
             $query = $this->db->query("
-
-            SELECT * FROM tb_layanan
-
-            WHERE layID IS NOT NULL
-            AND layID != ''
-
-            $filterStatus
-
-            ORDER BY CAST(SUBSTRING(layID, 4) AS UNSIGNED) DESC
-
+            SELECT l.*, u.userNama
+            FROM tb_layanan l
+            LEFT JOIN vUser u ON u.userId = l.layUserID
+            ORDER BY l.layStatus DESC
         ");
         } else {
 
-            // USER
+            // User hanya lihat tiket sendiri
             $query = $this->db->query("
-
-            SELECT * FROM tb_layanan
-
-            WHERE layUserID='$user'
-
-            AND layID IS NOT NULL
-            AND layID != ''
-
-            $filterStatus
-
-            ORDER BY CAST(SUBSTRING(layID, 4) AS UNSIGNED) DESC
-
+            SELECT l.*, u.userNama
+            FROM tb_layanan l
+            LEFT JOIN vUser u ON u.userId = l.layUserID
+            WHERE l.layUserID = '$user'
+            ORDER BY l.layTanggal DESC
         ");
         }
 

@@ -145,6 +145,7 @@ class Select extends CI_Controller
         $this->db->where('t.tikNomor', $tikNomor);
 
         $data = $this->db->get()->row_array();
+        $data['tikTindakan'] = strip_tags($data['tikTindakan']); // Menghapus tag HTML dari tikTindakan
 
         echo json_encode($data);
     }
@@ -174,7 +175,7 @@ class Select extends CI_Controller
         $this->db->where('layID', $tikNomor);
 
         $data = $this->db->get()->row_array();
-
+        $data['layTindakan'] = strip_tags($data['layTindakan']); // Menghapus tag HTML dari layTindakan
 
         $data['petugas'] = [
             $data['layPetugas1'],

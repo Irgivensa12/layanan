@@ -32,13 +32,13 @@
                 <!-- JUDUL -->
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
 
-                    <h1 class="h3 mb-0 text-gray-800">
+                <h1 class="h3 mb-0 text-gray-800">
 
-                        <?= ($admin == 'Y') ? 'Halaman Admin SARPRAS' : 'List Semua Keluhan SARPRAS'; ?>
+                    <?= ($admin == 'Y') ? 'Halaman Admin SARPRAS' : 'List Semua Keluhan SARPRAS'; ?>
 
-                    </h1>
+                </h1>
 
-                </div>
+            </div>
 
                 <!-- ALERT -->
                 <div class="form-group row">
@@ -95,14 +95,10 @@
                                         <th>Penginput</th>
                                     <?php } ?>
 
-                                    <th>Keluhan</th>
-                                    <th>Deskripsi</th>
-
-                                    <?php if ($admin != 'Y') { ?>
-                                        <th>Status</th>
-                                    <?php } ?>
-
-                                    <th>Detail</th>
+                                <th>Keluhan</th>
+                                <th>Deskripsi</th>
+                                <th>Status</th>
+                                <th>Detail</th>
 
                                     <?php if ($admin == 'Y') { ?>
                                         <th>Form Sarpras</th>
@@ -281,18 +277,19 @@
 
                             table.row.add([
 
-                                data[i].layID,
-                                tanggal_benar,
-                                data[i].layUserID,
-                                data[i].layHal,
-                                data[i].layDiskripsi,
-                                detailBtn,
-                                formSarprasBtn,
-                                actionBtn
+                            data[i].layID,
+                            tanggal_benar,
+                            data[i].layUserID,
+                            data[i].layHal,
+                            data[i].layDiskripsi,
+                            statusText,
+                            detailBtn,
+                            formSarprasBtn,
+                            actionBtn
 
-                            ]);
+                        ]);
 
-                        }
+                    }
 
                         // =========================
                         // USER
@@ -301,24 +298,24 @@
 
                             table.row.add([
 
-                                data[i].layID,
-                                tanggal_benar,
-                                data[i].layHal,
-                                data[i].layDiskripsi,
-                                statusText,
-                                detailBtn
+                            data[i].layID,
+                            tanggal_benar,
+                            data[i].layHal,
+                            data[i].layDiskripsi,
+                            statusText,
+                            detailBtn
 
-                            ]);
-
-                        }
+                        ]);
 
                     }
 
-                    table.draw();
-
                 }
 
-            });
+                table.draw();
+
+            }
+
+        });
 
         }
 
@@ -422,13 +419,13 @@
 
             $.ajax({
 
-                url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + layID,
+            url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + layID,
 
                 type: "GET",
 
                 dataType: "JSON",
 
-                success: function(data) {
+            success: function(data) {
 
                     var tanggal_db = new Date(data.layTanggal);
 
@@ -440,23 +437,23 @@
 
                     var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
-                    $("#m_layID").text(data.layID);
+                $("#m_layID").text(data.layID);
 
-                    $("#m_layTanggal").text(tanggal_benar);
+                $("#m_layTanggal").text(tanggal_benar);
 
-                    $("#m_userNama").text(data.userNama);
+                $("#m_userNama").text(data.userNama);
 
-                    $("#m_layHal").text(data.layHal);
+                $("#m_layHal").text(data.layHal);
 
                     $("#m_layStatus").html(
 
-                        data.layStatus === 'N' ?
-                        '<span class="badge badge-success">OPEN</span>' :
-                        '<span class="badge badge-secondary">CLOSED</span>'
+                    data.layStatus === 'OPEN' ?
+                    '<span class="badge badge-success">OPEN</span>' :
+                    '<span class="badge badge-secondary">CLOSED</span>'
 
-                    );
+                );
 
-                    $('#m_layDiskripsi').html(data.layDiskripsi);
+                $('#m_layDiskripsi').html(data.layDiskripsi);
 
                     $("#m_penanggungJawab").html(
                         data.penanggungJawab ?
