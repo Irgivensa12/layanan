@@ -168,33 +168,7 @@
                 </div>
             </div>
         </li>
-        <!-- MENU ADMIN -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse"
-                data-target="#collapseAdmin"
-                aria-expanded="true" aria-controls="collapseAdmin">
-
-                <i class="fas fa-fw fa-user-shield"></i>
-                <span>Admin</span>
-            </a>
-
-            <div id="collapseAdmin" class="collapse"
-                data-parent="#accordionSidebar">
-
-                <div class="bg-white py-2 collapse-inner rounded">
-
-                    <a class="collapse-item" href="<?= base_url('admin_sim') ?>">
-                        Admin SIM
-                    </a>
-
-                    <a class="collapse-item" href="<?= base_url('admin_sarpras') ?>">
-                        Admin Sarpras
-                    </a>
-
-                </div>
-            </div>
-        </li>
-
+       
 
 
 

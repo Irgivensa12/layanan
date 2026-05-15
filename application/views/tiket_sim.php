@@ -34,7 +34,7 @@ $role = $this->session->userdata('role');
 
                 <h1 class="h3 mb-0 text-gray-800">
 
-                    <?= ($role == 'admin') ? 'Halaman Admin SIM' : 'List Semua Kerusakan SIM'; ?>
+                    <?= ($role == 'admin') ? 'Halaman Tiket SIM' : 'List Semua Kerusakan SIM'; ?>
 
                 </h1>
 
@@ -178,7 +178,7 @@ $role = $this->session->userdata('role');
 
         $.ajax({
 
-            url: "<?php echo base_url('Select/tiket_sim'); ?>?status=<?= $this->input->get('status') ?>",
+            url: "<?php echo base_url('Select/tiket_sim?status=' . $this->input->get('status')) ?>",
 
             method: "POST",
 
