@@ -397,9 +397,7 @@
 
             $.ajax({
 
-                url: "<?php echo base_url('Select/tiket_sarpras?status=' . $this->input->get('status')) ?>",
-
-                method: "POST",
+            url: "<?php echo base_url('Select/tiket_sarpras?status=' . $this->input->get('status')) ?>",
 
                 dataType: "JSON",
 

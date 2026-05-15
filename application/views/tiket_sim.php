@@ -28,7 +28,7 @@ $userId = $this->session->userdata('helpdesk_userId');
             </button>
 
             <ul class="navbar-nav ml-auto">
-                <img src="<?= base_url('img/kariban.png') ?>">
+                <img src="<?= base_url('img/kanisius.png') ?>">
             </ul>
         </nav>
 
@@ -67,10 +67,11 @@ $userId = $this->session->userdata('helpdesk_userId');
                                 <th style="width:10px">No</th>
                                 <th>Tanggal</th>
                                 <th>Penginput</th>
+                                <th>Nama</th>
                                 <th>Ringkasan</th>
                                 <th>Status</th>
                                 <th>Detail</th>
-                                <?php if ("<?= $admin ?>" == 'Y') { ?>
+                                <?php if ($admin != 'Y') { ?>
                                     <th>Action</th>
                                 <?php } ?>
                             </tr>
@@ -88,7 +89,7 @@ $userId = $this->session->userdata('helpdesk_userId');
     <footer class="sticky-footer bg-white">
         <div class="container my-auto">
             <div class="copyright text-center my-auto">
-                <span>© <?php echo date("Y"); ?> PT Kariban.</span>
+                <span>© <?php echo date("Y"); ?> PT Kanisius.</span>
             </div>
         </div>
     </footer>
@@ -141,7 +142,7 @@ $userId = $this->session->userdata('helpdesk_userId');
     function getTiket_SIM() {
 
         $.ajax({
-            url: "<?php echo base_url('Select/tiket_sim'); ?>",
+            url: "<?php echo base_url('Select/tiket_sim?status=' . $this->input->get('status')) ?>",
             method: "POST",
             dataType: "JSON",
 
@@ -190,10 +191,10 @@ $userId = $this->session->userdata('helpdesk_userId');
                         // Tiket OPEN
                         if (data[i].tikStatus == 'N') {
 
-                            // tiket milik sendiri
+                            // Jika tiket milik user yang sedang login, maka bisa close tiket, jika tidak, tampilkan tombol disabled "Bukan Tiket Anda"
                             if (data[i].tikUserID == "<?= $userId ?>") {
 
-                                // operator & tindakan SUDAH diisi admin
+                                // Validasi apakah operator sudah dipilih dan tindakan sudah diisi sebelum bisa close tiket, jika belum, tampilkan tombol disabled "Menunggu Admin"
                                 if (
                                     data[i].tikOperator &&
                                     data[i].tikOperator.trim() != '' &&
@@ -206,32 +207,33 @@ $userId = $this->session->userdata('helpdesk_userId');
                                         data[i].tikNomor +
                                         '">OPEN</button>';
 
-                                } else {
+                                } else { // Jika operator belum dipilih atau tindakan belum diisi, maka tampilkan tombol disabled "Menunggu Admin"
 
                                     actionBtn =
                                         '<button class="btn btn-warning btn-sm" disabled>Menunggu Admin</button>';
                                 }
 
-                            } else {
+                            } else { // Jika tiket bukan milik user yang sedang login, maka tampilkan tombol disabled "Bukan Tiket Anda"
 
                                 actionBtn =
                                     '<button class="btn btn-secondary btn-sm" disabled>Bukan Tiket Anda</button>';
                             }
 
-                        } else {
+                        } else { // Tiket CLOSED
 
                             actionBtn =
                                 '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>';
                         }
                     }
 
-                    // ADMIN
+                    // Jika admin, tidak perlu tampilkan tombol action, karena admin tidak bisa close tiket, cukup tampilkan status OPEN/CLOSED dan detail tiket
                     if ("<?= $admin ?>" == 'Y') {
 
                         table.row.add([
                             data[i].tikNomor,
                             tanggal_benar,
                             data[i].tikUserID,
+                            data[i].userNama,
                             data[i].tikRingkasan,
                             statusBtn,
                             detailBtn
@@ -239,13 +241,14 @@ $userId = $this->session->userdata('helpdesk_userId');
 
                     }
 
-                    // USER
+                    // Jika user biasa, tampilkan tombol action sesuai dengan kondisi tiket dan kepemilikan tiket
                     else {
 
                         table.row.add([
                             data[i].tikNomor,
                             tanggal_benar,
                             data[i].tikUserID,
+                            data[i].userNama,
                             data[i].tikRingkasan,
                             statusBtn,
                             detailBtn,
@@ -264,7 +267,7 @@ $userId = $this->session->userdata('helpdesk_userId');
 
     $(document).on("click", ".detailBtn", function() { // Event listener untuk tombol detail
 
-        var tikNomor = $(this).data("id"); // mengambil data-id dari tombol yang diklik, yaitu tikNomor
+        var tikNomor = $(this).data("id"); // mengambil data-id dari tombol yang diklik, yaitu tikNoGmor
 
         loadDetailTik(tikNomor); // ambil detail tiket
 
@@ -398,10 +401,6 @@ $userId = $this->session->userdata('helpdesk_userId');
             type: "GET",
             dataType: "JSON",
             success: function(data) {
-                console.log(data);
-                console.log("STATUS ASLI =", data.tikStatus);
-                console.log("TYPE =", typeof data.tikStatus);
-
                 var tanggal_db = new Date(data.tikTanggal);
                 var options = {
                     year: 'numeric',
@@ -479,125 +478,155 @@ $userId = $this->session->userdata('helpdesk_userId');
 
     }
 </script>
+
+<!-- Modal -->
 <div class="modal fade" id="modalDetail" tabindex="-1">
-    <div class="modal-dialog" style="max-width:75%; width:75%; margin:40px auto;">
-        <div class="modal-content" style="border-radius:15px;">
+    <div class="modal-dialog" style="max-width:65%; width:65%; margin:20px auto;">
+        <div class="modal-content" style="border-radius:12px;">
 
             <!-- HEADER -->
-            <div class="modal-header bg-primary text-white">
-                <h4 class="modal-title text-center w-100" style="font-size:26px;">
+            <div class="modal-header bg-primary text-white py-2">
+
+                <h4 class="modal-title text-center w-100" style="font-size:20px;">
+
                     DATA LAYANAN SIM
+
                 </h4>
-                <button type="button" class="close text-white" data-dismiss="modal" style="font-size:30px;">&times;</button>
+
+                <button type="button"
+                    class="close text-white"
+                    data-dismiss="modal"
+                    style="font-size:24px;">
+
+                    &times;
+
+                </button>
+
             </div>
 
             <!-- BODY -->
-            <div class="modal-body" style="font-size:20px; padding:40px;">
+            <div class="modal-body" style="font-size:14px; padding:20px;">
 
                 <div class="container-fluid">
 
-                    <!-- Nomor Tiket -->
-                    <div class="form-group row align-items-center mb-4">
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                    <!-- NOMOR -->
+                    <div class="form-group row mb-3">
+
+                        <label class="col-md-3 font-weight-bold text-md-right">
                             Nomor Tiket
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_tikNomor" class="form-control d-flex align-items-center"
-                                style="height:55px;font-size:20px;">
+
+                            <div id="m_tikNomor"
+                                class="form-control d-flex align-items-center"
+                                style="height:38px;font-size:14px;">
                             </div>
+
                         </div>
+
                     </div>
 
+                    <!-- TANGGAL -->
+                    <div class="form-group row mb-3">
 
-                    <!-- Tanggal -->
-                    <div class="form-group row align-items-center mb-4">
-
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                        <label class="col-md-3 font-weight-bold text-md-right">
                             Tanggal
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_tikTanggal" class="form-control d-flex align-items-center"
-                                style="height:55px;font-size:20px;width:300px;">
+
+                            <div id="m_tikTanggal"
+                                class="form-control d-flex align-items-center"
+                                style="height:38px;font-size:14px;">
                             </div>
+
                         </div>
 
                     </div>
 
+                    <!-- USER -->
+                    <div class="form-group row mb-3">
 
-                    <!-- User -->
-                    <div class="form-group row align-items-center mb-4">
-
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                        <label class="col-md-3 font-weight-bold text-md-right">
                             Penginput
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_userNama" class="form-control d-flex align-items-center"
-                                style="height:55px;font-size:20px;">
+
+                            <div id="m_userNama"
+                                class="form-control d-flex align-items-center"
+                                style="height:38px;font-size:14px;">
                             </div>
+
                         </div>
 
                     </div>
 
-                    <!-- Status -->
-                    <div class="form-group row align-items-center mb-4">
+                    <!-- STATUS -->
+                    <div class="form-group row mb-3">
 
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                        <label class="col-md-3 font-weight-bold text-md-right">
                             Status
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_tikStatus" class="d-flex align-items-center font-weight-bold"
-                                style="font-size:28px;">
+
+                            <div id="m_tikStatus"
+                                class="d-flex align-items-center"
+                                style="height:38px;font-size:16px;font-weight:bold;">
                             </div>
+
                         </div>
 
                     </div>
 
+                    <!-- RINGKASAN -->
+                    <div class="form-group row mb-3">
 
-                    <!-- Ringkasan -->
-                    <div class="form-group row mb-4">
-
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-3">
+                        <label class="col-md-3 font-weight-bold text-md-right pt-2">
                             Ringkasan
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_tikRingkasan" class="form-control"
-                                style="font-size:20px;padding:20px;min-height:120px;">
+
+                            <div id="m_tikRingkasan"
+                                class="form-control"
+                                style="font-size:14px;padding:10px;min-height:80px;">
                             </div>
+
                         </div>
 
                     </div>
 
+                    <!-- DESKRIPSI -->
+                    <div class="form-group row mb-3">
 
-                    <!-- Deskripsi -->
-                    <div class="form-group row">
-
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-3">
-                            Deskripsi Kerusakan
+                        <label class="col-md-3 font-weight-bold text-md-right pt-2">
+                            Deskripsi
                         </label>
 
                         <div class="col-md-9">
-                            <div id="m_tikDeskripsi" class="form-control"
-                                style="font-size:20px;padding:20px;min-height:200px;">
+
+                            <div id="m_tikDeskripsi"
+                                class="form-control"
+                                style="font-size:14px;padding:10px;min-height:120px;">
                             </div>
+
                         </div>
 
                     </div>
 
                     <!-- Operator -->
-                    <div class="form-group row align-items-center mb-4">
-                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                    <div class="form-group row align-items-center mb-3">
+                        <label class="col-md-3 font-weight-bold text-md-right">
                             Operator
                         </label>
 
                         <div class="col-md-9">
                             <select name="tikOperator" id="tikOperator"
                                 class="form-control"
-                                style="height:55px;font-size:20px;">
+                                style="height:36px;font-size:14px;">
                                 <option value="">-- Pilih Operator --</option>
                             </select>
 
@@ -612,7 +641,7 @@ $userId = $this->session->userdata('helpdesk_userId');
                         <div class="col-md-9">
                             <textarea name="tikTindakan" id="tikTindakan"
                                 class="form-control"
-                                style="font-size:20px;padding:20px;min-height:200px;"
+                                style="font-size:14px;padding:20px;min-height:200px;"
                                 placeholder="Masukkan tindakan yang ingin dilakukan"
                                 required></textarea>
                         </div>
@@ -621,10 +650,11 @@ $userId = $this->session->userdata('helpdesk_userId');
             </div>
             <!-- FOOTER BUTTON -->
             <div class="modal-footer px-4 py-3 d-flex justify-content-between">
+
                 <!-- Tutup-->
                 <button type="button"
                     class="btn btn-danger"
-                    style="font-size:20px; padding:10px 40px;"
+                    style="font-size:14px; padding:6px 24px;"
                     data-dismiss="modal">
                     Tutup
                 </button>
@@ -633,7 +663,7 @@ $userId = $this->session->userdata('helpdesk_userId');
                 <button type="button"
                     id="btnSimpan"
                     class="btn btn-success"
-                    style="font-size:20px; padding:10px 40px;"
+                    style="font-size:14px; padding:6px 24px;"
                     onclick="konfirmasiSimpan()">
                     Simpan
                 </button>
