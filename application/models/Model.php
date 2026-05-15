@@ -108,16 +108,15 @@ class model extends CI_Model
 
         if ($status == 'open') {
 
-            $filterStatus = " AND tikStatus='N' ";
+            $filterStatus = " AND t.tikStatus='N' ";
         } elseif ($status == 'close') {
 
-            $filterStatus = " AND tikStatus='Y' ";
+            $filterStatus = " AND t.tikStatus='Y' ";
         }
 
         // ADMIN
         if ($admin == 'Y') {
-            // Mengambil semua kolom dari tabel tiket dan nama user dari tabel vUser
-            // dan LEFT JOIN untuk menggabungkan tabel tiket dan vUser berdasarkan tikUserID dan userID
+
             $query = $this->db->query("
             SELECT 
                 t.*, 
@@ -128,6 +127,7 @@ class model extends CI_Model
 
             WHERE t.tikNomor IS NOT NULL 
             AND t.tikNomor != ''
+            $filterStatus
 
             ORDER BY CAST(SUBSTRING(t.tikNomor, 4) AS UNSIGNED) ASC
         ");
@@ -144,6 +144,7 @@ class model extends CI_Model
             WHERE t.tikUserID='$user'
             AND t.tikNomor IS NOT NULL 
             AND t.tikNomor != ''
+            $filterStatus
 
             ORDER BY CAST(SUBSTRING(t.tikNomor, 4) AS UNSIGNED) ASC
         ");
@@ -151,7 +152,6 @@ class model extends CI_Model
 
         return $query;
     }
-
     public function tiket_sarpras()
     {
         $admin = $this->session->userdata('admin');
@@ -164,37 +164,41 @@ class model extends CI_Model
 
         if ($status == 'open') {
 
-            $filterStatus = " AND layStatus='N' ";
+            $filterStatus = " AND l.layStatus='N' ";
         } elseif ($status == 'close') {
 
-            $filterStatus = " AND layStatus='Y' ";
+            $filterStatus = " AND l.layStatus='Y' ";
         }
 
         // ADMIN
         if ($admin == 'Y') {
 
-            // Admin bisa lihat semua tiket + nama user
             $query = $this->db->query("
             SELECT l.*, u.userNama
             FROM tb_layanan l
             LEFT JOIN vUser u ON u.userId = l.layUserID
+
+            WHERE 1=1
+            $filterStatus
+
             ORDER BY l.layStatus DESC
         ");
         } else {
 
-            // User hanya lihat tiket sendiri
             $query = $this->db->query("
             SELECT l.*, u.userNama
             FROM tb_layanan l
             LEFT JOIN vUser u ON u.userId = l.layUserID
+
             WHERE l.layUserID = '$user'
+            $filterStatus
+
             ORDER BY l.layTanggal DESC
         ");
         }
 
         return $query;
     }
-
     public function getTiket($role, $userID = null)
     {
         $this->db->select("
