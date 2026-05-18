@@ -12,198 +12,198 @@
     ?>
 
     <style id="stylePrintSarpras">
-    /* Style global (font, ukuran, warna, garis) */
-    .sarpras-form {
-        width: 100%;
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-        color: black;
-        line-height: 1.5;
-    }
-
-    /* WRAPPER 2 KOLOM */
-    .print-wrapper {
-        display: flex;
-        gap: 20px;
-        align-items: stretch;
-    }
-
-    /* KOLOM KIRI & KANAN */
-    .print-col {
-        width: 50%;
-        padding: 20px;
-        border: 1px solid black;
-        /* kotak tipis muncul */
-        box-sizing: border-box;
-        display: flex;
-    }
-
-    /* FIELD */
-    .sarpras-row {
-        display: flex;
-        align-items: center;
-        /* biar sejajar isi form kanan dan kiri */
-        margin-bottom: 8px;
-    }
-
-    .sarpras-title {
-        font-size: 18px;
-        font-weight: 700;
-        text-align: center;
-    }
-
-    .sarpras-subtitle {
-        text-align: center;
-        margin-bottom: 10px;
-        font-weight: 600;
-    }
-
-    .sarpras-label {
-        width: 130px;
-        font-weight: bold;
-    }
-
-    /* GARIS INPUT */
-    .sarpras-line {
-        flex: 1;
-        border-bottom: 1px solid black;
-        min-height: 20px;
-        padding-left: 5px;
-        /* Jarak Teks */
-    }
-
-    /* BOX */
-    .sarpras-box {
-        border: 1px solid black;
-        min-height: 90px;
-        padding: 10px 12px;
-        /* agar teks tidak nempel kiri */
-        margin-top: 5px;
-        margin-bottom: 12px;
-    }
-
-    /* TTD */
-    .sarpras-ttd {
-        display: flex;
-        justify-content: space-between;
-        text-align: center;
-        font-size: 12px;
-        margin-top: 15px;
-    }
-
-    .sarpras-form hr {
-        border: none;
-        border-top: 2px dashed black;
-        margin: 15px 0;
-    }
-
-    /* Rencana Tindak Lanjut */
-    .sarpras-rtl {
-        margin-top: 15px;
-    }
-
-    .sarpras-rtl-row {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 5px;
-    }
-
-    .caKaki {
-        margin-top: 10px;
-        font-size: 12px;
-        font-weight: bold;
-    }
-
-    .modal-content {
-        position: relative;
-    }
-
-    .close {
-        position: absolute;
-        top: 10px;
-        right: 15px;
-        width: 35px;
-        height: 35px;
-        font-size: 22px;
-        font-weight: bold;
-
-        color: black;
-        background: transparent;
-        border: none;
-        border-radius: 50%;
-
-        cursor: pointer;
-        z-index: 999;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        transition: all 0.2s ease;
-    }
-
-    .close:hover {
-        background: #e81123;
-        /* merah khas tombol close */
-        color: white;
-    }
-
-    /* PRINT */
-    @media print {
-        @page {
-            size: A4 landscape;
-            margin: 10mm;
+        /* Style global (font, ukuran, warna, garis) */
+        .sarpras-form {
+            width: 100%;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: black;
+            line-height: 1.5;
         }
 
-        html,
-        body {
-            width: 297mm;
-            height: 210mm;
-            overflow: hidden;
-        }
-
+        /* WRAPPER 2 KOLOM */
         .print-wrapper {
-            width: 297mm;
-            height: 200mm;
-            /* jangan 210, kasih margin aman */
             display: flex;
-            gap: 10px;
-            margin: auto;
+            gap: 20px;
+            align-items: stretch;
         }
 
+        /* KOLOM KIRI & KANAN */
         .print-col {
             width: 50%;
-            height: 100%;
-            padding: 12px;
+            padding: 20px;
             border: 1px solid black;
+            /* kotak tipis muncul */
             box-sizing: border-box;
-            overflow: hidden;
-        }
-
-        .sarpras-form {
-            height: 100%;
             display: flex;
-            flex-direction: column;
+        }
+
+        /* FIELD */
+        .sarpras-row {
+            display: flex;
+            align-items: center;
+            /* biar sejajar isi form kanan dan kiri */
+            margin-bottom: 8px;
+        }
+
+        .sarpras-title {
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .sarpras-subtitle {
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .sarpras-label {
+            width: 130px;
+            font-weight: bold;
+        }
+
+        /* GARIS INPUT */
+        .sarpras-line {
+            flex: 1;
+            border-bottom: 1px solid black;
+            min-height: 20px;
+            padding-left: 5px;
+            /* Jarak Teks */
+        }
+
+        /* BOX */
+        .sarpras-box {
+            border: 1px solid black;
+            min-height: 90px;
+            padding: 10px 12px;
+            /* agar teks tidak nempel kiri */
+            margin-top: 5px;
+            margin-bottom: 12px;
+        }
+
+        /* TTD */
+        .sarpras-ttd {
+            display: flex;
             justify-content: space-between;
+            text-align: center;
+            font-size: 12px;
+            margin-top: 15px;
         }
 
-        button,
-        .modal-header,
-        .close {
-            display: none !important;
+        .sarpras-form hr {
+            border: none;
+            border-top: 2px dashed black;
+            margin: 15px 0;
         }
 
-        .close-btn {
-            display: none !important;
+        /* Rencana Tindak Lanjut */
+        .sarpras-rtl {
+            margin-top: 15px;
         }
 
-        .modal,
-        .modal-dialog,
+        .sarpras-rtl-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .caKaki {
+            margin-top: 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
         .modal-content {
-            all: unset;
+            position: relative;
         }
-    }
-</style>
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            font-size: 22px;
+            font-weight: bold;
+
+            color: black;
+            background: transparent;
+            border: none;
+            border-radius: 50%;
+
+            cursor: pointer;
+            z-index: 999;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            transition: all 0.2s ease;
+        }
+
+        .close:hover {
+            background: #e81123;
+            /* merah khas tombol close */
+            color: white;
+        }
+
+        /* PRINT */
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 10mm;
+            }
+
+            html,
+            body {
+                width: 297mm;
+                height: 210mm;
+                overflow: hidden;
+            }
+
+            .print-wrapper {
+                width: 297mm;
+                height: 200mm;
+                /* jangan 210, kasih margin aman */
+                display: flex;
+                gap: 10px;
+                margin: auto;
+            }
+
+            .print-col {
+                width: 50%;
+                height: 100%;
+                padding: 12px;
+                border: 1px solid black;
+                box-sizing: border-box;
+                overflow: hidden;
+            }
+
+            .sarpras-form {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+            button,
+            .modal-header,
+            .close {
+                display: none !important;
+            }
+
+            .close-btn {
+                display: none !important;
+            }
+
+            .modal,
+            .modal-dialog,
+            .modal-content {
+                all: unset;
+            }
+        }
+    </style>
 
     <div id="content-wrapper" class="d-flex flex-column">
 
@@ -629,304 +629,344 @@
 
         function loadDetailLay(layID) {
 
+            console.log("DETAIL ID:", layID);
+
             $.ajax({
 
-                url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + layID,
+                    url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + layID,
 
-                type: "GET",
+                    type: "GET",
 
-                dataType: "JSON",
+                    dataType: "json",
 
-                success: function(data) {
+                    success: function(data) {
 
-                    var tanggal_db = new Date(data.layTanggal);
+                        console.log("DETAIL DATA:");
+                        console.log(data);
 
-                    var options = {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    };
+                        // ======================
+                        // FORMAT TANGGAL
+                        // ======================
 
-                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
+                        let tanggal_benar = '-';
 
-                    $("#m_layID").text(data.layID);
+                        if (data.layTanggal) {
 
-                    $("#m_layTanggal").text(tanggal_benar);
+                            let tanggal_db = new Date(data.layTanggal);
 
-                    $("#m_userNama").text(data.userNama);
+                            tanggal_benar = tanggal_db.toLocaleDateString('id-ID', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            });
 
-                    $("#m_layHal").text(data.layHal);
+                        }
 
-                    $("#m_layStatus").html(
+                        // ======================
+                        // SET DATA MODAL
+                        // ======================
 
-                        data.layStatus === 'N' ?
-                        '<span class="badge badge-success">OPEN</span>' :
-                        '<span class="badge badge-secondary">CLOSED</span>'
+                        $("#m_layID").text(data.layID || '-');
 
-                    );
+                        $("#m_layTanggal").text(tanggal_benar);
 
-                    $('#m_layDiskripsi').html(data.layDiskripsi);
+                        $("#m_userNama").text(data.userNama || '-');
 
-                    $("#m_penanggungJawab").html(
-                        data.penanggungJawab ?
-                        data.penanggungJawab :
-                        '<span class="text-muted">Belum ditentukan</span>'
-                    );
+                        $("#m_layHal").text(data.layHal || '-');
 
-                    // =========================
-                    // ADMIN PETUGAS
-                    // =========================
+                        $("#m_layDiskripsi").text(data.layDiskripsi || '-');
 
-                    if (admin == 'Y') {
+                        // STATUS
 
-                        let petugasDB = data.petugas || [];
+                        if (data.layStatus == 'N') {
 
-                        $('select[name="petugas[]"]').each(function(index) {
+                            $("#m_layStatus").html(
+                                '<span class="badge badge-success">OPEN</span>'
+                            );
 
-                            let select = $(this);
+                        } else {
 
-                            if (petugasDB[index]) {
+                            $("#m_layStatus").html(
+                                '<span class="badge badge-secondary">CLOSED</span>'
+                            );
 
-                                select.val(petugasDB[index]);
+                        }
 
-                                select.attr('disabled', true);
+                        // PENANGGUNG JAWAB
 
-                            } else {
+                        $("#m_penanggungJawab").html(
 
-                                select.val('');
+                            data.penanggungJawab ?
 
-                                select.prop('disabled', false);
+                            data.penanggungJawab :
+
+                            '<span class="text-muted">Belum ditentukan</span>'
+
+                        );
+
+                        // ======================
+                        // PETUGAS ADMIN
+                        // ======================
+
+                        if (admin == 'Y') {
+
+                            let petugasDB = data.petugas || [];
+
+                            $('select[name="petugas[]"]').each(function(index) {
+
+                                    let select = $(this);
+
+                                    if (petugasDB[index]) {
+
+                                        select.val(petugasDB[index]);
+
+                                        select.prop('disabled', true);
+
+                                    } else {
+
+                                        select.val('');
+
+                                        select.prop('disabled', false);
+
+                                        }
+
+                                    });
+
+                                preventDuplicatePetugas();
 
                             }
 
-                        });
+                        },
 
-                        preventDuplicatePetugas();
+                        error: function(xhr, status, error) {
 
-                    }
+                            console.log("ERROR DETAIL:");
+                            console.log(xhr.responseText);
 
-                }
+                            alert("Gagal mengambil detail tiket");
 
-            });
-
-        }
-
-        // =========================
-        // LOAD PETUGAS
-        // =========================
-
-        function loadPetugas(callback) {
-
-            $.ajax({
-
-                url: "<?= base_url('Select/get_petugas') ?>",
-
-                method: "GET",
-
-                dataType: "JSON",
-
-                success: function(data) {
-
-                    $('select[name="petugas[]"]').each(function() {
-
-                        var select = $(this);
-
-                        select.empty();
-
-                        select.append('<option value="">-- Pilih Petugas --</option>');
-
-                        $.each(data, function(i, p) {
-
-                            select.append(
-                                '<option value="' + p.pegNoreg + '">' + p.pegNama + '</option>'
-                            );
-
-                        });
+                        }
 
                     });
 
-                    if (callback) callback();
+            }
 
-                }
+            // =========================
+            // LOAD PETUGAS
+            // =========================
 
-            });
+            function loadPetugas(callback) {
 
-        }
+                $.ajax({
 
-        // =========================
-        // DUPLIKAT PETUGAS
-        // =========================
+                    url: "<?= base_url('Select/get_petugas') ?>",
 
-        function preventDuplicatePetugas() {
+                    method: "GET",
 
-            let selectedValues = [];
+                    dataType: "JSON",
 
-            $('select[name="petugas[]"]').each(function() {
+                    success: function(data) {
 
-                let val = $(this).val();
+                        $('select[name="petugas[]"]').each(function() {
 
-                if (val !== "") {
+                            var select = $(this);
 
-                    selectedValues.push(val);
+                            select.empty();
 
-                }
+                            select.append('<option value="">-- Pilih Petugas --</option>');
 
-            });
+                            $.each(data, function(i, p) {
 
-            $('select[name="petugas[]"] option').prop('disabled', false);
+                                select.append(
+                                    '<option value="' + p.pegNoreg + '">' + p.pegNama + '</option>'
+                                );
 
-            $('select[name="petugas[]"]').each(function() {
+                            });
 
-                let currentSelect = $(this);
+                        });
 
-                let currentVal = currentSelect.val();
-
-                currentSelect.find('option').each(function() {
-
-                    let optionVal = $(this).val();
-
-                    if (selectedValues.includes(optionVal) && optionVal !== currentVal) {
-
-                        $(this).prop('disabled', true);
+                        if (callback) callback();
 
                     }
 
                 });
 
-            });
+            }
 
-        }
+            // =========================
+            // DUPLIKAT PETUGAS
+            // =========================
 
-        $(document).on('change', 'select[name="petugas[]"]', function() {
+            function preventDuplicatePetugas() {
 
-            preventDuplicatePetugas();
+                let selectedValues = [];
 
-        });
+                $('select[name="petugas[]"]').each(function() {
 
-        // =========================
-        // SIMPAN PETUGAS
-        // =========================
+                    let val = $(this).val();
 
-        function simpanPetugas() {
+                    if (val !== "") {
 
-            var petugas = [];
+                        selectedValues.push(val);
 
-            $('select[name="petugas[]"]').each(function() {
+                    }
 
-                if ($(this).val() != '') {
+                });
 
-                    petugas.push($(this).val());
+                $('select[name="petugas[]"] option').prop('disabled', false);
 
-                }
+                $('select[name="petugas[]"]').each(function() {
 
-            });
+                    let currentSelect = $(this);
 
-            $.ajax({
+                    let currentVal = currentSelect.val();
 
-                url: "<?= base_url('Insert/simpan_petugas') ?>",
+                    currentSelect.find('option').each(function() {
 
-                method: "POST",
+                        let optionVal = $(this).val();
 
-                data: {
+                        if (selectedValues.includes(optionVal) && optionVal !== currentVal) {
 
-                    layID: $('#m_layID').text(),
+                            $(this).prop('disabled', true);
 
-                    petugas: petugas
+                        }
 
-                },
+                    });
 
-                success: function(res) {
-
-                    alert("Pilihan Petugas Berhasil disimpan!");
-
-                    $('#modalDetail').modal('hide');
-
-                    getTiket_Sarpras();
-
-                }
-
-            });
-
-        }
-
-        function konfirmasiSimpan() {
-
-            if (confirm("Apakah Anda yakin ingin menyimpan perubahan ini?")) {
-
-                simpanPetugas();
+                });
 
             }
 
-        }
+            $(document).on('change', 'select[name="petugas[]"]', function() {
 
-        function loadFormSarpras(layID) {
+                preventDuplicatePetugas();
 
-            $.ajax({
-                url: "<?= base_url('Select/form_sarpras/') ?>" + layID,
-                type: "GET",
-                dataType: "JSON",
-                success: function(data) {
-
-                    var tanggal_db = new Date(data.layTanggal);
-                    var options = {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    };
-                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
-
-                    var raw = data.layTarget.split(' ')[0]; // ambil bagian tanggal saja (sebelum spasi)
-                    var tanggal_db = new Date(raw);
-
-                    var tgl_targetIdn = tanggal_db.toLocaleDateString('id-ID', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    });
-
-                    $("#m_kepada, #m_kepada2").text(data.penanggungJawab);
-                    $("#m_dari, #m_dari2").text(data.userNama);
-                    $("#m_tanggal, #m_tanggal2").text(tanggal_benar);
-                    $("#m_hal, #m_hal2").text(data.layHal);
-                    $("#m_isi, #m_isi2").text(data.layDiskripsi);
-                    $("#m_target, #m_target2").text(tgl_targetIdn);
-                    $("#m_pic, #m_pic2").text(data.penanggungJawab);
-                }
-            });
-        }
-
-        function printFormSarpras() {
-            // ambil elemen modal form sarpras yang sudah diisi datanya
-            var element = document.querySelector("#modalFormSarpras .print-wrapper").cloneNode(true);
-
-            // hapus tombol
-            element.querySelectorAll("button").forEach(btn => btn.remove());
-
-            // hapus style modal bootstrap
-            element.querySelectorAll('.modal-content').forEach(el => {
-                el.style.boxShadow = 'none';
-                el.style.border = 'none';
             });
 
-            var no_layanan = document.getElementById("m_layID").textContent.trim();
-            var opt = {
-                margin: 0.3,
-                filename: 'SPU-ADM-36 FORM PERMOHONAN LAYANAN SARPRAS - ' + no_layanan + '.pdf',
-                image: {
-                    type: 'jpeg',
-                    quality: 1
-                },
-                html2canvas: {
-                    scale: 2
-                },
-                jsPDF: {
-                    unit: 'mm',
-                    format: 'a4',
-                    orientation: 'landscape' // gunakan landscape untuk kertas A4 horizontal
+            // =========================
+            // SIMPAN PETUGAS
+            // =========================
+
+            function simpanPetugas() {
+
+                var petugas = [];
+
+                $('select[name="petugas[]"]').each(function() {
+
+                    if ($(this).val() != '') {
+
+                        petugas.push($(this).val());
+
+                    }
+
+                });
+
+                $.ajax({
+
+                    url: "<?= base_url('Insert/simpan_petugas') ?>",
+
+                    method: "POST",
+
+                    data: {
+
+                        layID: $('#m_layID').text(),
+
+                        petugas: petugas
+
+                    },
+
+                    success: function(res) {
+
+                        alert("Pilihan Petugas Berhasil disimpan!");
+
+                        $('#modalDetail').modal('hide');
+
+                        getTiket_Sarpras();
+
+                    }
+
+                });
+
+            }
+
+            function konfirmasiSimpan() {
+
+                if (confirm("Apakah Anda yakin ingin menyimpan perubahan ini?")) {
+
+                    simpanPetugas();
+
                 }
-            };
-            html2pdf().set(opt).from(element).save();
-        }
+
+            }
+
+            function loadFormSarpras(layID) {
+
+                $.ajax({
+                    url: "<?= base_url('Select/form_sarpras/') ?>" + layID,
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function(data) {
+
+                        var tanggal_db = new Date(data.layTanggal);
+                        var options = {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        };
+                        var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
+
+                        var raw = data.layTarget.split(' ')[0]; // ambil bagian tanggal saja (sebelum spasi)
+                        var tanggal_db = new Date(raw);
+
+                        var tgl_targetIdn = tanggal_db.toLocaleDateString('id-ID', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+
+                        $("#m_kepada, #m_kepada2").text(data.penanggungJawab);
+                        $("#m_dari, #m_dari2").text(data.userNama);
+                        $("#m_tanggal, #m_tanggal2").text(tanggal_benar);
+                        $("#m_hal, #m_hal2").text(data.layHal);
+                        $("#m_isi, #m_isi2").text(data.layDiskripsi);
+                        $("#m_target, #m_target2").text(tgl_targetIdn);
+                        $("#m_pic, #m_pic2").text(data.penanggungJawab);
+                    }
+                });
+            }
+
+            function printFormSarpras() {
+                // ambil elemen modal form sarpras yang sudah diisi datanya
+                var element = document.querySelector("#modalFormSarpras .print-wrapper").cloneNode(true);
+
+                // hapus tombol
+                element.querySelectorAll("button").forEach(btn => btn.remove());
+
+                // hapus style modal bootstrap
+                element.querySelectorAll('.modal-content').forEach(el => {
+                    el.style.boxShadow = 'none';
+                    el.style.border = 'none';
+                });
+
+                var no_layanan = document.getElementById("m_layID").textContent.trim();
+                var opt = {
+                    margin: 0.3,
+                    filename: 'SPU-ADM-36 FORM PERMOHONAN LAYANAN SARPRAS - ' + no_layanan + '.pdf',
+                    image: {
+                        type: 'jpeg',
+                        quality: 1
+                    },
+                    html2canvas: {
+                        scale: 2
+                    },
+                    jsPDF: {
+                        unit: 'mm',
+                        format: 'a4',
+                        orientation: 'landscape' // gunakan landscape untuk kertas A4 horizontal
+                    }
+                };
+                html2pdf().set(opt).from(element).save();
+            }
     </script>
     <!-- MODAL DETAIL -->
     <div class="modal fade" id="modalDetail" tabindex="-1">
@@ -1279,11 +1319,11 @@
 
                                 <div class="sarpras-row">
                                     <div class="sarpras-label">Hal</div>
-                                    <div class="sarpras-line" id="m_hal"></div>
+                                    <div class="sarpras-line" id="m_hal2"></div>
                                 </div>
 
                                 <b>I. Isi Permohonan</b>
-                                <div class="sarpras-box" id="m_isi"></div>
+                                <div class="sarpras-box" id="m_isi2"></div>
 
                                 <div class="sarpras-row">
                                     <div class="sarpras-label">Target</div>
