@@ -72,11 +72,11 @@ class Select extends CI_Controller
         ]);
     }
 
-    public function tiket_sim() // Function untuk menampilkan data dari tabel tb_tiket ke halaman tiket_sim.php
-    {
-        $data = $this->Model->tiket_sim()->result_array(); // buka class tiket_sim di Model
-        echo json_encode($data);
-    }
+    // public function tiket_sim() // Function untuk menampilkan data dari tabel tb_tiket ke halaman tiket_sim.php
+    // {
+    //     $data = $this->Model->tiket_sim()->result_array(); // buka class tiket_sim di Model
+    //     echo json_encode($data);
+    // }
 
     public function tiket_sarpras()
     {
@@ -84,9 +84,9 @@ class Select extends CI_Controller
         echo json_encode($data);
     }
 
-    public function admin_sim() // Function untuk menampilkan data dari tabel tb_tiket ke halaman tiket_sarpras.php
+    public function tiket_sim() // Function untuk menampilkan data dari tabel tb_tiket ke halaman admin_sim.php
     {
-        $data = $this->Model->admin_sim()->result_array(); // buka class admin_sim di Model
+        $data = $this->Model->tiket_sim()->result_array(); // buka class admin_sim di Model
         echo json_encode($data);
     }
     public function admin_sarpras() // Function untuk menampilkan data dari tabel tb_tiket ke halaman tiket_sarpras.php
@@ -118,7 +118,7 @@ class Select extends CI_Controller
         echo json_encode($data);
     }
 
-    public function detail_tiket($tikNomor = null)
+    public function detail_tiket_sim($tikNomor = null)
     {
         $this->db->select("
         t.tikNomor,
@@ -175,7 +175,6 @@ class Select extends CI_Controller
         $this->db->where('layID', $tikNomor);
 
         $data = $this->db->get()->row_array();
-        $data['layTindakan'] = strip_tags($data['layTindakan']); // Menghapus tag HTML dari layTindakan
 
         $data['petugas'] = [
             $data['layPetugas1'],

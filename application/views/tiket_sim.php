@@ -3,135 +3,98 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 if (!$this->session->userdata('helpdesk_userId')) {
     $this->session->set_flashdata('type', 'alert-danger');
-    $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
+    $this->session->set_flashdata(
+        'pesan',
+        '<strong>Error!</strong> Anda harus login terlebih dahulu'
+    );
+
     redirect();
     exit;
 }
 
-$role = $this->session->userdata('role');
+// SESSION
+$admin = $this->session->userdata('admin');
+$userId = $this->session->userdata('helpdesk_userId');
 ?>
+<!-- untuk daftar menu dst, cek header.php-->
 
 <div id="content-wrapper" class="d-flex flex-column">
 
     <div id="content">
 
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
             <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                 <i class="fa fa-bars"></i>
             </button>
 
             <ul class="navbar-nav ml-auto">
-                <img src="<?= base_url('img/kariban.png') ?>">
+                <img src="<?= base_url('img/kanisius.png') ?>">
             </ul>
-
         </nav>
 
         <div class="container-fluid">
 
-            <!-- JUDUL -->
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-
-                <h1 class="h3 mb-0 text-gray-800">
-
-                    <?= ($role == 'admin') ? 'Halaman Tiket SIM' : 'List Semua Kerusakan SIM'; ?>
-
-                </h1>
-
+                <h1 class="h3 mb-0 text-gray-800">List Semua Kerusakan SIM</h1>
             </div>
 
-            <!-- ALERT -->
             <div class="form-group row">
-
                 <div class="col-sm-12">
-
                     <?php if (isset($_SESSION["pesan"])) { ?>
-
                         <div class="alert <?= $_SESSION['type'] ?> alert-dismissible">
-
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-
                             <?= $_SESSION['pesan'] ?>
-
                         </div>
-
                     <?php unset($_SESSION['pesan']);
                     } ?>
-
                 </div>
-
             </div>
 
-            <!-- BUTTON TAMBAH -->
+            <!-- Button Tambah -->
             <div class="form-group row">
-
                 <div class="col-sm-2">
-
                     <a href="<?= base_url('Controller/tambah_tiket_sim') ?>" class="btn btn-primary">
-
                         <i class="fas fa-plus"></i> Tambah
-
                     </a>
-
                 </div>
-
             </div>
 
-            <!-- TABLE -->
             <div class="row">
-
                 <div class="col">
-
                     <table id="tabel" class="display nowrap" style="width:100%">
-
                         <thead style="color: black;">
-
                             <tr>
-
-                                <th>No</th>
+                                <th style="width:10px">No</th>
                                 <th>Tanggal</th>
                                 <th>Penginput</th>
                                 <th>Nama</th>
                                 <th>Ringkasan</th>
                                 <th>Status</th>
                                 <th>Detail</th>
-                                <?php if ($role != 'admin') { ?>
-                                    <th>Action</th>
+                                <?php if ($admin != 'Y') { ?>
+                                    <th>Status</th>
                                 <?php } ?>
                             </tr>
-
                         </thead>
-
-                        <tbody id="tbody" style="color:black;">
+                        <tbody id="tbody" name="tbody" style="color: black;">
 
                         </tbody>
-
                     </table>
-
                 </div>
-
             </div>
-
             <br>
-
         </div>
-
     </div>
 
-    <!-- FOOTER -->
     <footer class="sticky-footer bg-white">
-
         <div class="container my-auto">
-
             <div class="copyright text-center my-auto">
-
-                <span>© <?= date("Y"); ?> PT Kariban.</span>
-
+                <span>© <?php echo date("Y"); ?> PT Kanisius.</span>
             </div>
-
         </div>
-
     </footer>
+
+</div>
 
 </div>
 
@@ -139,54 +102,51 @@ $role = $this->session->userdata('role');
     <i class="fas fa-angle-up"></i>
 </a>
 
-<!-- JS -->
+<!-- Harus Menggunakan base_url karena asset dipanggil relatif terhadap URL aktif -->
 <script src="<?= base_url('vendor/jquery/jquery.min.js') ?>"></script>
 <script src="<?= base_url('vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
 <script src="<?= base_url('vendor/jquery-easing/jquery.easing.min.js') ?>"></script>
 <script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
 
-<!-- DATATABLE -->
-<link rel="stylesheet" href="<?= base_url('vendor/datatables/jquery.dataTables.min.css') ?>">
+<!-- DataTables -->
+<link rel="stylesheet" type="text/css" href="<?= base_url('vendor/datatables/jquery.dataTables.min.css') ?>">
+<script type="text/javascript" charset="utf8" src="<?= base_url('vendor/datatables/jquery.dataTables.min.js') ?>"></script>
+<script type="text/javascript" charset="utf8" src="<?= base_url('vendor/datatables/dataTables.select.min.js') ?>"></script>
 
-<script src="<?= base_url('vendor/datatables/jquery.dataTables.min.js') ?>"></script>
+<!-- CKEditor -->
+<script src="<?= base_url('vendor/ckeditor/ckeditor.js') ?>"></script>
+<script src="<?= base_url('vendor/ckeditor/translations/id.js') ?>"></script>
+
+<!-- xlsx -->
+<script type="text/javascript" src="<?= base_url('vendor/xlsx/xlsx.fix.js') ?>"></script>
 
 <script>
-    // Menggunakan Javascript dan jQuery
-    // Bisa cek untuk contoh membuat form: https://getbootstrap.com/docs/4.0/components/forms/
+    // gunakan Javascript dan jQuery
+    // bisa cek untuk contoh membuat form: https://getbootstrap.com/docs/4.0/components/forms/
 
     var table;
 
-    var role = "<?= $role ?>";
-
     $(document).ready(function() {
-        $('#menuTiket').trigger('click');
+        $('#admin').trigger('onclick');
         table = $('#tabel').DataTable({ //https://datatables.net/reference/option/
             "scrollX": true,
-            "scrollY": "400px",
+            "scrollY": "400px", // Membuat tabel bisa discroll vertikal dengan tinggi 400px
             "select": true,
             "bSort": false
-
         });
-
-        getTiket_SIM();
-
+        getTiket_SIM(); // Memanggil function get
     });
 
-    // Menggunakan AJAX untuk membuat tabel dari data tabel
+    // menggunakan AJAX untuk membuat tabel dari data tabel
     // AJAX (View) -> Controller -> Model -> dapat hasil
     function getTiket_SIM() {
 
         $.ajax({
-
             url: "<?php echo base_url('Select/tiket_sim?status=' . $this->input->get('status')) ?>",
-
             method: "POST",
-
             dataType: "JSON",
 
             success: function(data) {
-
-                console.log(data);
 
                 table.clear();
 
@@ -195,11 +155,9 @@ $role = $this->session->userdata('role');
                     var tanggal_db = new Date(data[i].tikTanggal);
 
                     var options = {
-
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric'
-
                     };
 
                     var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
@@ -207,35 +165,36 @@ $role = $this->session->userdata('role');
                     // STATUS
                     var statusBtn = '';
 
-                    if (data[i].tikStatus == 'N') {
+                    if (data[i].tikStatus == 'N') { // Jika status tiket 'N' (OPEN) maka tampilkan tombol OPEN, jika tidak tampilkan tombol CLOSED
 
-                        statusBtn = '<span class="badge badge-success">OPEN</span>';
+                        statusBtn =
+                            '<button class="btn btn-success btn-sm" disabled>OPEN</button>';
 
                     } else {
 
-                        statusBtn = '<span class="badge badge-secondary">CLOSED</span>';
-
+                        statusBtn =
+                            '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>';
                     }
 
-                    // DETAIL BUTTON
+                    // DETAIL
                     var detailBtn =
                         '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
                         data[i].tikNomor +
                         '" data-toggle="modal" data-target="#modalDetail">Detail</button>';
 
-                    // ACTION BUTTON
+                    // ACTION USER
                     var actionBtn = '';
 
-                    // hanya untuk USER BIASA
-                    if (role != 'admin') {
+                    // HANYA USER BIASA
+                    if ("<?= $admin ?>" != 'Y') {
 
-                        // tiket masih OPEN
+                        // Tiket OPEN
                         if (data[i].tikStatus == 'N') {
 
-                            // hanya pemilik tiket
-                            if (data[i].tikUserID == "<?= $this->session->userdata('helpdesk_userId') ?>") {
+                            // Jika tiket milik user yang sedang login, maka bisa close tiket, jika tidak, tampilkan tombol disabled "Bukan Tiket Anda"
+                            if (data[i].tikUserID == "<?= $userId ?>") {
 
-                                // operator & tindakan sudah diisi admin
+                                // Validasi apakah operator sudah dipilih dan tindakan sudah diisi sebelum bisa close tiket, jika belum, tampilkan tombol disabled "Menunggu Admin"
                                 if (
                                     data[i].tikOperator &&
                                     data[i].tikOperator.trim() != '' &&
@@ -246,35 +205,31 @@ $role = $this->session->userdata('role');
                                     actionBtn =
                                         '<button class="btn btn-success btn-sm statusBtn" data-id="' +
                                         data[i].tikNomor +
-                                        '">Close</button>';
+                                        '">OPEN</button>';
 
-                                } else {
+                                } else { // Jika operator belum dipilih atau tindakan belum diisi, maka tampilkan tombol disabled "Menunggu Admin"
 
                                     actionBtn =
                                         '<button class="btn btn-warning btn-sm" disabled>Menunggu Admin</button>';
                                 }
 
-                            } else {
+                            } else { // Jika tiket bukan milik user yang sedang login, maka tampilkan tombol disabled "Bukan Tiket Anda"
 
                                 actionBtn =
                                     '<button class="btn btn-secondary btn-sm" disabled>Bukan Tiket Anda</button>';
                             }
 
-                        }
-
-                        // tiket CLOSED
-                        else {
+                        } else { // Tiket CLOSED
 
                             actionBtn =
                                 '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>';
                         }
                     }
 
-                    // Jika admin hanya tampilkan nomor, tanggal, penginput, nama, ringkasan, status, dan detail
-                    if (role == 'admin') {
+                    // Jika admin, tidak perlu tampilkan tombol action, karena admin tidak bisa close tiket, cukup tampilkan status OPEN/CLOSED dan detail tiket
+                    if ("<?= $admin ?>" == 'Y') {
 
                         table.row.add([
-
                             data[i].tikNomor,
                             tanggal_benar,
                             data[i].tikUserID,
@@ -282,16 +237,14 @@ $role = $this->session->userdata('role');
                             data[i].tikRingkasan,
                             statusBtn,
                             detailBtn
-
                         ]);
 
                     }
 
-                    // Jika user biasa tampilkan nomor, tanggal, penginput, nama, ringkasan, status, detail, dan action
+                    // Jika user biasa, tampilkan tombol action sesuai dengan kondisi tiket dan kepemilikan tiket
                     else {
 
                         table.row.add([
-
                             data[i].tikNomor,
                             tanggal_benar,
                             data[i].tikUserID,
@@ -300,26 +253,69 @@ $role = $this->session->userdata('role');
                             statusBtn,
                             detailBtn,
                             actionBtn
-
                         ]);
 
                     }
+
                 }
 
                 table.draw();
 
             }
-
         });
-
     }
 
-    // DETAIL
-    $(document).on("click", ".detailBtn", function() {
+    $(document).on("click", ".detailBtn", function() { // Event listener untuk tombol detail
 
-        var tikNomor = $(this).data("id"); // Mengambil data-id dari tombol yang diklik, yaitu tikNomor
+        var tikNomor = $(this).data("id"); // mengambil data-id dari tombol yang diklik, yaitu tikNoGmor
 
-        loadDetailTik(tikNomor); // Mengambil detail tiket
+        loadDetailTik(tikNomor); // ambil detail tiket
+
+    });
+
+    $(document).on("click", ".statusBtn", function() {
+
+        var tikNomor = $(this).data("id");
+
+        // ambil data tiket untuk validasi sebelum close
+        $.ajax({
+            url: "<?= base_url('Select/detail_tiket_sim/') ?>" + tikNomor,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data) {
+
+                let operator = data.tikOperator;
+                let tindakan = data.tikTindakan;
+
+                // validasi operator dan tindakan sebelum close tiket
+                if (!operator || operator === "") {
+                    alert("❌ Tidak bisa menutup tiket!\nOperator belum dipilih.");
+                    return;
+                }
+
+                if (!tindakan || tindakan.trim() === "") {
+                    alert("❌ Tidak bisa menutup tiket!\nTindakan masih kosong.");
+                    return;
+                }
+
+                // konfirmasi sebelum close tiket
+                if (confirm("Apakah Anda yakin ingin menutup tiket ini?")) {
+
+                    $.ajax({
+                        url: "<?= base_url('Insert/close_tiket/') ?>" + tikNomor,
+                        type: "POST",
+                        success: function() {
+
+                            alert("Tiket berhasil ditutup!");
+                            getTiket_SIM();
+
+                        }
+                    });
+
+                }
+
+            }
+        });
 
     });
 
@@ -363,16 +359,12 @@ $role = $this->session->userdata('role');
         }
     }
 
-    function loadOperator(selected = '') {
+    function loadOperator(selected = '', callback = null) { // Function untuk load data operator ke select option, dengan parameter selected untuk menandai option mana yang dipilih, dan callback untuk menjalankan fungsi setelah load selesai
 
         $.ajax({
-
             url: "<?= base_url('Select/get_operator_sim') ?>",
-
             method: "GET",
-
             dataType: "JSON",
-
             success: function(data) {
 
                 let select = $('#tikOperator');
@@ -383,39 +375,33 @@ $role = $this->session->userdata('role');
 
                 $.each(data, function(i, op) {
 
+                    let selectedAttr = (op.pegNoreg == selected) ? 'selected' : '';
+
                     select.append(
-                        '<option value="' + op.pegNoreg + '">' +
+                        '<option value="' + op.pegNoreg + '" ' + selectedAttr + '>' +
                         op.pegNama +
                         '</option>'
                     );
 
                 });
 
-                // pilih operator setelah option selesai dibuat
-                select.val(selected);
-
+                // jalankan callback setelah selesai load
+                if (callback) {
+                    callback();
+                }
             }
-
         });
+
     }
 
     function loadDetailTik(tikNomor) {
 
         $.ajax({
-
-            url: "<?= base_url('Select/detail_tiket/') ?>" + tikNomor,
-
+            url: "<?= base_url('Select/detail_tiket_sim/') ?>" + tikNomor,
             type: "GET",
-
             dataType: "JSON",
-
             success: function(data) {
-
-                console.log(data);
-                console.log("ROLE :", role);
-
                 var tanggal_db = new Date(data.tikTanggal);
-
                 var options = {
                     year: 'numeric',
                     month: 'long',
@@ -424,33 +410,31 @@ $role = $this->session->userdata('role');
 
                 var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
-                // DATA UMUM
                 $("#m_tikNomor").text(data.tikNomor);
                 $("#m_tikTanggal").text(tanggal_benar);
                 $("#m_userNama").text(data.userNama);
                 $("#m_tikRingkasan").text(data.tikRingkasan);
-                $("#m_tikDeskripsi").html(data.tikDeskripsi);
 
-                // STATUS
-                $("#m_tikStatus").html(
-                    data.tikStatus == 'N' ?
+                $("#m_tikStatus").html( // Jika status tiket 'OPEN' maka tampilkan badge hijau (Open), jika tidak tampilkan badge abu-abu (CLOSED)
+                    data.tikStatus === 'OPEN' ?
                     '<span class="badge badge-success">OPEN</span>' :
                     '<span class="badge badge-secondary">CLOSED</span>'
                 );
 
-                // =========================
-                // ADMIN
-                // =========================
-                if (role === 'admin') {
+                $('#m_tikDeskripsi').html(data.tikDeskripsi);
 
-                    // tampilkan operator dropdown
+                // =======================
+                // ADMIN
+                // =======================
+                if ("<?= $admin ?>" == 'Y') {
+
+                    // Load operator & tindakan
                     loadOperator(data.tikOperator);
 
-                    // isi tindakan
                     $('#tikTindakan').val(data.tikTindakan ?? '');
 
-                    // OPEN
-                    if (data.tikStatus == 'N') {
+                    // Jika tiket masih OPEN
+                    if (data.tikStatus == 'OPEN') { // Jika status tiket OPEN, maka tampilkan tombol OPEN, jika tidak tampilkan tombol CLOSED
 
                         $('#tikOperator').prop('disabled', false);
 
@@ -460,7 +444,7 @@ $role = $this->session->userdata('role');
 
                     }
 
-                    // CLOSED
+                    // Jika tiket sudah CLOSED
                     else {
 
                         $('#tikOperator').prop('disabled', true);
@@ -468,57 +452,36 @@ $role = $this->session->userdata('role');
                         $('#tikTindakan').prop('readonly', true);
 
                         $('#btnSimpan').hide();
+
                     }
 
                 }
-
-                // =========================
+                // =======================
                 // USER
-                // =========================
+                // =======================
                 else {
 
-                    $('#m_tikOperator').html(data.operatorNama ?? '-');
+                    loadOperator(data.tikOperator);
 
-                    $('#m_tikTindakan').html(data.tikTindakan ?? '-');
+                    $('#tikOperator').prop('disabled', true);
+
+                    $('#tikTindakan').prop('readonly', true);
+
+                    $('#btnSimpan').hide();
+
+                    $('#tikTindakan').val(data.tikTindakan ?? '');
+
                 }
+
             }
-
         });
+
     }
-    // CLOSE TIKET ADMIN
-    $(document).on("click", ".statusBtn", function() {
-
-        var tikNomor = $(this).data("id");
-
-        if (confirm("Apakah yakin ingin menutup tiket ini?")) {
-
-            $.ajax({
-
-                url: "<?= base_url('Insert/close_tiket/') ?>" + tikNomor,
-
-                type: "POST",
-
-                success: function() {
-
-                    alert("Tiket berhasil ditutup!");
-
-                    getTiket_SIM();
-
-                }
-
-            });
-
-        }
-
-    });
 </script>
 
-<!-- MODAL -->
+<!-- Modal -->
 <div class="modal fade" id="modalDetail" tabindex="-1">
-
-    <!-- UKURAN DISAMAKAN DENGAN SARPRAS -->
     <div class="modal-dialog" style="max-width:65%; width:65%; margin:20px auto;">
-
         <div class="modal-content" style="border-radius:12px;">
 
             <!-- HEADER -->
@@ -654,89 +617,60 @@ $role = $this->session->userdata('role');
 
                     </div>
 
-                    <!-- OPERATOR -->
-                    <div class="form-group row mb-3">
-
+                    <!-- Operator -->
+                    <div class="form-group row align-items-center mb-3">
                         <label class="col-md-3 font-weight-bold text-md-right">
                             Operator
                         </label>
 
                         <div class="col-md-9">
-
-                            <?php if ($role == 'admin') { ?>
-
-                                <select id="tikOperator" class="form-control"></select>
-
-                            <?php } else { ?>
-
-                                <div id="m_tikOperator"
-                                    class="form-control d-flex align-items-center"
-                                    style="height:38px;font-size:14px;">
-                                </div>
-
-                            <?php } ?>
+                            <select name="tikOperator" id="tikOperator"
+                                class="form-control"
+                                style="height:36px;font-size:14px;">
+                                <option value="">-- Pilih Operator --</option>
+                            </select>
 
                         </div>
-
                     </div>
-
-                    <!-- TINDAKAN -->
-                    <div class="form-group row mb-3">
-
-                        <label class="col-md-3 font-weight-bold text-md-right pt-2">
-                            Tindakan
+                    <!-- Tindakan -->
+                    <div class="form-group row">
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4 pt-3">
+                            Tindakan <span class="text-danger">*</span>
                         </label>
 
                         <div class="col-md-9">
-
-                            <?php if ($role == 'admin') { ?>
-
-                                <textarea id="tikTindakan"
-                                    class="form-control"
-                                    rows="5"></textarea>
-
-                            <?php } else { ?>
-
-                                <div id="m_tikTindakan"
-                                    class="form-control"
-                                    style="font-size:14px;padding:10px;min-height:120px;">
-                                </div>
-
-                            <?php } ?>
-
+                            <textarea name="tikTindakan" id="tikTindakan"
+                                class="form-control"
+                                style="font-size:14px;padding:20px;min-height:200px;"
+                                placeholder="Masukkan tindakan yang ingin dilakukan"
+                                required></textarea>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- FOOTER BUTTON -->
+            <div class="modal-footer px-4 py-3 d-flex justify-content-between">
 
-            <!-- FOOTER -->
-            <div class="modal-footer justify-content-center py-2">
-
+                <!-- Tutup-->
                 <button type="button"
                     class="btn btn-danger"
-                    style="font-size:14px;padding:6px 24px;"
+                    style="font-size:14px; padding:6px 24px;"
                     data-dismiss="modal">
                     Tutup
                 </button>
 
                 <!-- Simpan -->
-                <?php if ($role == 'admin') { ?>
-
-                    <button type="button"
-                        id="btnSimpan"
-                        class="btn btn-success"
-                        style="font-size:20px; padding:10px 40px;"
-                        onclick="konfirmasiSimpan()">
-                        Simpan
-                    </button>
-
-                <?php } ?>
+                <button type="button"
+                    id="btnSimpan"
+                    class="btn btn-success"
+                    style="font-size:14px; padding:6px 24px;"
+                    onclick="konfirmasiSimpan()">
+                    Simpan
+                </button>
 
             </div>
         </div>
-
     </div>
-
 </div>
 
 </body>

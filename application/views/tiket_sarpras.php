@@ -300,7 +300,7 @@
 
                                     <?php if ($admin == 'Y') { ?>
                                         <th>Form Sarpras</th>
-                                        <th>Action</th>
+                                        <th>Status</th>
                                     <?php } ?>
 
                                 </tr>
@@ -364,12 +364,6 @@
     <!-- library html2pdf -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-
-    <!-- DATATABLE -->
-    <link rel="stylesheet" href="<?= base_url('vendor/datatables/jquery.dataTables.min.css') ?>">
-
-    <script src="<?= base_url('vendor/datatables/jquery.dataTables.min.js') ?>"></script>
-
     <script>
         var table;
         var admin = "<?= $admin ?>";
@@ -398,8 +392,6 @@
             $.ajax({
 
                 url: "<?php echo base_url('Select/tiket_sarpras?status=' . $this->input->get('status')) ?>",
-
-                method: "POST",
 
                 dataType: "JSON",
 
@@ -575,6 +567,8 @@
 
             var nomor = $(this).data("id");
 
+            console.log("CLOSE TIKET :", nomor);
+
             $.ajax({
 
                 url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + nomor,
@@ -585,11 +579,29 @@
 
                 success: function(data) {
 
-                    let petugas = data.petugas || [];
+                    console.log("DETAIL CLOSE :", data);
 
-                    let petugasValid = petugas.filter(p => p && p !== "");
+                    let petugas = [];
 
-                    if (petugasValid.length === 0) {
+                    // HANDLE ARRAY / STRING
+                    if (Array.isArray(data.petugas)) {
+
+                        petugas = data.petugas;
+
+                    } else if (typeof data.petugas === 'string' && data.petugas.trim() !== '') {
+
+                        petugas = data.petugas.split(',');
+
+                    }
+
+                    let petugasValid = petugas.filter(function(p) {
+
+                        return p != null && p.toString().trim() !== "";
+
+                    });
+
+                    // VALIDASI
+                    if (petugasValid.length <= 0) {
 
                         alert("❌ Tidak bisa menutup layanan keluhan!\nSilakan pilih penanggung jawab terlebih dahulu.");
 
@@ -605,11 +617,21 @@
 
                             type: "POST",
 
-                            success: function() {
+                            success: function(res) {
+
+                                console.log(res);
 
                                 alert("Tiket berhasil ditutup!");
 
                                 getTiket_Sarpras();
+
+                            },
+
+                            error: function(xhr) {
+
+                                console.log(xhr.responseText);
+
+                                alert("Gagal menutup tiket!");
 
                             }
 
@@ -617,12 +639,19 @@
 
                     }
 
+                },
+
+                error: function(xhr) {
+
+                    console.log(xhr.responseText);
+
+                    alert("Gagal mengambil detail tiket!");
+
                 }
 
             });
 
         });
-
         // =========================
         // LOAD DETAIL
         // =========================
@@ -641,8 +670,17 @@
 
                     success: function(data) {
 
-                        console.log("DETAIL DATA:");
-                        console.log(data);
+                    console.log("DETAIL DATA :", data);
+
+                    // CEK jika data kosong
+                    if (!data || data == null) {
+
+                        alert("Data tiket tidak ditemukan!");
+
+                        return;
+                    }
+
+                    var tanggal_db = new Date(data.layTanggal);
 
                         // ======================
                         // FORMAT TANGGAL
@@ -650,27 +688,24 @@
 
                         let tanggal_benar = '-';
 
-                        if (data.layTanggal) {
+                    $("#m_layID").text(data.layID || '-');
 
-                            let tanggal_db = new Date(data.layTanggal);
+                    $("#m_layTanggal").text(tanggal_benar || '-');
 
-                            tanggal_benar = tanggal_db.toLocaleDateString('id-ID', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric'
-                            });
+                    $("#m_userNama").text(data.userNama || '-');
 
-                        }
+                    $("#m_layHal").text(data.layHal || '-');
 
-                        // ======================
-                        // SET DATA MODAL
-                        // ======================
+                    // STATUS
+                    $("#m_layStatus").html(
 
-                        $("#m_layID").text(data.layID || '-');
+                        data.layStatus == 'N' ?
+                        '<span class="badge badge-success">OPEN</span>' :
+                        '<span class="badge badge-secondary">CLOSED</span>'
 
                         $("#m_layTanggal").text(tanggal_benar);
 
-                        $("#m_userNama").text(data.userNama || '-');
+                    $('#m_layDiskripsi').html(data.layDiskripsi || '-');
 
                         $("#m_layHal").text(data.layHal || '-');
 
@@ -692,7 +727,7 @@
 
                         }
 
-                        // PENANGGUNG JAWAB
+                                select.prop('disabled', true);
 
                         $("#m_penanggungJawab").html(
 
@@ -743,7 +778,15 @@
                             console.log("ERROR DETAIL:");
                             console.log(xhr.responseText);
 
-                            alert("Gagal mengambil detail tiket");
+                },
+
+                error: function(xhr, status, error) {
+
+                    console.log(xhr.responseText);
+
+                    alert("Gagal mengambil detail tiket!");
+
+                }
 
                         }
 
@@ -841,6 +884,61 @@
 
                 preventDuplicatePetugas();
 
+            $.ajax({
+                url: "<?= base_url('Select/form_sarpras/') ?>" + layID,
+                type: "GET",
+                dataType: "JSON",
+                success: function(data) {
+
+                    var tanggal_db = new Date(data.layTanggal);
+                    var options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
+                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
+
+                    var raw = ''; // Default value jika layTarget kosong atau null
+
+                    if (data.layTarget) { // Cek apakah layTarget memiliki nilai
+                        raw = data.layTarget.split(' ')[0]; // Ambil bagian tanggal saja (sebelum spasi)
+                    }
+
+                    var tgl_targetIdn = '-';
+                    if (raw != '') {
+
+                        var tanggal_db = new Date(raw);
+
+                        tgl_targetIdn = tanggal_db.toLocaleDateString('id-ID', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+
+                    }
+
+                    $("#m_kepada, #m_kepada2").text(data.penanggungJawab);
+                    $("#m_dari, #m_dari2").text(data.userNama);
+                    $("#m_tanggal, #m_tanggal2").text(tanggal_benar);
+                    $("#m_hal, #m_hal2").text(data.layHal);
+                    $("#m_isi, #m_isi2").text(data.layDiskripsi);
+                    $("#m_target, #m_target2").text(tgl_targetIdn);
+                    $("#m_pic, #m_pic2").text(data.penanggungJawab);
+                }
+            });
+        }
+
+        function printFormSarpras() {
+            // ambil elemen modal form sarpras yang sudah diisi datanya
+            var element = document.querySelector("#modalFormSarpras .print-wrapper").cloneNode(true);
+
+            // hapus tombol
+            element.querySelectorAll("button").forEach(btn => btn.remove());
+
+            // hapus style modal bootstrap
+            element.querySelectorAll('.modal-content').forEach(el => {
+                el.style.boxShadow = 'none';
+                el.style.border = 'none';
             });
 
             // =========================
@@ -1291,7 +1389,6 @@
 
                         <!-- KOLOM KANAN (DUPLIKAT) -->
                         <div class="print-col">
-                            <!-- DUPLIKAT SAMA PERSIS -->
                             <div class="sarpras-form">
 
                                 <div class="sarpras-title">

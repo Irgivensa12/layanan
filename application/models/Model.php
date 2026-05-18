@@ -96,7 +96,7 @@ class model extends CI_Model
         $this->db->delete('buku');
     }
 
-    public function tiket_sim()
+   public function tiket_sim()
     {
         $admin = $this->session->userdata('admin');
         $user  = $this->session->userdata('helpdesk_userId');
