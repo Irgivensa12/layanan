@@ -63,7 +63,8 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
                 <!-- SIM OPEN -->
                 <div class="col-xl-4 col-md-6 mb-4">
                     <div class="card shadow h-100 py-2"
-                        style="border-left:4px solid #28a745;">
+                        onclick="window.location='<?= base_url('tiket_sim?status=open') ?>'"
+                        style="cursor:pointer; border-left:4px solid #28a745;">
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col mr-2">
@@ -87,6 +88,7 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
                 <!-- SIM CLOSE -->
                 <div class="col-xl-4 col-md-6 mb-4">
                     <div class="card shadow h-100 py-2"
+                        onclick="window.location='<?= base_url('tiket_sim?status=close') ?>'"
                         style="border-left:4px solid #8B4513;">
                         <div class="card-body">
                             <div class="row align-items-center">
@@ -141,6 +143,7 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
                 <!-- SARPRAS OPEN -->
                 <div class="col-xl-4 col-md-6 mb-4">
                     <div class="card shadow h-100 py-2"
+                        onclick="window.location='<?= base_url('tiket_sarpras?status=open') ?>'"
                         style="border-left:4px solid #28a745;">
                         <div class="card-body">
                             <div class="row align-items-center">
@@ -165,6 +168,7 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
                 <!-- SARPRAS CLOSE -->
                 <div class="col-xl-4 col-md-6 mb-4">
                     <div class="card shadow h-100 py-2"
+                        onclick="window.location='<?= base_url('tiket_sarpras?status=close') ?>'"
                         style="border-left:4px solid #8B4513;">
                         <div class="card-body">
                             <div class="row align-items-center">

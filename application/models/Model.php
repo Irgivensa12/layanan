@@ -96,47 +96,109 @@ class model extends CI_Model
         $this->db->delete('buku');
     }
 
-    public function tiket_sim()
+   public function tiket_sim()
     {
         $admin = $this->session->userdata('admin');
         $user  = $this->session->userdata('helpdesk_userId');
 
+        $status = $this->input->get('status');
+
+        // FILTER STATUS
+        $filterStatus = "";
+
+        if ($status == 'open') {
+
+            $filterStatus = " AND t.tikStatus='N' ";
+        } elseif ($status == 'close') {
+
+            $filterStatus = " AND t.tikStatus='Y' ";
+        }
+
+        // ADMIN
         if ($admin == 'Y') {
+
             $query = $this->db->query("
-            SELECT * FROM tb_tiket 
-            WHERE tikNomor IS NOT NULL AND tikNomor != ''
-            ORDER BY CAST(SUBSTRING(tikNomor, 4) AS UNSIGNED) DESC
+            SELECT 
+                t.*, 
+                u.userNama
+            FROM tb_tiket t
+            LEFT JOIN vUser u 
+                ON u.userId = t.tikUserID
+
+            WHERE t.tikNomor IS NOT NULL 
+            AND t.tikNomor != ''
+            $filterStatus
+
+            ORDER BY CAST(SUBSTRING(t.tikNomor, 4) AS UNSIGNED) ASC
         ");
         } else {
+
             $query = $this->db->query("
-            SELECT * FROM tb_tiket 
-            WHERE tikUserID='$user'
-            AND tikNomor IS NOT NULL AND tikNomor != ''
-            ORDER BY CAST(SUBSTRING(tikNomor, 4) AS UNSIGNED) DESC
+            SELECT 
+                t.*,
+                u.userNama
+            FROM tb_tiket t
+            LEFT JOIN vUser u 
+                ON u.userId = t.tikUserID
+
+            WHERE t.tikUserID='$user'
+            AND t.tikNomor IS NOT NULL 
+            AND t.tikNomor != ''
+            $filterStatus
+
+            ORDER BY CAST(SUBSTRING(t.tikNomor, 4) AS UNSIGNED) ASC
         ");
         }
 
         return $query;
     }
-
     public function tiket_sarpras()
     {
         $admin = $this->session->userdata('admin');
         $user  = $this->session->userdata('helpdesk_userId');
 
+        $status = $this->input->get('status');
+
+        // FILTER STATUS
+        $filterStatus = "";
+
+        if ($status == 'open') {
+
+            $filterStatus = " AND l.layStatus='N' ";
+        } elseif ($status == 'close') {
+
+            $filterStatus = " AND l.layStatus='Y' ";
+        }
+
+        // ADMIN
         if ($admin == 'Y') {
-            // admin lihat semua tiket
-            $query = $this->db->query("SELECT * FROM tb_layanan ORDER BY layStatus DESC, CAST(SUBSTRING(layID, 4) AS UNSIGNED) DESC");
+
+            $query = $this->db->query("
+            SELECT l.*, u.userNama
+            FROM tb_layanan l
+            LEFT JOIN vUser u ON u.userId = l.layUserID
+
+            WHERE 1=1
+            $filterStatus
+
+            ORDER BY l.layStatus DESC
+        ");
         } else {
-            // user hanya lihat tiket sendiri
-            $query = $this->db->query("SELECT * FROM tb_layanan 
-                                   WHERE layUserID='$user'
-                                   ORDER BY layTanggal DESC, CAST(SUBSTRING(layID, 4) AS UNSIGNED) DESC");
+
+            $query = $this->db->query("
+            SELECT l.*, u.userNama
+            FROM tb_layanan l
+            LEFT JOIN vUser u ON u.userId = l.layUserID
+
+            WHERE l.layUserID = '$user'
+            $filterStatus
+
+            ORDER BY l.layTanggal DESC
+        ");
         }
 
         return $query;
     }
-
     public function getTiket($role, $userID = null)
     {
         $this->db->select("

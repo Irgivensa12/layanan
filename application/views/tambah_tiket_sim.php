@@ -104,7 +104,6 @@ if (!$this->session->userdata('helpdesk_userId')) {
                         </div>
 
                     </div>
-
                     <!-- Ringkasan -->
                     <div class="form-group row mb-4 align-items-center">
 
