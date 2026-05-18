@@ -12,198 +12,198 @@
     ?>
 
     <style id="stylePrintSarpras">
-    /* Style global (font, ukuran, warna, garis) */
-    .sarpras-form {
-        width: 100%;
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-        color: black;
-        line-height: 1.5;
-    }
-
-    /* WRAPPER 2 KOLOM */
-    .print-wrapper {
-        display: flex;
-        gap: 20px;
-        align-items: stretch;
-    }
-
-    /* KOLOM KIRI & KANAN */
-    .print-col {
-        width: 50%;
-        padding: 20px;
-        border: 1px solid black;
-        /* kotak tipis muncul */
-        box-sizing: border-box;
-        display: flex;
-    }
-
-    /* FIELD */
-    .sarpras-row {
-        display: flex;
-        align-items: center;
-        /* biar sejajar isi form kanan dan kiri */
-        margin-bottom: 8px;
-    }
-
-    .sarpras-title {
-        font-size: 18px;
-        font-weight: 700;
-        text-align: center;
-    }
-
-    .sarpras-subtitle {
-        text-align: center;
-        margin-bottom: 10px;
-        font-weight: 600;
-    }
-
-    .sarpras-label {
-        width: 130px;
-        font-weight: bold;
-    }
-
-    /* GARIS INPUT */
-    .sarpras-line {
-        flex: 1;
-        border-bottom: 1px solid black;
-        min-height: 20px;
-        padding-left: 5px;
-        /* Jarak Teks */
-    }
-
-    /* BOX */
-    .sarpras-box {
-        border: 1px solid black;
-        min-height: 90px;
-        padding: 10px 12px;
-        /* agar teks tidak nempel kiri */
-        margin-top: 5px;
-        margin-bottom: 12px;
-    }
-
-    /* TTD */
-    .sarpras-ttd {
-        display: flex;
-        justify-content: space-between;
-        text-align: center;
-        font-size: 12px;
-        margin-top: 15px;
-    }
-
-    .sarpras-form hr {
-        border: none;
-        border-top: 2px dashed black;
-        margin: 15px 0;
-    }
-
-    /* Rencana Tindak Lanjut */
-    .sarpras-rtl {
-        margin-top: 15px;
-    }
-
-    .sarpras-rtl-row {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 5px;
-    }
-
-    .caKaki {
-        margin-top: 10px;
-        font-size: 12px;
-        font-weight: bold;
-    }
-
-    .modal-content {
-        position: relative;
-    }
-
-    .close {
-        position: absolute;
-        top: 10px;
-        right: 15px;
-        width: 35px;
-        height: 35px;
-        font-size: 22px;
-        font-weight: bold;
-
-        color: black;
-        background: transparent;
-        border: none;
-        border-radius: 50%;
-
-        cursor: pointer;
-        z-index: 999;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        transition: all 0.2s ease;
-    }
-
-    .close:hover {
-        background: #e81123;
-        /* merah khas tombol close */
-        color: white;
-    }
-
-    /* PRINT */
-    @media print {
-        @page {
-            size: A4 landscape;
-            margin: 10mm;
+        /* Style global (font, ukuran, warna, garis) */
+        .sarpras-form {
+            width: 100%;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: black;
+            line-height: 1.5;
         }
 
-        html,
-        body {
-            width: 297mm;
-            height: 210mm;
-            overflow: hidden;
-        }
-
+        /* WRAPPER 2 KOLOM */
         .print-wrapper {
-            width: 297mm;
-            height: 200mm;
-            /* jangan 210, kasih margin aman */
             display: flex;
-            gap: 10px;
-            margin: auto;
+            gap: 20px;
+            align-items: stretch;
         }
 
+        /* KOLOM KIRI & KANAN */
         .print-col {
             width: 50%;
-            height: 100%;
-            padding: 12px;
+            padding: 20px;
             border: 1px solid black;
+            /* kotak tipis muncul */
             box-sizing: border-box;
-            overflow: hidden;
-        }
-
-        .sarpras-form {
-            height: 100%;
             display: flex;
-            flex-direction: column;
+        }
+
+        /* FIELD */
+        .sarpras-row {
+            display: flex;
+            align-items: center;
+            /* biar sejajar isi form kanan dan kiri */
+            margin-bottom: 8px;
+        }
+
+        .sarpras-title {
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .sarpras-subtitle {
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .sarpras-label {
+            width: 130px;
+            font-weight: bold;
+        }
+
+        /* GARIS INPUT */
+        .sarpras-line {
+            flex: 1;
+            border-bottom: 1px solid black;
+            min-height: 20px;
+            padding-left: 5px;
+            /* Jarak Teks */
+        }
+
+        /* BOX */
+        .sarpras-box {
+            border: 1px solid black;
+            min-height: 90px;
+            padding: 10px 12px;
+            /* agar teks tidak nempel kiri */
+            margin-top: 5px;
+            margin-bottom: 12px;
+        }
+
+        /* TTD */
+        .sarpras-ttd {
+            display: flex;
             justify-content: space-between;
+            text-align: center;
+            font-size: 12px;
+            margin-top: 15px;
         }
 
-        button,
-        .modal-header,
-        .close {
-            display: none !important;
+        .sarpras-form hr {
+            border: none;
+            border-top: 2px dashed black;
+            margin: 15px 0;
         }
 
-        .close-btn {
-            display: none !important;
+        /* Rencana Tindak Lanjut */
+        .sarpras-rtl {
+            margin-top: 15px;
         }
 
-        .modal,
-        .modal-dialog,
+        .sarpras-rtl-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .caKaki {
+            margin-top: 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
         .modal-content {
-            all: unset;
+            position: relative;
         }
-    }
-</style>
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            font-size: 22px;
+            font-weight: bold;
+
+            color: black;
+            background: transparent;
+            border: none;
+            border-radius: 50%;
+
+            cursor: pointer;
+            z-index: 999;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            transition: all 0.2s ease;
+        }
+
+        .close:hover {
+            background: #e81123;
+            /* merah khas tombol close */
+            color: white;
+        }
+
+        /* PRINT */
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 10mm;
+            }
+
+            html,
+            body {
+                width: 297mm;
+                height: 210mm;
+                overflow: hidden;
+            }
+
+            .print-wrapper {
+                width: 297mm;
+                height: 200mm;
+                /* jangan 210, kasih margin aman */
+                display: flex;
+                gap: 10px;
+                margin: auto;
+            }
+
+            .print-col {
+                width: 50%;
+                height: 100%;
+                padding: 12px;
+                border: 1px solid black;
+                box-sizing: border-box;
+                overflow: hidden;
+            }
+
+            .sarpras-form {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+            button,
+            .modal-header,
+            .close {
+                display: none !important;
+            }
+
+            .close-btn {
+                display: none !important;
+            }
+
+            .modal,
+            .modal-dialog,
+            .modal-content {
+                all: unset;
+            }
+        }
+    </style>
 
     <div id="content-wrapper" class="d-flex flex-column">
 
@@ -216,7 +216,7 @@
                 </button>
 
                 <ul class="navbar-nav ml-auto">
-                    <img src="<?= base_url('img/kanisius.png') ?>">
+                    <img src="<?= base_url('img/kariban.png') ?>">
                 </ul>
 
             </nav>
@@ -330,7 +330,7 @@
 
                 <div class="copyright text-center my-auto">
 
-                    <span>© <?= date("Y"); ?> PT Kanisius.</span>
+                    <span>© <?= date("Y"); ?> PT Kariban.</span>
 
                 </div>
 
@@ -364,12 +364,6 @@
     <!-- library html2pdf -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-
-    <!-- DATATABLE -->
-    <link rel="stylesheet" href="<?= base_url('vendor/datatables/jquery.dataTables.min.css') ?>">
-
-    <script src="<?= base_url('vendor/datatables/jquery.dataTables.min.js') ?>"></script>
-
     <script>
         var table;
         var admin = "<?= $admin ?>";
@@ -397,7 +391,7 @@
 
             $.ajax({
 
-            url: "<?php echo base_url('Select/tiket_sarpras?status=' . $this->input->get('status')) ?>",
+                url: "<?php echo base_url('Select/tiket_sarpras?status=' . $this->input->get('status')) ?>",
 
                 dataType: "JSON",
 
@@ -573,6 +567,8 @@
 
             var nomor = $(this).data("id");
 
+            console.log("CLOSE TIKET :", nomor);
+
             $.ajax({
 
                 url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + nomor,
@@ -583,11 +579,29 @@
 
                 success: function(data) {
 
-                    let petugas = data.petugas || [];
+                    console.log("DETAIL CLOSE :", data);
 
-                    let petugasValid = petugas.filter(p => p && p !== "");
+                    let petugas = [];
 
-                    if (petugasValid.length === 0) {
+                    // HANDLE ARRAY / STRING
+                    if (Array.isArray(data.petugas)) {
+
+                        petugas = data.petugas;
+
+                    } else if (typeof data.petugas === 'string' && data.petugas.trim() !== '') {
+
+                        petugas = data.petugas.split(',');
+
+                    }
+
+                    let petugasValid = petugas.filter(function(p) {
+
+                        return p != null && p.toString().trim() !== "";
+
+                    });
+
+                    // VALIDASI
+                    if (petugasValid.length <= 0) {
 
                         alert("❌ Tidak bisa menutup layanan keluhan!\nSilakan pilih penanggung jawab terlebih dahulu.");
 
@@ -603,11 +617,21 @@
 
                             type: "POST",
 
-                            success: function() {
+                            success: function(res) {
+
+                                console.log(res);
 
                                 alert("Tiket berhasil ditutup!");
 
                                 getTiket_Sarpras();
+
+                            },
+
+                            error: function(xhr) {
+
+                                console.log(xhr.responseText);
+
+                                alert("Gagal menutup tiket!");
 
                             }
 
@@ -615,12 +639,19 @@
 
                     }
 
+                },
+
+                error: function(xhr) {
+
+                    console.log(xhr.responseText);
+
+                    alert("Gagal mengambil detail tiket!");
+
                 }
 
             });
 
         });
-
         // =========================
         // LOAD DETAIL
         // =========================
@@ -637,6 +668,16 @@
 
                 success: function(data) {
 
+                    console.log("DETAIL DATA :", data);
+
+                    // CEK jika data kosong
+                    if (!data || data == null) {
+
+                        alert("Data tiket tidak ditemukan!");
+
+                        return;
+                    }
+
                     var tanggal_db = new Date(data.layTanggal);
 
                     var options = {
@@ -647,23 +688,24 @@
 
                     var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
-                    $("#m_layID").text(data.layID);
+                    $("#m_layID").text(data.layID || '-');
 
-                    $("#m_layTanggal").text(tanggal_benar);
+                    $("#m_layTanggal").text(tanggal_benar || '-');
 
-                    $("#m_userNama").text(data.userNama);
+                    $("#m_userNama").text(data.userNama || '-');
 
-                    $("#m_layHal").text(data.layHal);
+                    $("#m_layHal").text(data.layHal || '-');
 
+                    // STATUS
                     $("#m_layStatus").html(
 
-                        data.layStatus === 'N' ?
+                        data.layStatus == 'N' ?
                         '<span class="badge badge-success">OPEN</span>' :
                         '<span class="badge badge-secondary">CLOSED</span>'
 
                     );
 
-                    $('#m_layDiskripsi').html(data.layDiskripsi);
+                    $('#m_layDiskripsi').html(data.layDiskripsi || '-');
 
                     $("#m_penanggungJawab").html(
                         data.penanggungJawab ?
@@ -687,7 +729,7 @@
 
                                 select.val(petugasDB[index]);
 
-                                select.attr('disabled', true);
+                                select.prop('disabled', true);
 
                             } else {
 
@@ -702,6 +744,14 @@
                         preventDuplicatePetugas();
 
                     }
+
+                },
+
+                error: function(xhr, status, error) {
+
+                    console.log(xhr.responseText);
+
+                    alert("Gagal mengambil detail tiket!");
 
                 }
 
@@ -873,14 +923,24 @@
                     };
                     var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
-                    var raw = data.layTarget.split(' ')[0]; // ambil bagian tanggal saja (sebelum spasi)
-                    var tanggal_db = new Date(raw);
+                    var raw = ''; // Default value jika layTarget kosong atau null
 
-                    var tgl_targetIdn = tanggal_db.toLocaleDateString('id-ID', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    });
+                    if (data.layTarget) { // Cek apakah layTarget memiliki nilai
+                        raw = data.layTarget.split(' ')[0]; // Ambil bagian tanggal saja (sebelum spasi)
+                    }
+
+                    var tgl_targetIdn = '-';
+                    if (raw != '') {
+
+                        var tanggal_db = new Date(raw);
+
+                        tgl_targetIdn = tanggal_db.toLocaleDateString('id-ID', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+
+                    }
 
                     $("#m_kepada, #m_kepada2").text(data.penanggungJawab);
                     $("#m_dari, #m_dari2").text(data.userNama);
@@ -1249,7 +1309,6 @@
 
                         <!-- KOLOM KANAN (DUPLIKAT) -->
                         <div class="print-col">
-                            <!-- DUPLIKAT SAMA PERSIS -->
                             <div class="sarpras-form">
 
                                 <div class="sarpras-title">
@@ -1277,11 +1336,11 @@
 
                                 <div class="sarpras-row">
                                     <div class="sarpras-label">Hal</div>
-                                    <div class="sarpras-line" id="m_hal"></div>
+                                    <div class="sarpras-line" id="m_hal2"></div>
                                 </div>
 
                                 <b>I. Isi Permohonan</b>
-                                <div class="sarpras-box" id="m_isi"></div>
+                                <div class="sarpras-box" id="m_isi2"></div>
 
                                 <div class="sarpras-row">
                                     <div class="sarpras-label">Target</div>

@@ -154,7 +154,7 @@ if (!$this->session->userdata('helpdesk_userId')) {
                         <!-- Tombol Simpan (Kanan) -->
                         <button type="submit"
                             class="btn btn-primary"
-                            onclick="return validasiSarpras()"
+                            onclick="return validasiForm()"
                             style="padding:10px 30px;font-size:16px;">
                             Simpan
                         </button>
@@ -186,9 +186,9 @@ if (!$this->session->userdata('helpdesk_userId')) {
 <script>
     function validasiForm() {
 
-        let ringkasan = document.getElementsByName('tikRingkasan')[0].value.trim();
-        let deskripsi = document.getElementsByName('tikDeskripsi')[0].value.trim();
-        let tanggal = document.getElementsByName('tikTanggal')[0].value;
+        let ringkasan = document.getElementsByName('layHal')[0].value.trim();
+        let deskripsi = document.getElementsByName('layDiskripsi')[0].value.trim();
+        let tanggal = document.getElementsByName('layTanggal')[0].value;
 
 
         if (
