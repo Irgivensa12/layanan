@@ -72,7 +72,7 @@ $userId = $this->session->userdata('helpdesk_userId');
                                 <th>Status</th>
                                 <th>Detail</th>
                                 <?php if ($admin != 'Y') { ?>
-                                    <th>Action</th>
+                                    <th>Status</th>
                                 <?php } ?>
                             </tr>
                         </thead>

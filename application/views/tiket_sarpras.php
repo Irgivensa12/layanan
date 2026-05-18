@@ -216,7 +216,7 @@
                 </button>
 
                 <ul class="navbar-nav ml-auto">
-                    <img src="<?= base_url('img/kariban.png') ?>">
+                    <img src="<?= base_url('img/kanisius.png') ?>">
                 </ul>
 
             </nav>
@@ -300,7 +300,7 @@
 
                                     <?php if ($admin == 'Y') { ?>
                                         <th>Form Sarpras</th>
-                                        <th>Action</th>
+                                        <th>Status</th>
                                     <?php } ?>
 
                                 </tr>
@@ -330,7 +330,7 @@
 
                 <div class="copyright text-center my-auto">
 
-                    <span>© <?= date("Y"); ?> PT Kariban.</span>
+                    <span>© <?= date("Y"); ?> PT Kanisius.</span>
 
                 </div>
 
