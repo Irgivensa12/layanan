@@ -699,7 +699,7 @@
                     // STATUS
                     $("#m_layStatus").html(
 
-                        data.layStatus == 'N' ?
+                        data.layStatus == 'OPEN' ?
                         '<span class="badge badge-success">OPEN</span>' :
                         '<span class="badge badge-secondary">CLOSED</span>'
 
