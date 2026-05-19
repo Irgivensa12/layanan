@@ -658,17 +658,15 @@
 
         function loadDetailLay(layID) {
 
-            console.log("DETAIL ID:", layID);
-
             $.ajax({
 
-                    url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + layID,
+                url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + layID,
 
-                    type: "GET",
+                type: "GET",
 
-                    dataType: "json",
+                dataType: "JSON",
 
-                    success: function(data) {
+                success: function(data) {
 
                     console.log("DETAIL DATA :", data);
 
@@ -682,11 +680,13 @@
 
                     var tanggal_db = new Date(data.layTanggal);
 
-                        // ======================
-                        // FORMAT TANGGAL
-                        // ======================
+                    var options = {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    };
 
-                        let tanggal_benar = '-';
+                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
                     $("#m_layID").text(data.layID || '-');
 
@@ -699,84 +699,51 @@
                     // STATUS
                     $("#m_layStatus").html(
 
-                        data.layStatus == 'N' ?
+                        data.layStatus == 'OPEN' ?
                         '<span class="badge badge-success">OPEN</span>' :
                         '<span class="badge badge-secondary">CLOSED</span>'
 
-                        $("#m_layTanggal").text(tanggal_benar);
+                    );
 
                     $('#m_layDiskripsi').html(data.layDiskripsi || '-');
 
-                        $("#m_layHal").text(data.layHal || '-');
+                    $("#m_penanggungJawab").html(
+                        data.penanggungJawab ?
+                        data.penanggungJawab :
+                        '<span class="text-muted">Belum ditentukan</span>'
+                    );
 
-                        $("#m_layDiskripsi").text(data.layDiskripsi || '-');
+                    // =========================
+                    // ADMIN PETUGAS
+                    // =========================
 
-                        // STATUS
+                    if (admin == 'Y') {
 
-                        if (data.layStatus == 'N') {
+                        let petugasDB = data.petugas || [];
 
-                            $("#m_layStatus").html(
-                                '<span class="badge badge-success">OPEN</span>'
-                            );
+                        $('select[name="petugas[]"]').each(function(index) {
 
-                        } else {
+                            let select = $(this);
 
-                            $("#m_layStatus").html(
-                                '<span class="badge badge-secondary">CLOSED</span>'
-                            );
+                            if (petugasDB[index]) {
 
-                        }
+                                select.val(petugasDB[index]);
 
                                 select.prop('disabled', true);
 
-                        $("#m_penanggungJawab").html(
+                            } else {
 
-                            data.penanggungJawab ?
+                                select.val('');
 
-                            data.penanggungJawab :
-
-                            '<span class="text-muted">Belum ditentukan</span>'
-
-                        );
-
-                        // ======================
-                        // PETUGAS ADMIN
-                        // ======================
-
-                        if (admin == 'Y') {
-
-                            let petugasDB = data.petugas || [];
-
-                            $('select[name="petugas[]"]').each(function(index) {
-
-                                    let select = $(this);
-
-                                    if (petugasDB[index]) {
-
-                                        select.val(petugasDB[index]);
-
-                                        select.prop('disabled', true);
-
-                                    } else {
-
-                                        select.val('');
-
-                                        select.prop('disabled', false);
-
-                                        }
-
-                                    });
-
-                                preventDuplicatePetugas();
+                                select.prop('disabled', false);
 
                             }
 
-                        },
+                        });
 
-                        error: function(xhr, status, error) {
+                        preventDuplicatePetugas();
 
-                            console.log("ERROR DETAIL:");
-                            console.log(xhr.responseText);
+                    }
 
                 },
 
@@ -788,101 +755,159 @@
 
                 }
 
-                        }
+            });
 
-                    });
+        }
 
-            }
+        // =========================
+        // LOAD PETUGAS
+        // =========================
 
-            // =========================
-            // LOAD PETUGAS
-            // =========================
+        function loadPetugas(callback) {
 
-            function loadPetugas(callback) {
+            $.ajax({
 
-                $.ajax({
+                url: "<?= base_url('Select/get_petugas') ?>",
 
-                    url: "<?= base_url('Select/get_petugas') ?>",
+                method: "GET",
 
-                    method: "GET",
+                dataType: "JSON",
 
-                    dataType: "JSON",
+                success: function(data) {
 
-                    success: function(data) {
+                    $('select[name="petugas[]"]').each(function() {
 
-                        $('select[name="petugas[]"]').each(function() {
+                        var select = $(this);
 
-                            var select = $(this);
+                        select.empty();
 
-                            select.empty();
+                        select.append('<option value="">-- Pilih Petugas --</option>');
 
-                            select.append('<option value="">-- Pilih Petugas --</option>');
+                        $.each(data, function(i, p) {
 
-                            $.each(data, function(i, p) {
-
-                                select.append(
-                                    '<option value="' + p.pegNoreg + '">' + p.pegNama + '</option>'
-                                );
-
-                            });
+                            select.append(
+                                '<option value="' + p.pegNoreg + '">' + p.pegNama + '</option>'
+                            );
 
                         });
 
-                        if (callback) callback();
-
-                    }
-
-                });
-
-            }
-
-            // =========================
-            // DUPLIKAT PETUGAS
-            // =========================
-
-            function preventDuplicatePetugas() {
-
-                let selectedValues = [];
-
-                $('select[name="petugas[]"]').each(function() {
-
-                    let val = $(this).val();
-
-                    if (val !== "") {
-
-                        selectedValues.push(val);
-
-                    }
-
-                });
-
-                $('select[name="petugas[]"] option').prop('disabled', false);
-
-                $('select[name="petugas[]"]').each(function() {
-
-                    let currentSelect = $(this);
-
-                    let currentVal = currentSelect.val();
-
-                    currentSelect.find('option').each(function() {
-
-                        let optionVal = $(this).val();
-
-                        if (selectedValues.includes(optionVal) && optionVal !== currentVal) {
-
-                            $(this).prop('disabled', true);
-
-                        }
-
                     });
 
+                    if (callback) callback();
+
+                }
+
+            });
+
+        }
+
+        // =========================
+        // DUPLIKAT PETUGAS
+        // =========================
+
+        function preventDuplicatePetugas() {
+
+            let selectedValues = [];
+
+            $('select[name="petugas[]"]').each(function() {
+
+                let val = $(this).val();
+
+                if (val !== "") {
+
+                    selectedValues.push(val);
+
+                }
+
+            });
+
+            $('select[name="petugas[]"] option').prop('disabled', false);
+
+            $('select[name="petugas[]"]').each(function() {
+
+                let currentSelect = $(this);
+
+                let currentVal = currentSelect.val();
+
+                currentSelect.find('option').each(function() {
+
+                    let optionVal = $(this).val();
+
+                    if (selectedValues.includes(optionVal) && optionVal !== currentVal) {
+
+                        $(this).prop('disabled', true);
+
+                    }
+
                 });
+
+            });
+
+        }
+
+        $(document).on('change', 'select[name="petugas[]"]', function() {
+
+            preventDuplicatePetugas();
+
+        });
+
+        // =========================
+        // SIMPAN PETUGAS
+        // =========================
+
+        function simpanPetugas() {
+
+            var petugas = [];
+
+            $('select[name="petugas[]"]').each(function() {
+
+                if ($(this).val() != '') {
+
+                    petugas.push($(this).val());
+
+                }
+
+            });
+
+            $.ajax({
+
+                url: "<?= base_url('Insert/simpan_petugas') ?>",
+
+                method: "POST",
+
+                data: {
+
+                    layID: $('#m_layID').text(),
+
+                    petugas: petugas
+
+                },
+
+                success: function(res) {
+
+                    alert("Pilihan Petugas Berhasil disimpan!");
+
+                    $('#modalDetail').modal('hide');
+
+                    getTiket_Sarpras();
+
+                }
+
+            });
+
+        }
+
+        function konfirmasiSimpan() {
+
+            if (confirm("Apakah Anda yakin ingin menyimpan perubahan ini?")) {
+
+                simpanPetugas();
 
             }
 
-            $(document).on('change', 'select[name="petugas[]"]', function() {
+        }
 
-                preventDuplicatePetugas();
+        function loadFormSarpras(layID) {
 
             $.ajax({
                 url: "<?= base_url('Select/form_sarpras/') ?>" + layID,
@@ -941,130 +966,25 @@
                 el.style.border = 'none';
             });
 
-            // =========================
-            // SIMPAN PETUGAS
-            // =========================
-
-            function simpanPetugas() {
-
-                var petugas = [];
-
-                $('select[name="petugas[]"]').each(function() {
-
-                    if ($(this).val() != '') {
-
-                        petugas.push($(this).val());
-
-                    }
-
-                });
-
-                $.ajax({
-
-                    url: "<?= base_url('Insert/simpan_petugas') ?>",
-
-                    method: "POST",
-
-                    data: {
-
-                        layID: $('#m_layID').text(),
-
-                        petugas: petugas
-
-                    },
-
-                    success: function(res) {
-
-                        alert("Pilihan Petugas Berhasil disimpan!");
-
-                        $('#modalDetail').modal('hide');
-
-                        getTiket_Sarpras();
-
-                    }
-
-                });
-
-            }
-
-            function konfirmasiSimpan() {
-
-                if (confirm("Apakah Anda yakin ingin menyimpan perubahan ini?")) {
-
-                    simpanPetugas();
-
+            var no_layanan = document.getElementById("m_layID").textContent.trim();
+            var opt = {
+                margin: 0.3,
+                filename: 'SPU-ADM-36 FORM PERMOHONAN LAYANAN SARPRAS - ' + no_layanan + '.pdf',
+                image: {
+                    type: 'jpeg',
+                    quality: 1
+                },
+                html2canvas: {
+                    scale: 2
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'landscape' // gunakan landscape untuk kertas A4 horizontal
                 }
-
-            }
-
-            function loadFormSarpras(layID) {
-
-                $.ajax({
-                    url: "<?= base_url('Select/form_sarpras/') ?>" + layID,
-                    type: "GET",
-                    dataType: "JSON",
-                    success: function(data) {
-
-                        var tanggal_db = new Date(data.layTanggal);
-                        var options = {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                        };
-                        var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
-
-                        var raw = data.layTarget.split(' ')[0]; // ambil bagian tanggal saja (sebelum spasi)
-                        var tanggal_db = new Date(raw);
-
-                        var tgl_targetIdn = tanggal_db.toLocaleDateString('id-ID', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                        });
-
-                        $("#m_kepada, #m_kepada2").text(data.penanggungJawab);
-                        $("#m_dari, #m_dari2").text(data.userNama);
-                        $("#m_tanggal, #m_tanggal2").text(tanggal_benar);
-                        $("#m_hal, #m_hal2").text(data.layHal);
-                        $("#m_isi, #m_isi2").text(data.layDiskripsi);
-                        $("#m_target, #m_target2").text(tgl_targetIdn);
-                        $("#m_pic, #m_pic2").text(data.penanggungJawab);
-                    }
-                });
-            }
-
-            function printFormSarpras() {
-                // ambil elemen modal form sarpras yang sudah diisi datanya
-                var element = document.querySelector("#modalFormSarpras .print-wrapper").cloneNode(true);
-
-                // hapus tombol
-                element.querySelectorAll("button").forEach(btn => btn.remove());
-
-                // hapus style modal bootstrap
-                element.querySelectorAll('.modal-content').forEach(el => {
-                    el.style.boxShadow = 'none';
-                    el.style.border = 'none';
-                });
-
-                var no_layanan = document.getElementById("m_layID").textContent.trim();
-                var opt = {
-                    margin: 0.3,
-                    filename: 'SPU-ADM-36 FORM PERMOHONAN LAYANAN SARPRAS - ' + no_layanan + '.pdf',
-                    image: {
-                        type: 'jpeg',
-                        quality: 1
-                    },
-                    html2canvas: {
-                        scale: 2
-                    },
-                    jsPDF: {
-                        unit: 'mm',
-                        format: 'a4',
-                        orientation: 'landscape' // gunakan landscape untuk kertas A4 horizontal
-                    }
-                };
-                html2pdf().set(opt).from(element).save();
-            }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
     </script>
     <!-- MODAL DETAIL -->
     <div class="modal fade" id="modalDetail" tabindex="-1">
@@ -1484,4 +1404,4 @@
         </div>
 
 
-        </html>
+        </html> 
