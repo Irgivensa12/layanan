@@ -96,7 +96,7 @@ class model extends CI_Model
         $this->db->delete('buku');
     }
 
-   public function tiket_sim()
+    public function tiket_sim()
     {
         $admin = $this->session->userdata('admin');
         $user  = $this->session->userdata('helpdesk_userId');
@@ -226,20 +226,6 @@ class model extends CI_Model
             $this->db->where('tikUserID', $userID);
             return $this->db->get();
         }
-    }
-    public function admin_sim()
-    {
-        $query = $this->db->query("
-            SELECT * FROM tb_tiket 
-            WHERE tikNomor IS NOT NULL AND tikNomor != ''
-            ORDER BY CAST(SUBSTRING(tikNomor, 4) AS UNSIGNED) DESC
-        ");
-        return $query;
-    }
-    public function admin_sarpras()
-    {
-        $query = "SELECT layID, layTanggal, layUserID, pegNama, layHal, layDiskripsi, layTarget, layPetugas1, layPetugas2, layPetugas3, layPetugas4, layPetugas5, layStatus, layCreateUserID, layCloseUserID, layCloseTanggal, FROM tb_layanan";
-        return $this->db->query($query);
     }
     public function update_tiket($tikNomor, $data)
     {

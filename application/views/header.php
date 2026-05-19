@@ -168,10 +168,6 @@
                 </div>
             </div>
         </li>
-       
-
-
-
 
         <?php
         $admin   = $this->session->userdata('admin');
