@@ -45,17 +45,24 @@ class Controller extends CI_Controller
 
     public function dashboard()
     {
-        // cek privilege
-        $pengguna = $this->session->userdata('pengguna');
         $admin   = $this->session->userdata('admin');
+        $sim     = $this->session->userdata('sim');
+        $sarpras = $this->session->userdata('sarpras');
 
-        // Mengambil nama dari session
         $data['nama'] = $this->session->userdata('helpdesk_userNama');
 
         if ($admin == 'Y') {
-            $data['role'] = 'Admin';
+
+            $data['role'] = 'Admin Hak Akses';
+        } elseif ($sim == 'Y') {
+
+            $data['role'] = 'Admin SIM';
+        } elseif ($sarpras == 'Y') {
+
+            $data['role'] = 'Admin Sarpras';
         } else {
-            $data['role'] = 'Pengguna';
+
+            $data['role'] = 'User';
         }
 
         $this->load->view('header');

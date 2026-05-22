@@ -1,12 +1,17 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
-if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
-    $this->session->set_flashdata('type', 'alert-danger');
-    $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
-    redirect();
-    exit;
-}
+$admin   = $this->session->userdata('admin');
+$sim     = $this->session->userdata('sim');
+$sarpras = $this->session->userdata('sarpras');
 ?>
+
+<?php
+if (
+    $admin == 'Y' ||
+    $sim == 'Y' ||
+    ($sim != 'Y' && $sarpras != 'Y')
+) {
+?>
+<?php } ?>
 
 <div id="content-wrapper" class="d-flex flex-column">
 
@@ -18,7 +23,7 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
             </button>
 
             <ul class="navbar-nav ml-auto">
-                <img src="<?= base_url('img/kanisius.png') ?>">
+                <img src="<?= base_url('img/kariban.png') ?>">
             </ul>
         </nav>
 
@@ -198,10 +203,36 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
     <footer class="sticky-footer bg-white">
         <div class="container my-auto">
             <div class="copyright text-center my-auto">
-                <span>© <?= date("Y"); ?> PT Kanisius.</span>
+                <span>© <?= date("Y"); ?> PT Kariban.</span>
             </div>
         </div>
     </footer>
+
+</div>
+<div class="alert alert-info">
+
+    User ID :
+    <?= $this->session->userdata('helpdesk_userId') ?>
+
+    <br>
+
+    Nama :
+    <?= $this->session->userdata('helpdesk_userNama') ?>
+
+    <br>
+
+    Admin :
+    <?= $this->session->userdata('admin') ?>
+
+    <br>
+
+    SIM :
+    <?= $this->session->userdata('sim') ?>
+
+    <br>
+
+    Sarpras :
+    <?= $this->session->userdata('sarpras') ?>
 
 </div>
 

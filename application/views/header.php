@@ -96,10 +96,16 @@
 
                     <?php
                     $admin   = $this->session->userdata('admin');
+                    $sim     = $this->session->userdata('sim');
+                    $sarpras = $this->session->userdata('sarpras');
                     $user    = $this->session->userdata('helpdesk_userId');
 
                     if ($admin == 'Y') {
-                        $role = 'Admin';
+                        $role = 'Admin Akses';
+                    } elseif ($sim == 'Y') {
+                        $role = 'Admin SIM';
+                    } elseif ($sarpras == 'Y') {
+                        $role = 'Admin Sarpras';
                     } else {
                         $role = 'User';
                     }
@@ -126,22 +132,13 @@
         <hr class="sidebar-divider my-0">
 
         <!-- Dashboard -->
-        <?php if ($this->session->userdata('admin') == 'Y') { ?>
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url('dashboard') ?>">
-                    <i class="fas fa-fw fa-home"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-        <?php } else { ?>
-            <!-- Jika USER BIASA -->
-            <li class="nav-item">
-                <a class="nav-link" href="<?= base_url('dashboard') ?>">
-                    <i class="fas fa-fw fa-home"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-        <?php } ?>
+        <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('dashboard') ?>">
+                <i class="fas fa-fw fa-home"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+
         <!-- MENU TIKET -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse"
@@ -157,21 +154,57 @@
 
                 <div class="bg-white py-2 collapse-inner rounded">
 
-                    <a class="collapse-item" href="<?= base_url('tiket_sim') ?>">
-                        Tiket SIM
-                    </a>
+                    <!-- ADMIN UTAMA BISA SEMUA -->
+                    <?php if ($admin == 'Y') { ?>
 
-                    <a class="collapse-item" href="<?= base_url('tiket_sarpras') ?>">
-                        Tiket Sarpras
-                    </a>
+                        <a class="collapse-item" href="<?= base_url('tiket_sim') ?>">
+                            Tiket SIM
+                        </a>
+
+                        <a class="collapse-item" href="<?= base_url('tiket_sarpras') ?>">
+                            Tiket Sarpras
+                        </a>
+
+                    <?php } ?>
+
+                    <!-- ADMIN SIM -->
+                    <?php if ($sim == 'Y') { ?>
+
+                        <a class="collapse-item" href="<?= base_url('tiket_sim') ?>">
+                            Tiket SIM
+                        </a>
+
+                    <?php } ?>
+
+                    <!-- ADMIN SARPRAS -->
+                    <?php if ($sarpras == 'Y') { ?>
+
+                        <a class="collapse-item" href="<?= base_url('tiket_sarpras') ?>">
+                            Tiket Sarpras
+                        </a>
+
+                    <?php } ?>
+
+                    <!-- USER BIASA -->
+                    <?php if (
+                        $admin != 'Y' &&
+                        $sim != 'Y' &&
+                        $sarpras != 'Y'
+                    ) { ?>
+
+                        <a class="collapse-item" href="<?= base_url('tiket_sim') ?>">
+                            Tiket SIM
+                        </a>
+
+                        <a class="collapse-item" href="<?= base_url('tiket_sarpras') ?>">
+                            Tiket Sarpras
+                        </a>
+
+                    <?php } ?>
 
                 </div>
             </div>
         </li>
-       
-
-
-
 
         <?php
         $admin   = $this->session->userdata('admin');
@@ -181,31 +214,65 @@
         ?>
 
             <!-- MENU LAPORAN -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse"
-                    data-target="#collapseLaporan"
-                    aria-expanded="true" aria-controls="collapseLaporan">
+            <?php
+            if (
+                $admin == 'Y' ||
+                $sim == 'Y' ||
+                $sarpras == 'Y'
+            ) {
+            ?>
 
-                    <i class="fas fa-fw fa-file"></i>
-                    <span>Laporan</span>
-                </a>
+                <!-- MENU LAPORAN -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse"
+                        data-target="#collapseLaporan"
+                        aria-expanded="true" aria-controls="collapseLaporan">
 
-                <div id="collapseLaporan" class="collapse"
-                    data-parent="#accordionSidebar">
+                        <i class="fas fa-fw fa-file"></i>
+                        <span>Laporan</span>
+                    </a>
 
-                    <div class="bg-white py-2 collapse-inner rounded">
+                    <div id="collapseLaporan" class="collapse"
+                        data-parent="#accordionSidebar">
 
-                        <a class="collapse-item" href="<?= base_url('laporan_sim') ?>">
-                            Laporan SIM
-                        </a>
+                        <div class="bg-white py-2 collapse-inner rounded">
 
-                        <a class="collapse-item" href="<?= base_url('laporan_sarpras') ?>">
-                            Laporan Sarpras
-                        </a>
+                            <!-- ADMIN UTAMA -->
+                            <?php if ($admin == 'Y') { ?>
 
+                                <a class="collapse-item" href="<?= base_url('laporan_sim') ?>">
+                                    Laporan SIM
+                                </a>
+
+                                <a class="collapse-item" href="<?= base_url('laporan_sarpras') ?>">
+                                    Laporan Sarpras
+                                </a>
+
+                            <?php } ?>
+
+                            <!-- ADMIN SIM -->
+                            <?php if ($sim == 'Y') { ?>
+
+                                <a class="collapse-item" href="<?= base_url('laporan_sim') ?>">
+                                    Laporan SIM
+                                </a>
+
+                            <?php } ?>
+
+                            <!-- ADMIN SARPRAS -->
+                            <?php if ($sarpras == 'Y') { ?>
+
+                                <a class="collapse-item" href="<?= base_url('laporan_sarpras') ?>">
+                                    Laporan Sarpras
+                                </a>
+
+                            <?php } ?>
+
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+
+            <?php } ?>
 
         <?php
         } else {

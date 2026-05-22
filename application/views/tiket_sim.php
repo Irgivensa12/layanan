@@ -1,20 +1,17 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
-
-if (!$this->session->userdata('helpdesk_userId')) {
-    $this->session->set_flashdata('type', 'alert-danger');
-    $this->session->set_flashdata(
-        'pesan',
-        '<strong>Error!</strong> Anda harus login terlebih dahulu'
-    );
-
+if (
+    !$this->session->userdata('helpdesk_userId')
+) {
     redirect();
     exit;
 }
 
 // SESSION
-$admin = $this->session->userdata('admin');
-$userId = $this->session->userdata('helpdesk_userId');
+$admin   = $this->session->userdata('admin');
+$sim     = $this->session->userdata('sim');
+$sarpras = $this->session->userdata('sarpras');
+
+$userId  = $this->session->userdata('helpdesk_userId');
 ?>
 <!-- untuk daftar menu dst, cek header.php-->
 
@@ -28,7 +25,7 @@ $userId = $this->session->userdata('helpdesk_userId');
             </button>
 
             <ul class="navbar-nav ml-auto">
-                <img src="<?= base_url('img/kanisius.png') ?>">
+                <img src="<?= base_url('img/karibans.png') ?>">
             </ul>
         </nav>
 
@@ -71,7 +68,7 @@ $userId = $this->session->userdata('helpdesk_userId');
                                 <th>Ringkasan</th>
                                 <th>Status</th>
                                 <th>Detail</th>
-                                <?php if ($admin != 'Y') { ?>
+                                <?php if ($admin != 'Y' && $sim != 'Y') { ?>
                                     <th>Status</th>
                                 <?php } ?>
                             </tr>
@@ -89,7 +86,7 @@ $userId = $this->session->userdata('helpdesk_userId');
     <footer class="sticky-footer bg-white">
         <div class="container my-auto">
             <div class="copyright text-center my-auto">
-                <span>© <?php echo date("Y"); ?> PT Kanisius.</span>
+                <span>© <?php echo date("Y"); ?> PT Kariban.</span>
             </div>
         </div>
     </footer>
@@ -186,7 +183,7 @@ $userId = $this->session->userdata('helpdesk_userId');
                     var actionBtn = '';
 
                     // HANYA USER BIASA
-                    if ("<?= $admin ?>" != 'Y') {
+                    if ("<?= $admin ?>" != 'Y' && "<?= $sim ?>" != 'Y') {
 
                         // Tiket OPEN
                         if (data[i].tikStatus == 'N') {
@@ -227,7 +224,10 @@ $userId = $this->session->userdata('helpdesk_userId');
                     }
 
                     // Jika admin, tidak perlu tampilkan tombol action, karena admin tidak bisa close tiket, cukup tampilkan status OPEN/CLOSED dan detail tiket
-                    if ("<?= $admin ?>" == 'Y') {
+                    if (
+                        "<?= $admin ?>" == 'Y' ||
+                        "<?= $sim ?>" == 'Y'
+                    ) {
 
                         table.row.add([
                             data[i].tikNomor,
@@ -426,7 +426,10 @@ $userId = $this->session->userdata('helpdesk_userId');
                 // =======================
                 // ADMIN
                 // =======================
-                if ("<?= $admin ?>" == 'Y') {
+                if (
+                    "<?= $admin ?>" == 'Y' ||
+                    "<?= $sim ?>" == 'Y'
+                ) {
 
                     // Load operator & tindakan
                     loadOperator(data.tikOperator);

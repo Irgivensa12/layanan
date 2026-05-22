@@ -8,58 +8,64 @@ class model extends CI_Model
         $id = $this->input->post('id');
         $password = $this->input->post('password');
 
-        $query = "SELECT a.*, p.privMenuId, p.privAkses
-        FROM vUser a
-        LEFT JOIN tb_user_priv p ON p.privUserId = a.userId
-        WHERE a.userId = '$id'";
+        $query = "
+    SELECT 
+        a.*,
 
-        $user = $this->db->query($query)->result_array();
+        IFNULL(MAX(CASE WHEN p.privMenuId='1' 
+        THEN p.privAkses END),'N') AS sim,
+
+        IFNULL(MAX(CASE WHEN p.privMenuId='25' 
+        THEN p.privAkses END),'N') AS sarpras,
+
+        IFNULL(MAX(CASE WHEN p.privMenuId='24' 
+        THEN p.privAkses END),'N') AS admin
+
+    FROM vUser a
+    LEFT JOIN tb_user_priv p 
+        ON p.privUserId = a.userId
+
+    WHERE a.userId = '$id'
+    GROUP BY a.userId
+    ";
+
+        $user = $this->db->query($query)->row_array();
 
         if ($user) {
-            // ambil baris pertama untuk cek password
-            $firstRow = $user[0];
 
-            if (md5($password) == $firstRow['userPass']) {
+            if (md5($password) == $user['userPass']) {
+
                 $this->session->set_userdata('helpdesk_login', true);
-                $this->session->set_userdata('helpdesk_userId', $firstRow['userId']);
-                $this->session->set_userdata('helpdesk_userNama', $firstRow['userNama']);
-                foreach ($user as $row) {
+                $this->session->set_userdata('helpdesk_userId', $user['userId']);
+                $this->session->set_userdata('helpdesk_userNama', $user['userNama']);
 
-                    // MENU ADMIN
-                    if ($row['privMenuId'] == 24 && $row['privAkses'] == 'Y') {
-                        $this->session->set_userdata('admin', 'Y');
-                    }
+                // ROLE
+                $this->session->set_userdata('admin', $user['admin']);
+                $this->session->set_userdata('sim', $user['sim']);
+                $this->session->set_userdata('sarpras', $user['sarpras']);
 
-                    // MENU TIKET SIM
-                    if ($row['privMenuId'] == 1 && $row['privAkses'] == 'Y') {
-                        $this->session->set_userdata('sim', 'Y');
-                    }
-
-                    // MENU SARPRAS
-                    if ($row['privMenuId'] == 25 && $row['privAkses'] == 'Y') {
-                        $this->session->set_userdata('sarpras', 'Y');
-                    }
-                }
-                $this->session->set_flashdata('type', 'alert-success');
-                $this->session->set_flashdata('pesan', '<strong>Berhasil!</strong> Anda Berhasil Login');
                 redirect('dashboard');
-
-
-                // jika password salah
             } else {
+
                 $this->session->set_flashdata('type', 'alert-danger');
-                $this->session->set_flashdata('pesan', '<strong>Gagal!</strong> ID atau Password salah');
+                $this->session->set_flashdata(
+                    'pesan',
+                    '<strong>Gagal!</strong> Password salah'
+                );
+
                 redirect();
             }
-        } else { // jika user tidak ditemukan
+        } else {
 
             $this->session->set_flashdata('type', 'alert-danger');
-            $this->session->set_flashdata('pesan', 'User tidak ditemukan');
+            $this->session->set_flashdata(
+                'pesan',
+                'User tidak ditemukan'
+            );
+
             redirect();
         }
     }
-
-
     public function insertData_sim($tb_tiket, $data)
     {
         return $this->db->insert($tb_tiket, $data);
@@ -96,26 +102,24 @@ class model extends CI_Model
         $this->db->delete('buku');
     }
 
-   public function tiket_sim()
+    public function tiket_sim()
     {
         $admin = $this->session->userdata('admin');
+        $sim   = $this->session->userdata('sim');
         $user  = $this->session->userdata('helpdesk_userId');
 
         $status = $this->input->get('status');
 
-        // FILTER STATUS
         $filterStatus = "";
 
         if ($status == 'open') {
-
             $filterStatus = " AND t.tikStatus='N' ";
         } elseif ($status == 'close') {
-
             $filterStatus = " AND t.tikStatus='Y' ";
         }
 
-        // ADMIN
-        if ($admin == 'Y') {
+        // ADMIN UTAMA ATAU ADMIN SIM
+        if ($admin == 'Y' || $sim == 'Y') {
 
             $query = $this->db->query("
             SELECT 
@@ -133,6 +137,7 @@ class model extends CI_Model
         ");
         } else {
 
+            // USER BIASA
             $query = $this->db->query("
             SELECT 
                 t.*,
@@ -238,7 +243,7 @@ class model extends CI_Model
     }
     public function admin_sarpras()
     {
-        $query = "SELECT layID, layTanggal, layUserID, pegNama, layHal, layDiskripsi, layTarget, layPetugas1, layPetugas2, layPetugas3, layPetugas4, layPetugas5, layStatus, layCreateUserID, layCloseUserID, layCloseTanggal, FROM tb_layanan";
+        $query = "SELECT layID, layTanggal, layUserID, pegNama, layHal, layDiskripsi, layTarget, layPetugas1, layPetugas2, layPetugas3, layPetugas4, layPetugas5, layStatus, layCreateUserID, layCloseUserID, layCloseTanggal FROM tb_layanan";
         return $this->db->query($query);
     }
     public function update_tiket($tikNomor, $data)
