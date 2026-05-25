@@ -80,14 +80,9 @@ class Select extends CI_Controller
         echo json_encode($data);
     }
 
-    public function tiket_sim() // Function untuk menampilkan data dari tabel tb_tiket ke halaman admin_sim.php
+    public function tiket_sim() // Function untuk menampilkan data dari tabel tb_tiket ke halaman tiket_sim.php
     {
-        $data = $this->Model->tiket_sim()->result_array(); // buka class admin_sim di Model
-        echo json_encode($data);
-    }
-    public function admin_sarpras() // Function untuk menampilkan data dari tabel tb_tiket ke halaman tiket_sarpras.php
-    {
-        $data = $this->Model->admin_sarpras()->result_array(); // buka class admin_sarpras di Model
+        $data = $this->Model->tiket_sim()->result_array(); // buka class tiket_sim di Model
         echo json_encode($data);
     }
 

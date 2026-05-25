@@ -66,9 +66,13 @@ $userId  = $this->session->userdata('helpdesk_userId');
                                 <th>Penginput</th>
                                 <th>Nama</th>
                                 <th>Ringkasan</th>
-                                <th>Status</th>
+                                <?php if ($admin == 'Y') { ?>
+                                    <th>Status</th>
+                                <?php } ?>
+
                                 <th>Detail</th>
-                                <?php if ($admin != 'Y' && $sim != 'Y') { ?>
+
+                                <?php if ($admin != 'Y') { ?>
                                     <th>Status</th>
                                 <?php } ?>
                             </tr>
@@ -250,13 +254,10 @@ $userId  = $this->session->userdata('helpdesk_userId');
                             data[i].tikUserID,
                             data[i].userNama,
                             data[i].tikRingkasan,
-                            statusBtn,
                             detailBtn,
                             actionBtn
                         ]);
-
                     }
-
                 }
 
                 table.draw();
