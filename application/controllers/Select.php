@@ -16,26 +16,28 @@ class Select extends CI_Controller
     public function dashboard()
     {
         $userId = $this->session->userdata('helpdesk_userId');
-        $admin  = $this->session->userdata('admin');
+        // $admin  = $this->session->userdata('admin');
+        $sim = $this->session->userdata('sim');
+        $sarpras = $this->session->userdata('sarpras');
 
         // ================= SIM =================
 
         $this->db->from('tb_tiket');
-        if ($admin != 'Y') {
+        if ($sim != 'Y') {
             $this->db->where('tikUserID', $userId);
         }
         $tiket_sim_total = $this->db->count_all_results();
 
         $this->db->from('tb_tiket');
         $this->db->where('tikStatus', 'N');
-        if ($admin != 'Y') {
+        if ($sim != 'Y') {
             $this->db->where('tikUserID', $userId);
         }
         $tiket_sim_open = $this->db->count_all_results();
 
         $this->db->from('tb_tiket');
         $this->db->where('tikStatus', 'Y');
-        if ($admin != 'Y') {
+        if ($sim != 'Y') {
             $this->db->where('tikUserID', $userId);
         }
         $tiket_sim_close = $this->db->count_all_results();
@@ -43,21 +45,21 @@ class Select extends CI_Controller
         // ================= SARPRAS =================
 
         $this->db->from('tb_layanan');
-        if ($admin != 'Y') {
+        if ($sarpras != 'Y') {
             $this->db->where('layUserID', $userId);
         }
         $tiket_sarpras_total = $this->db->count_all_results();
 
         $this->db->from('tb_layanan');
         $this->db->where('layStatus', 'N');
-        if ($admin != 'Y') {
+        if ($sarpras != 'Y') {
             $this->db->where('layUserID', $userId);
         }
         $tiket_sarpras_open = $this->db->count_all_results();
 
         $this->db->from('tb_layanan');
         $this->db->where('layStatus', 'Y');
-        if ($admin != 'Y') {
+        if ($sarpras != 'Y') {
             $this->db->where('layUserID', $userId);
         }
         $tiket_sarpras_close = $this->db->count_all_results();
@@ -71,12 +73,6 @@ class Select extends CI_Controller
             "tiket_sarpras_close" => $tiket_sarpras_close
         ]);
     }
-
-    // public function tiket_sim() // Function untuk menampilkan data dari tabel tb_tiket ke halaman tiket_sim.php
-    // {
-    //     $data = $this->Model->tiket_sim()->result_array(); // buka class tiket_sim di Model
-    //     echo json_encode($data);
-    // }
 
     public function tiket_sarpras()
     {
