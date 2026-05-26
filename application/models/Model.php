@@ -242,4 +242,54 @@ class model extends CI_Model
         $this->db->where('layID', $layID);
         $this->db->update('tb_layanan', $data);
     }
+
+    public function get_user_hak_akses()
+    {
+        $query = $this->db->query("
+        SELECT
+            userId,
+            userNama,
+
+            IFNULL(
+                MAX(
+                    CASE
+                        WHEN privMenuId='1'
+                        THEN privAkses
+                    END
+                ),
+            'N') AS Tiket,
+
+            IFNULL(
+                MAX(
+                    CASE
+                        WHEN privMenuId='25'
+                        THEN privAkses
+                    END
+                ),
+            'N') AS Sarpras,
+
+            IFNULL(
+                MAX(
+                    CASE
+                        WHEN privMenuId='24'
+                        THEN privAkses
+                    END
+                ),
+            'N') AS Admin
+
+        FROM tb_user_priv
+
+        LEFT JOIN ref_menu
+            ON privMenuId = menuID
+
+        LEFT JOIN vUser
+            ON privUserId = userID
+
+        GROUP BY userId, userNama
+
+        ORDER BY userNama ASC
+    ");
+
+        return $query;
+    }
 }

@@ -276,4 +276,73 @@
                 $this->session->set_flashdata('pesan', '<strong>Error!</strong> pesan error: <br><br>' . $this->email->print_debugger());
             }
         }
+
+        public function updateHakAkses()
+        {
+            // VALIDASI LOGIN
+            if (
+                !$this->session->userdata('helpdesk_userId')
+            ) {
+                redirect();
+                exit;
+            }
+
+            // HANYA ADMIN HAK AKSES YANG BISA UPDATE HAK AKSES
+            if (
+                $this->session->userdata('admin') != 'Y'
+            ) {
+
+                $_SESSION['pesan'] =
+                    'Anda tidak memiliki akses!';
+
+                $_SESSION['type'] =
+                    'alert-danger';
+
+                redirect('dashboard');
+            }
+
+            // MENERIMA DATA DARI FORM
+            $userId = $this->input->post('userId');
+
+            $sim      =
+                $this->input->post('sim')
+                ? 'Y' : 'N'; // jika checkbox sim dicentang, maka $sim bernilai 'Y', jika tidak dicentang maka bernilai 'N'
+
+            $sarpras =
+                $this->input->post('sarpras')
+                ? 'Y' : 'N';
+
+            $admin   =
+                $this->input->post('admin')
+                ? 'Y' : 'N';
+
+            // UPDATE ROLE SIM
+            $this->model->update_hak_akses(
+                $userId,
+                '1',
+                $sim
+            );
+
+            // UPDATE ROLE SARPRAS
+            $this->model->update_hak_akses( // function untuk update hak akses, menerima parameter userId, privMenuId, dan privAkses (Y/N)
+                $userId,
+                '25',
+                $sarpras
+            );
+
+            // UPDATE ROLE ADMIN
+            $this->model->update_hak_akses(
+                $userId,
+                '24',
+                $admin
+            );
+
+            $_SESSION['pesan'] =
+                'Hak akses berhasil diperbarui!';
+
+            $_SESSION['type'] =
+                'alert-success';
+
+            redirect('menu_user');
+        }
     }

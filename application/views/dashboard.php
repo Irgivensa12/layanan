@@ -23,7 +23,7 @@ if (
             </button>
 
             <ul class="navbar-nav ml-auto">
-                <img src="<?= base_url('img/kariban.png') ?>">
+                <img src="<?= base_url('img/kanisius.png') ?>">
             </ul>
         </nav>
 
@@ -203,13 +203,13 @@ if (
     <footer class="sticky-footer bg-white">
         <div class="container my-auto">
             <div class="copyright text-center my-auto">
-                <span>© <?= date("Y"); ?> PT Kariban.</span>
+                <span>© <?= date("Y"); ?> PT Kanisius.</span>
             </div>
         </div>
     </footer>
 
 </div>
-<div class="alert alert-info">
+<!-- <div class="alert alert-info">
 
     User ID :
     <?= $this->session->userdata('helpdesk_userId') ?>
@@ -234,7 +234,7 @@ if (
     Sarpras :
     <?= $this->session->userdata('sarpras') ?>
 
-</div>
+</div> -->
 
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
