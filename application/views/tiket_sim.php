@@ -25,7 +25,7 @@ $userId  = $this->session->userdata('helpdesk_userId');
             </button>
 
             <ul class="navbar-nav ml-auto">
-                <img src="<?= base_url('img/karibans.png') ?>">
+                <img src="<?= base_url('img/kanisius.png') ?>">
             </ul>
         </nav>
 
@@ -71,6 +71,10 @@ $userId  = $this->session->userdata('helpdesk_userId');
                                 <?php } ?>
 
                                 <th>Detail</th>
+<<<<<<<<< Temporary merge branch 1
+                                <?php if ($admin != 'Y' && $sim != 'Y') { ?>
+=========
+
                                 <?php if ($admin != 'Y') { ?>
                                     <th>Status</th>
                                 <?php } ?>
@@ -89,7 +93,7 @@ $userId  = $this->session->userdata('helpdesk_userId');
     <footer class="sticky-footer bg-white">
         <div class="container my-auto">
             <div class="copyright text-center my-auto">
-                <span>© <?php echo date("Y"); ?> PT Kariban.</span>
+                <span>© <?php echo date("Y"); ?> PT Kanisius.</span>
             </div>
         </div>
     </footer>

@@ -102,4 +102,17 @@ class Controller extends CI_Controller
         $this->load->view('header');
         $this->load->view('laporan_sim');
     }
+
+    public function menu_user()
+    {
+        $data['title'] = 'Menu User';
+
+        $data['user'] =
+            $this->Model
+            ->get_user_hak_akses()
+            ->result();
+
+        $this->load->view('header');
+        $this->load->view('menu_user', $data);
+    }
 }

@@ -244,20 +244,6 @@ class model extends CI_Model
             return $this->db->get();
         }
     }
-    public function admin_sim()
-    {
-        $query = $this->db->query("
-            SELECT * FROM tb_tiket 
-            WHERE tikNomor IS NOT NULL AND tikNomor != ''
-            ORDER BY CAST(SUBSTRING(tikNomor, 4) AS UNSIGNED) DESC
-        ");
-        return $query;
-    }
-    public function admin_sarpras()
-    {
-        $query = "SELECT layID, layTanggal, layUserID, pegNama, layHal, layDiskripsi, layTarget, layPetugas1, layPetugas2, layPetugas3, layPetugas4, layPetugas5, layStatus, layCreateUserID, layCloseUserID, layCloseTanggal FROM tb_layanan";
-        return $this->db->query($query);
-    }
     public function update_tiket($tikNomor, $data)
     {
         $this->db->where('tikNomor', $tikNomor);
@@ -267,5 +253,55 @@ class model extends CI_Model
     {
         $this->db->where('layID', $layID);
         $this->db->update('tb_layanan', $data);
+    }
+
+    public function get_user_hak_akses()
+    {
+        $query = $this->db->query("
+        SELECT
+            userId,
+            userNama,
+
+            IFNULL(
+                MAX(
+                    CASE
+                        WHEN privMenuId='1'
+                        THEN privAkses
+                    END
+                ),
+            'N') AS Tiket,
+
+            IFNULL(
+                MAX(
+                    CASE
+                        WHEN privMenuId='25'
+                        THEN privAkses
+                    END
+                ),
+            'N') AS Sarpras,
+
+            IFNULL(
+                MAX(
+                    CASE
+                        WHEN privMenuId='24'
+                        THEN privAkses
+                    END
+                ),
+            'N') AS Admin
+
+        FROM tb_user_priv
+
+        LEFT JOIN ref_menu
+            ON privMenuId = menuID
+
+        LEFT JOIN vUser
+            ON privUserId = userID
+
+        GROUP BY userId, userNama
+
+        ORDER BY userNama ASC
+    ");
+
+        return $query;
     }
 }

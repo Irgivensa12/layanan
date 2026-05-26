@@ -154,7 +154,7 @@
 
                 <div class="bg-white py-2 collapse-inner rounded">
 
-                    <!-- ADMIN UTAMA BISA SEMUA -->
+                    <!-- ADMIN UTAMA -->
                     <?php if ($admin == 'Y') { ?>
 
                         <a class="collapse-item" href="<?= base_url('tiket_sim') ?>">
@@ -212,80 +212,60 @@
             </div>
         </li>
 
-        <?php
-        $admin   = $this->session->userdata('admin');
-        $sarpras = $this->session->userdata('sarpras');
+        <!-- MENU USER (KHUSUS ADMIN HAK AKSES) -->
+        <?php if ($admin == 'Y') { ?>
 
-        if ($admin == 'Y' || $sarpras == 'Y') {
-        ?>
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url('Insert/menu_user') ?>">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Menu User</span>
+                </a>
+            </li>
 
-            <!-- MENU LAPORAN -->
-            <?php
-            if (
-                $admin == 'Y' ||
-                $sim == 'Y' ||
-                $sarpras == 'Y'
-            ) {
-            ?>
+        <?php } ?>
 
-                <!-- MENU LAPORAN -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse"
-                        data-target="#collapseLaporan"
-                        aria-expanded="true" aria-controls="collapseLaporan">
+        <!-- MENU LAPORAN -->
+        <?php if ($sim == 'Y' || $sarpras == 'Y') { ?>
 
-                        <i class="fas fa-fw fa-file"></i>
-                        <span>Laporan</span>
-                    </a>
+            <li class="nav-item">
 
-                    <div id="collapseLaporan" class="collapse"
-                        data-parent="#accordionSidebar">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse"
+                    data-target="#collapseLaporan"
+                    aria-expanded="true" aria-controls="collapseLaporan">
 
-                        <div class="bg-white py-2 collapse-inner rounded">
+                    <i class="fas fa-fw fa-file"></i>
+                    <span>Laporan</span>
 
-                            <!-- ADMIN UTAMA -->
-                            <?php if ($admin == 'Y') { ?>
+                </a>
 
-                                <a class="collapse-item" href="<?= base_url('laporan_sim') ?>">
-                                    Laporan SIM
-                                </a>
+                <div id="collapseLaporan" class="collapse"
+                    data-parent="#accordionSidebar">
 
-                                <a class="collapse-item" href="<?= base_url('laporan_sarpras') ?>">
-                                    Laporan Sarpras
-                                </a>
+                    <div class="bg-white py-2 collapse-inner rounded">
 
-                            <?php } ?>
+                        <!-- ADMIN SIM -->
+                        <?php if ($sim == 'Y') { ?>
 
-                            <!-- ADMIN SIM -->
-                            <?php if ($sim == 'Y') { ?>
+                            <a class="collapse-item" href="<?= base_url('laporan_sim') ?>">
+                                Laporan SIM
+                            </a>
 
-                                <a class="collapse-item" href="<?= base_url('laporan_sim') ?>">
-                                    Laporan SIM
-                                </a>
+                        <?php } ?>
 
-                            <?php } ?>
+                        <!-- ADMIN SARPRAS -->
+                        <?php if ($sarpras == 'Y') { ?>
 
-                            <!-- ADMIN SARPRAS -->
-                            <?php if ($sarpras == 'Y') { ?>
+                            <a class="collapse-item" href="<?= base_url('laporan_sarpras') ?>">
+                                Laporan Sarpras
+                            </a>
 
-                                <a class="collapse-item" href="<?= base_url('laporan_sarpras') ?>">
-                                    Laporan Sarpras
-                                </a>
+                        <?php } ?>
 
-                            <?php } ?>
-
-                        </div>
                     </div>
-                </li>
+                </div>
+            </li>
 
-            <?php } ?>
-
-        <?php
-        } else {
-            // jika login sebagai USER biasa, menu laporan tidak ditampilkan
-        }
-        ?>
-
+        <?php } ?>
 
         <hr class="sidebar-divider">
 
