@@ -283,11 +283,12 @@
             if (
                 !$this->session->userdata('helpdesk_userId')
             ) {
+
                 redirect();
                 exit;
             }
 
-            // HANYA ADMIN HAK AKSES YANG BISA UPDATE HAK AKSES
+            // HANYA ADMIN
             if (
                 $this->session->userdata('admin') != 'Y'
             ) {
@@ -299,39 +300,41 @@
                     'alert-danger';
 
                 redirect('dashboard');
+                exit;
             }
 
-            // MENERIMA DATA DARI FORM
+            // AMBIL DATA
             $userId = $this->input->post('userId');
 
-            $sim      =
+            // DEFAULT
+            $sim =
                 $this->input->post('sim')
-                ? 'Y' : 'N'; // jika checkbox sim dicentang, maka $sim bernilai 'Y', jika tidak dicentang maka bernilai 'N'
+                ? 'Y' : 'N';
 
             $sarpras =
                 $this->input->post('sarpras')
                 ? 'Y' : 'N';
 
-            $admin   =
-                $this->input->post('admin')
-                ? 'Y' : 'N';
+            // $admin =
+            //     $this->input->post('admin')
+            //     ? 'Y' : 'N';
 
             // UPDATE ROLE SIM
-            $this->model->update_hak_akses(
+            $this->Model->update_hak_akses(
                 $userId,
                 '1',
                 $sim
             );
 
             // UPDATE ROLE SARPRAS
-            $this->model->update_hak_akses( // function untuk update hak akses, menerima parameter userId, privMenuId, dan privAkses (Y/N)
+            $this->Model->update_hak_akses(
                 $userId,
                 '25',
                 $sarpras
             );
 
             // UPDATE ROLE ADMIN
-            $this->model->update_hak_akses(
+            $this->Model->update_hak_akses(
                 $userId,
                 '24',
                 $admin

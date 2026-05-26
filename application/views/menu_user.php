@@ -92,8 +92,7 @@ if ($admin != 'Y') {
                                     <th>Nama User</th>
                                     <th>SIM</th>
                                     <th>Sarpras</th>
-                                    <th>Admin</th>
-                                    <th>Aksi</th>
+                                    <th>Edit Hak Akses</th>
                                 </tr>
 
                             </thead>
@@ -135,24 +134,6 @@ if ($admin != 'Y') {
                                             <?php if ($u->Sarpras == 'Y') { ?>
 
                                                 <span class="badge badge-success">
-                                                    Y
-                                                </span>
-
-                                            <?php } else { ?>
-
-                                                <span class="badge badge-secondary">
-                                                    N
-                                                </span>
-
-                                            <?php } ?>
-
-                                        </td>
-
-                                        <td>
-
-                                            <?php if ($u->Admin == 'Y') { ?>
-
-                                                <span class="badge badge-danger">
                                                     Y
                                                 </span>
 
@@ -234,6 +215,7 @@ if ($admin != 'Y') {
                 action="<?= base_url('Insert/updateHakAkses') ?>"
                 method="POST">
 
+                <!-- HEADER -->
                 <div class="modal-header bg-primary text-white">
 
                     <h5 class="modal-title">
@@ -250,6 +232,7 @@ if ($admin != 'Y') {
 
                 </div>
 
+                <!-- BODY -->
                 <div class="modal-body">
 
                     <div class="form-group">
@@ -279,45 +262,54 @@ if ($admin != 'Y') {
 
                     <div class="form-group">
 
-                        <input type="checkbox"
-                            name="sim"
-                            value="Y"
-                            id="sim">
-
-                        <label for="sim">
-                            Admin SIM
+                        <label>
+                            <b>Pilih Hak Akses</b>
                         </label>
 
-                    </div>
+                        <div class="mt-2">
 
-                    <div class="form-group">
+                            <input type="checkbox"
+                                name="sim"
+                                value="Y"
+                                id="sim">
 
-                        <input type="checkbox"
-                            name="sarpras"
-                            value="Y"
-                            id="sarpras">
+                            <label for="sim">
+                                Admin SIM
+                            </label>
 
-                        <label for="sarpras">
-                            Admin Sarpras
-                        </label>
+                        </div>
 
-                    </div>
+                        <div>
 
-                    <div class="form-group">
+                            <input type="checkbox"
+                                name="sarpras"
+                                value="Y"
+                                id="sarpras">
 
-                        <input type="checkbox"
-                            name="admin"
-                            value="Y"
-                            id="admin">
+                            <label for="sarpras">
+                                Admin Sarpras
+                            </label>
 
-                        <label for="admin">
-                            Admin Utama
-                        </label>
+                        </div>
+
+                        <!-- <div>
+
+                            <input type="checkbox"
+                                name="admin"
+                                value="Y"
+                                id="admin">
+
+                            <label for="admin">
+                                Admin
+                            </label>
+
+                        </div> -->
 
                     </div>
 
                 </div>
 
+                <!-- FOOTER -->
                 <div class="modal-footer">
 
                     <button type="submit"
@@ -362,7 +354,11 @@ if ($admin != 'Y') {
 <script>
     $(document).ready(function() {
 
-        $('#tabel').DataTable();
+        // DATATABLE
+        $('#tabel').DataTable({
+            "pageLength": 10,
+            "lengthMenu": [5, 10, 25, 50, 100]
+        });
 
         // TOMBOL EDIT
         $(document).on('click', '.btnEdit', function() {
@@ -370,16 +366,37 @@ if ($admin != 'Y') {
             let userId = $(this).data('userid');
             let userNama = $(this).data('usernama');
 
-            let tiket = $(this).data('tiket');
-            let sarpras = $(this).data('sarpras');
-            let admin = $(this).data('admin');
-
             $('#userId').val(userId);
             $('#userNama').val(userNama);
 
-            $('#sim').prop('checked', tiket == 'Y');
-            $('#sarpras').prop('checked', sarpras == 'Y');
-            $('#admin').prop('checked', admin == 'Y');
+            // RESET CHECKBOX
+            $('#sim').prop('checked', false);
+            $('#sarpras').prop('checked', false);
+
+            // ADMIN SEMENTARA DIKOMENTARI
+            // $('#admin').prop('checked', false);
+
+            // ISI CHECKBOX SESUAI DATABASE
+            if ($(this).data('tiket') == 'Y') {
+
+                $('#sim').prop('checked', true);
+
+            }
+
+            if ($(this).data('sarpras') == 'Y') {
+
+                $('#sarpras').prop('checked', true);
+
+            }
+
+            // ADMIN SEMENTARA DIKOMENTARI
+            /*
+            if ($(this).data('admin') == 'Y') {
+
+                $('#admin').prop('checked', true);
+
+            }
+            */
 
             $('#modalEdit').modal('show');
 
@@ -390,25 +407,28 @@ if ($admin != 'Y') {
 
             let sim = $('#sim').is(':checked');
             let sarpras = $('#sarpras').is(':checked');
-            let admin = $('#admin').is(':checked');
 
-            // MINIMAL 1 ROLE
+            // ADMIN SEMENTARA DIKOMENTARI
+            // let admin = $('#admin').is(':checked');
+
+            // JIKA SEMUA KOSONG = USER BIASA
             if (
                 !sim &&
-                !sarpras &&
-                !admin
+                !sarpras
+                // && !admin
             ) {
 
-                alert(
-                    'Minimal satu hak akses harus dipilih!'
+                let konfirmasiUser = confirm(
+                    'User akan dijadikan user biasa. Lanjutkan?'
                 );
 
-                e.preventDefault();
+                if (!konfirmasiUser) {
 
-                return false;
+                    e.preventDefault();
+                    return false;
+                }
             }
 
-            // KONFIRMASI
             let konfirmasi = confirm(
                 'Apakah Anda yakin ingin menyimpan perubahan hak akses ini?'
             );
@@ -416,7 +436,6 @@ if ($admin != 'Y') {
             if (!konfirmasi) {
 
                 e.preventDefault();
-
                 return false;
             }
 
