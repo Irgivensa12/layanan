@@ -71,9 +71,6 @@ $userId  = $this->session->userdata('helpdesk_userId');
                                 <?php } ?>
 
                                 <th>Detail</th>
-<<<<<<<<< Temporary merge branch 1
-                                <?php if ($admin != 'Y' && $sim != 'Y') { ?>
-=========
 
                                 <?php if ($admin != 'Y') { ?>
                                     <th>Status</th>

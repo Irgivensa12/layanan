@@ -365,7 +365,7 @@ if ($admin != 'Y') {
         $('#tabel').DataTable();
 
         // TOMBOL EDIT
-        $('.btnEdit').click(function() {
+        $(document).on('click', '.btnEdit', function() {
 
             let userId = $(this).data('userid');
             let userNama = $(this).data('usernama');
