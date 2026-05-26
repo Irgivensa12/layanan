@@ -19,3 +19,4 @@ $route['tambah_tiket_sim'] = 'Controller/tambah_tiket_sim';
 $route['dashboard'] = 'Controller/dashboard';
 $route['laporan_sim'] = 'Controller/laporan_sim';
 $route['laporan_sarpras'] = 'Controller/laporan_sarpras';
+$route['menu_user'] = 'Controller/menu_user';

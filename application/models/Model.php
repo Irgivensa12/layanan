@@ -118,7 +118,7 @@ class model extends CI_Model
             $filterStatus = " AND t.tikStatus='Y' ";
         }
 
-        // ADMIN UTAMA ATAU ADMIN SIM
+        // ADMIN HAK AKSES ATAU ADMIN SIM
         if ($admin == 'Y' || $sim == 'Y') {
 
             $query = $this->db->query("
@@ -250,32 +250,26 @@ class model extends CI_Model
             userId,
             userNama,
 
-            IFNULL(
-                MAX(
-                    CASE
-                        WHEN privMenuId='1'
-                        THEN privAkses
-                    END
-                ),
-            'N') AS Tiket,
+            MAX(
+                CASE
+                    WHEN privMenuId='1'
+                    THEN privAkses
+                END
+            ) AS Tiket,
 
-            IFNULL(
-                MAX(
-                    CASE
-                        WHEN privMenuId='25'
-                        THEN privAkses
-                    END
-                ),
-            'N') AS Sarpras,
+            MAX(
+                CASE
+                    WHEN privMenuId='25'
+                    THEN privAkses
+                END
+            ) AS Sarpras,
 
-            IFNULL(
-                MAX(
-                    CASE
-                        WHEN privMenuId='24'
-                        THEN privAkses
-                    END
-                ),
-            'N') AS Admin
+            MAX(
+                CASE
+                    WHEN privMenuId='24'
+                    THEN privAkses
+                END
+            ) AS Admin
 
         FROM tb_user_priv
 
@@ -285,11 +279,56 @@ class model extends CI_Model
         LEFT JOIN vUser
             ON privUserId = userID
 
+        WHERE menuJenis='Tiket'
+
         GROUP BY userId, userNama
 
         ORDER BY userNama ASC
     ");
 
         return $query;
+    }
+
+    public function update_hak_akses(
+        $userId,
+        $menuId,
+        $akses
+    ) {
+
+        $cek = $this->db
+            ->where('privUserId', $userId)
+            ->where('privMenuId', $menuId)
+            ->get('tb_user_priv');
+
+        if ($cek->num_rows() > 0) {
+
+            $this->db->where('privUserId', $userId);
+            $this->db->where('privMenuId', $menuId);
+
+            return $this->db->update(
+                'tb_user_priv',
+                [
+                    'privAkses' => $akses
+                ]
+            );
+        } else {
+
+            return $this->db->insert(
+                'tb_user_priv',
+                [
+                    'privUserId' => $userId,
+                    'privMenuId' => $menuId,
+                    'privAkses' => $akses
+                ]
+            );
+        }
+    }
+
+    public function insert_hak_akses($data)
+    {
+        return $this->db->insert(
+            'tb_user_priv',
+            $data
+        );
     }
 }

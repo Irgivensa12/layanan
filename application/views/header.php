@@ -210,7 +210,7 @@
         <?php if ($admin == 'Y') { ?>
 
             <li class="nav-item">
-                <a class="nav-link" href="<?= base_url('Insert/menu_user') ?>">
+                <a class="nav-link" href="<?= base_url('menu_user') ?>">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Menu User</span>
                 </a>
