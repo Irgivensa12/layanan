@@ -1,1407 +1,1411 @@
-    <?php
+   <?php
     defined('BASEPATH') or exit('No direct script access allowed');
 
-    if (!$this->session->userdata('helpdesk_userId')) {
-        $this->session->set_flashdata('type', 'alert-danger');
-        $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
+    if (
+        !$this->session->userdata('helpdesk_userId')
+    ) {
         redirect();
         exit;
     }
 
-    $admin = $this->session->userdata('admin');
+    // SESSION
+    $admin   = $this->session->userdata('admin');
+    $sim     = $this->session->userdata('sim');
+    $sarpras = $this->session->userdata('sarpras');
+
+    $userId  = $this->session->userdata('helpdesk_userId');
     ?>
+   <style id="stylePrintSarpras">
+       /* Style global (font, ukuran, warna, garis) */
+       .sarpras-form {
+           width: 100%;
+           font-family: Arial, sans-serif;
+           font-size: 14px;
+           color: black;
+           line-height: 1.5;
+       }
 
-    <style id="stylePrintSarpras">
-        /* Style global (font, ukuran, warna, garis) */
-        .sarpras-form {
-            width: 100%;
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-            color: black;
-            line-height: 1.5;
-        }
+       /* WRAPPER 2 KOLOM */
+       .print-wrapper {
+           display: flex;
+           gap: 20px;
+           align-items: stretch;
+       }
 
-        /* WRAPPER 2 KOLOM */
-        .print-wrapper {
-            display: flex;
-            gap: 20px;
-            align-items: stretch;
-        }
+       /* KOLOM KIRI & KANAN */
+       .print-col {
+           width: 50%;
+           padding: 20px;
+           border: 1px solid black;
+           /* kotak tipis muncul */
+           box-sizing: border-box;
+           display: flex;
+       }
 
-        /* KOLOM KIRI & KANAN */
-        .print-col {
-            width: 50%;
-            padding: 20px;
-            border: 1px solid black;
-            /* kotak tipis muncul */
-            box-sizing: border-box;
-            display: flex;
-        }
+       /* FIELD */
+       .sarpras-row {
+           display: flex;
+           align-items: center;
+           /* biar sejajar isi form kanan dan kiri */
+           margin-bottom: 8px;
+       }
 
-        /* FIELD */
-        .sarpras-row {
-            display: flex;
-            align-items: center;
-            /* biar sejajar isi form kanan dan kiri */
-            margin-bottom: 8px;
-        }
+       .sarpras-title {
+           font-size: 18px;
+           font-weight: 700;
+           text-align: center;
+       }
 
-        .sarpras-title {
-            font-size: 18px;
-            font-weight: 700;
-            text-align: center;
-        }
+       .sarpras-subtitle {
+           text-align: center;
+           margin-bottom: 10px;
+           font-weight: 600;
+       }
 
-        .sarpras-subtitle {
-            text-align: center;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
+       .sarpras-label {
+           width: 130px;
+           font-weight: bold;
+       }
 
-        .sarpras-label {
-            width: 130px;
-            font-weight: bold;
-        }
+       /* GARIS INPUT */
+       .sarpras-line {
+           flex: 1;
+           border-bottom: 1px solid black;
+           min-height: 20px;
+           padding-left: 5px;
+           /* Jarak Teks */
+       }
 
-        /* GARIS INPUT */
-        .sarpras-line {
-            flex: 1;
-            border-bottom: 1px solid black;
-            min-height: 20px;
-            padding-left: 5px;
-            /* Jarak Teks */
-        }
+       /* BOX */
+       .sarpras-box {
+           border: 1px solid black;
+           min-height: 90px;
+           padding: 10px 12px;
+           /* agar teks tidak nempel kiri */
+           margin-top: 5px;
+           margin-bottom: 12px;
+       }
 
-        /* BOX */
-        .sarpras-box {
-            border: 1px solid black;
-            min-height: 90px;
-            padding: 10px 12px;
-            /* agar teks tidak nempel kiri */
-            margin-top: 5px;
-            margin-bottom: 12px;
-        }
+       /* TTD */
+       .sarpras-ttd {
+           display: flex;
+           justify-content: space-between;
+           text-align: center;
+           font-size: 12px;
+           margin-top: 15px;
+       }
 
-        /* TTD */
-        .sarpras-ttd {
-            display: flex;
-            justify-content: space-between;
-            text-align: center;
-            font-size: 12px;
-            margin-top: 15px;
-        }
+       .sarpras-form hr {
+           border: none;
+           border-top: 2px dashed black;
+           margin: 15px 0;
+       }
 
-        .sarpras-form hr {
-            border: none;
-            border-top: 2px dashed black;
-            margin: 15px 0;
-        }
+       /* Rencana Tindak Lanjut */
+       .sarpras-rtl {
+           margin-top: 15px;
+       }
 
-        /* Rencana Tindak Lanjut */
-        .sarpras-rtl {
-            margin-top: 15px;
-        }
+       .sarpras-rtl-row {
+           display: flex;
+           justify-content: space-between;
+           margin-bottom: 5px;
+       }
 
-        .sarpras-rtl-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
+       .caKaki {
+           margin-top: 10px;
+           font-size: 12px;
+           font-weight: bold;
+       }
 
-        .caKaki {
-            margin-top: 10px;
-            font-size: 12px;
-            font-weight: bold;
-        }
+       .modal-content {
+           position: relative;
+       }
 
-        .modal-content {
-            position: relative;
-        }
+       .close {
+           position: absolute;
+           top: 10px;
+           right: 15px;
+           width: 35px;
+           height: 35px;
+           font-size: 22px;
+           font-weight: bold;
 
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            width: 35px;
-            height: 35px;
-            font-size: 22px;
-            font-weight: bold;
+           color: black;
+           background: transparent;
+           border: none;
+           border-radius: 50%;
 
-            color: black;
-            background: transparent;
-            border: none;
-            border-radius: 50%;
+           cursor: pointer;
+           z-index: 999;
 
-            cursor: pointer;
-            z-index: 999;
+           display: flex;
+           align-items: center;
+           justify-content: center;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+           transition: all 0.2s ease;
+       }
 
-            transition: all 0.2s ease;
-        }
+       .close:hover {
+           background: #e81123;
+           /* merah khas tombol close */
+           color: white;
+       }
 
-        .close:hover {
-            background: #e81123;
-            /* merah khas tombol close */
-            color: white;
-        }
+       /* PRINT */
+       @media print {
+           @page {
+               size: A4 landscape;
+               margin: 10mm;
+           }
 
-        /* PRINT */
-        @media print {
-            @page {
-                size: A4 landscape;
-                margin: 10mm;
-            }
+           html,
+           body {
+               width: 297mm;
+               height: 210mm;
+               overflow: hidden;
+           }
 
-            html,
-            body {
-                width: 297mm;
-                height: 210mm;
-                overflow: hidden;
-            }
+           .print-wrapper {
+               width: 297mm;
+               height: 200mm;
+               /* jangan 210, kasih margin aman */
+               display: flex;
+               gap: 10px;
+               margin: auto;
+           }
 
-            .print-wrapper {
-                width: 297mm;
-                height: 200mm;
-                /* jangan 210, kasih margin aman */
-                display: flex;
-                gap: 10px;
-                margin: auto;
-            }
+           .print-col {
+               width: 50%;
+               height: 100%;
+               padding: 12px;
+               border: 1px solid black;
+               box-sizing: border-box;
+               overflow: hidden;
+           }
 
-            .print-col {
-                width: 50%;
-                height: 100%;
-                padding: 12px;
-                border: 1px solid black;
-                box-sizing: border-box;
-                overflow: hidden;
-            }
+           .sarpras-form {
+               height: 100%;
+               display: flex;
+               flex-direction: column;
+               justify-content: space-between;
+           }
 
-            .sarpras-form {
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-            }
+           button,
+           .modal-header,
+           .close {
+               display: none !important;
+           }
 
-            button,
-            .modal-header,
-            .close {
-                display: none !important;
-            }
+           .close-btn {
+               display: none !important;
+           }
 
-            .close-btn {
-                display: none !important;
-            }
+           .modal,
+           .modal-dialog,
+           .modal-content {
+               all: unset;
+           }
+       }
+   </style>
 
-            .modal,
-            .modal-dialog,
-            .modal-content {
-                all: unset;
-            }
-        }
-    </style>
+   <div id="content-wrapper" class="d-flex flex-column">
 
-    <div id="content-wrapper" class="d-flex flex-column">
+       <div id="content">
 
-        <div id="content">
+           <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
-            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+               <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                   <i class="fa fa-bars"></i>
+               </button>
 
-                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                    <i class="fa fa-bars"></i>
-                </button>
+               <ul class="navbar-nav ml-auto">
+                   <img src="<?= base_url('img/kanisius.png') ?>">
+               </ul>
 
-                <ul class="navbar-nav ml-auto">
-                    <img src="<?= base_url('img/kanisius.png') ?>">
-                </ul>
+           </nav>
 
-            </nav>
+           <div class="container-fluid">
 
-            <div class="container-fluid">
+               <!-- JUDUL -->
+               <div class="d-sm-flex align-items-center justify-content-between mb-4">
 
-                <!-- JUDUL -->
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                   <h1 class="h3 mb-0 text-gray-800">
 
-                    <h1 class="h3 mb-0 text-gray-800">
+                       <?= ($sarpras == 'Y') ? 'Halaman keluhan SARPRAS' : 'List Semua Keluhan SARPRAS'; ?>
 
-                        <?= ($admin == 'Y') ? 'Halaman keluhan SARPRAS' : 'List Semua Keluhan SARPRAS'; ?>
+                   </h1>
 
-                    </h1>
+               </div>
 
-                </div>
+               <!-- ALERT -->
+               <div class="form-group row">
 
-                <!-- ALERT -->
-                <div class="form-group row">
+                   <div class="col-sm-12">
 
-                    <div class="col-sm-12">
+                       <?php if (isset($_SESSION["pesan"])) { ?>
 
-                        <?php if (isset($_SESSION["pesan"])) { ?>
+                           <div class="alert <?= $_SESSION['type'] ?> alert-dismissible">
 
-                            <div class="alert <?= $_SESSION['type'] ?> alert-dismissible">
+                               <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                               <?= $_SESSION['pesan'] ?>
 
-                                <?= $_SESSION['pesan'] ?>
+                           </div>
 
-                            </div>
-
-                        <?php unset($_SESSION['pesan']);
+                       <?php unset($_SESSION['pesan']);
                         } ?>
 
-                    </div>
+                   </div>
 
-                </div>
+               </div>
 
-                <!-- BUTTON TAMBAH -->
-                <div class="form-group row">
+               <!-- BUTTON TAMBAH -->
+               <div class="form-group row">
 
-                    <div class="col-sm-2">
+                   <div class="col-sm-2">
 
-                        <a href="<?= base_url('tambah_tiket_sarpras') ?>" class="btn btn-primary">
+                       <a href="<?= base_url('tambah_tiket_sarpras') ?>" class="btn btn-primary">
 
-                            <i class="fas fa-plus"></i> Tambah
+                           <i class="fas fa-plus"></i> Tambah
 
-                        </a>
+                       </a>
 
-                    </div>
+                   </div>
 
-                </div>
+               </div>
 
-                <!-- TABLE -->
-                <div class="row">
+               <!-- TABLE -->
+               <div class="row">
 
-                    <div class="col">
+                   <div class="col">
 
-                        <table id="tabel" class="display nowrap" style="width:100%">
+                       <table id="tabel" class="display nowrap" style="width:100%">
 
-                            <thead style="color: black;">
+                           <thead style="color: black;">
 
-                                <tr>
+                               <tr>
 
-                                    <th>No</th>
-                                    <th>Tanggal</th>
+                                   <th>No</th>
+                                   <th>Tanggal</th>
 
-                                    <?php if ($admin == 'Y') { ?>
-                                        <th>Penginput</th>
-                                    <?php } ?>
+                                   <?php if ($admin == 'Y') { ?>
+                                       <th>Penginput</th>
+                                   <?php } ?>
 
-                                    <th>Keluhan</th>
-                                    <th>Deskripsi</th>
+                                   <th>Keluhan</th>
+                                   <th>Deskripsi</th>
 
-                                    <?php if ($admin != 'Y') { ?>
-                                        <th>Status</th>
-                                    <?php } ?>
+                                   <?php if ($admin != 'Y') { ?>
+                                       <th>Status</th>
+                                   <?php } ?>
 
-                                    <th>Detail</th>
+                                   <th>Detail</th>
 
-                                    <?php if ($admin == 'Y') { ?>
-                                        <th>Form Sarpras</th>
-                                        <th>Status</th>
-                                    <?php } ?>
+                                   <?php if ($admin == 'Y') { ?>
+                                       <th>Form Sarpras</th>
+                                       <th>Status</th>
+                                   <?php } ?>
 
-                                </tr>
+                               </tr>
 
-                            </thead>
+                           </thead>
 
-                            <tbody id="tbody" style="color:black;">
+                           <tbody id="tbody" style="color:black;">
 
-                            </tbody>
+                           </tbody>
 
-                        </table>
+                       </table>
 
-                    </div>
+                   </div>
 
-                </div>
+               </div>
 
-                <br>
+               <br>
 
-            </div>
+           </div>
 
-        </div>
+       </div>
 
-        <!-- FOOTER -->
-        <footer class="sticky-footer bg-white">
+       <!-- FOOTER -->
+       <footer class="sticky-footer bg-white">
 
-            <div class="container my-auto">
+           <div class="container my-auto">
 
-                <div class="copyright text-center my-auto">
+               <div class="copyright text-center my-auto">
 
-                    <span>© <?= date("Y"); ?> PT Kanisius.</span>
+                   <span>© <?= date("Y"); ?> PT Kanisius.</span>
 
-                </div>
+               </div>
 
-            </div>
+           </div>
 
-        </footer>
+       </footer>
 
-    </div>
+   </div>
 
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-    <!-- Harus Menggunakan base_url karena asset dipanggil relatif terhadap URL aktif -->
-    <script src="<?= base_url('vendor/jquery/jquery.min.js') ?>"></script>
-    <script src="<?= base_url('vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
-    <script src="<?= base_url('vendor/jquery-easing/jquery.easing.min.js') ?>"></script>
-    <script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
+   <a class="scroll-to-top rounded" href="#page-top">
+       <i class="fas fa-angle-up"></i>
+   </a>
+   <!-- Harus Menggunakan base_url karena asset dipanggil relatif terhadap URL aktif -->
+   <script src="<?= base_url('vendor/jquery/jquery.min.js') ?>"></script>
+   <script src="<?= base_url('vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
+   <script src="<?= base_url('vendor/jquery-easing/jquery.easing.min.js') ?>"></script>
+   <script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
 
-    <!-- DataTables -->
-    <link rel="stylesheet" type="text/css" href="<?= base_url('vendor/datatables/jquery.dataTables.min.css') ?>">
-    <script type="text/javascript" charset="utf8" src="<?= base_url('vendor/datatables/jquery.dataTables.min.js') ?>"></script>
-    <script type="text/javascript" charset="utf8" src="<?= base_url('vendor/datatables/dataTables.select.min.js') ?>"></script>
+   <!-- DataTables -->
+   <link rel="stylesheet" type="text/css" href="<?= base_url('vendor/datatables/jquery.dataTables.min.css') ?>">
+   <script type="text/javascript" charset="utf8" src="<?= base_url('vendor/datatables/jquery.dataTables.min.js') ?>"></script>
+   <script type="text/javascript" charset="utf8" src="<?= base_url('vendor/datatables/dataTables.select.min.js') ?>"></script>
 
-    <!-- CKEditor -->
-    <script src="<?= base_url('vendor/ckeditor/ckeditor.js') ?>"></script>
-    <script src="<?= base_url('vendor/ckeditor/translations/id.js') ?>"></script>
+   <!-- CKEditor -->
+   <script src="<?= base_url('vendor/ckeditor/ckeditor.js') ?>"></script>
+   <script src="<?= base_url('vendor/ckeditor/translations/id.js') ?>"></script>
 
-    <!-- xlsx -->
-    <script type="text/javascript" src="<?= base_url('vendor/xlsx/xlsx.fix.js') ?>"></script>
+   <!-- xlsx -->
+   <script type="text/javascript" src="<?= base_url('vendor/xlsx/xlsx.fix.js') ?>"></script>
 
-    <!-- library html2pdf -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+   <!-- library html2pdf -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-    <script>
-        var table;
-        var admin = "<?= $admin ?>";
+   <script>
+       var table;
+       var admin = "<?= $admin ?>";
 
-        $(document).ready(function() {
+       $(document).ready(function() {
 
-            $('#menuTiket').trigger('click');
+           $('#menuTiket').trigger('click');
 
-            table = $('#tabel').DataTable({
-                "scrollX": true,
-                "scrollY": "400px",
-                "select": true,
-                "bSort": false
-            });
+           table = $('#tabel').DataTable({
+               "scrollX": true,
+               "scrollY": "400px",
+               "select": true,
+               "bSort": false
+           });
 
-            getTiket_Sarpras();
+           getTiket_Sarpras();
 
-        });
+       });
 
-        // =========================
-        // GET DATA
-        // =========================
+       // =========================
+       // GET DATA
+       // =========================
 
-        function getTiket_Sarpras() {
+       function getTiket_Sarpras() {
 
-            $.ajax({
+           $.ajax({
 
-                url: "<?php echo base_url('Select/tiket_sarpras?status=' . $this->input->get('status')) ?>",
+               url: "<?php echo base_url('Select/tiket_sarpras?status=' . $this->input->get('status')) ?>",
 
-                dataType: "JSON",
+               dataType: "JSON",
 
-                success: function(data) {
+               success: function(data) {
 
-                    console.log(data);
+                   console.log(data);
 
-                    table.clear();
+                   table.clear();
 
-                    data.sort(function(a, b) {
+                   data.sort(function(a, b) {
 
-                        let numA = parseInt(a.layID.toString().split('-').pop()) || 0;
-                        let numB = parseInt(b.layID.toString().split('-').pop()) || 0;
+                       let numA = parseInt(a.layID.toString().split('-').pop()) || 0;
+                       let numB = parseInt(b.layID.toString().split('-').pop()) || 0;
 
-                        return numB - numA;
+                       return numB - numA;
 
-                    });
+                   });
 
-                    for (var i = 0; i < data.length; i++) {
+                   for (var i = 0; i < data.length; i++) {
 
-                        var tanggal_db = new Date(data[i].layTanggal);
+                       var tanggal_db = new Date(data[i].layTanggal);
 
-                        var options = {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                        };
+                       var options = {
+                           year: 'numeric',
+                           month: 'long',
+                           day: 'numeric'
+                       };
 
-                        var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
+                       var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
-                        // STATUS
+                       // STATUS
 
-                        var statusText = '';
+                       var statusText = '';
 
-                        if (data[i].layStatus == 'N') {
+                       if (data[i].layStatus == 'N') {
 
-                            statusText =
-                                '<span class="badge badge-success">OPEN</span>';
+                           statusText =
+                               '<span class="badge badge-success">OPEN</span>';
 
-                        } else {
+                       } else {
 
-                            statusText =
-                                '<span class="badge badge-secondary">CLOSED</span>';
+                           statusText =
+                               '<span class="badge badge-secondary">CLOSED</span>';
 
-                        }
+                       }
 
-                        // DETAIL BUTTON
+                       // DETAIL BUTTON
 
-                        var detailBtn =
-                            '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
-                            data[i].layID +
-                            '" data-toggle="modal" data-target="#modalDetail">Detail</button>';
+                       var detailBtn =
+                           '<button class="btn btn-primary btn-sm detailBtn" data-id="' +
+                           data[i].layID +
+                           '" data-toggle="modal" data-target="#modalDetail">Detail</button>';
 
-                        // FORM SARPRAS
+                       // FORM SARPRAS
 
-                        var formSarprasBtn =
-                            '<button class="btn btn-info btn-sm formSarprasBtn" data-id="' +
-                            data[i].layID +
-                            '" data-toggle="modal" data-target="#modalFormSarpras">Form Sarpras</button>';
+                       var formSarprasBtn =
+                           '<button class="btn btn-info btn-sm formSarprasBtn" data-id="' +
+                           data[i].layID +
+                           '" data-toggle="modal" data-target="#modalFormSarpras">Form Sarpras</button>';
 
-                        // ACTION ADMIN
+                       // ACTION ADMIN
 
-                        var actionBtn = '';
+                       var actionBtn = '';
 
-                        if (admin == 'Y') {
+                       if (admin == 'Y') {
 
-                            if (data[i].layStatus == 'N') {
+                           if (data[i].layStatus == 'N') {
 
-                                actionBtn =
-                                    '<button class="btn btn-success btn-sm statusBtn" data-id="' +
-                                    data[i].layID +
-                                    '">OPEN</button>';
+                               actionBtn =
+                                   '<button class="btn btn-success btn-sm statusBtn" data-id="' +
+                                   data[i].layID +
+                                   '">OPEN</button>';
 
-                            } else {
+                           } else {
 
-                                actionBtn =
-                                    '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>';
+                               actionBtn =
+                                   '<button class="btn btn-secondary btn-sm" disabled>CLOSED</button>';
 
-                            }
+                           }
 
-                        }
+                       }
 
-                        // =========================
-                        // ADMIN
-                        // =========================
+                       // =========================
+                       // ADMIN
+                       // =========================
 
-                        if (admin == 'Y') {
+                       if (admin == 'Y') {
 
-                            table.row.add([
+                           table.row.add([
 
-                                data[i].layID,
-                                tanggal_benar,
-                                data[i].layUserID,
-                                data[i].layHal,
-                                data[i].layDiskripsi,
-                                detailBtn,
-                                formSarprasBtn,
-                                actionBtn
+                               data[i].layID,
+                               tanggal_benar,
+                               data[i].layUserID,
+                               data[i].layHal,
+                               data[i].layDiskripsi,
+                               detailBtn,
+                               formSarprasBtn,
+                               actionBtn
 
-                            ]);
+                           ]);
 
-                        }
+                       }
 
-                        // =========================
-                        // USER
-                        // =========================
-                        else {
+                       // =========================
+                       // USER
+                       // =========================
+                       else {
 
-                            table.row.add([
+                           table.row.add([
 
-                                data[i].layID,
-                                tanggal_benar,
-                                data[i].layHal,
-                                data[i].layDiskripsi,
-                                statusText,
-                                detailBtn
+                               data[i].layID,
+                               tanggal_benar,
+                               data[i].layHal,
+                               data[i].layDiskripsi,
+                               statusText,
+                               detailBtn
 
-                            ]);
+                           ]);
 
-                        }
+                       }
 
-                    }
+                   }
 
-                    table.draw();
+                   table.draw();
 
-                }
+               }
 
-            });
+           });
 
-        }
+       }
 
-        // =========================
-        // DETAIL
-        // =========================
+       // =========================
+       // DETAIL
+       // =========================
 
-        $(document).on("click", ".detailBtn", function() {
+       $(document).on("click", ".detailBtn", function() {
 
-            var layID = $(this).data("id");
+           var layID = $(this).data("id");
 
-            if (admin == 'Y') {
+           if (admin == 'Y') {
 
-                loadPetugas(() => {
+               loadPetugas(() => {
 
-                    loadDetailLay(layID);
+                   loadDetailLay(layID);
 
-                });
+               });
 
-            } else {
+           } else {
 
-                loadDetailLay(layID);
+               loadDetailLay(layID);
 
-            }
+           }
 
-        });
+       });
 
-        // =========================
-        // FORM SARPRAS
-        // =========================
+       // =========================
+       // FORM SARPRAS
+       // =========================
 
-        $(document).on("click", ".formSarprasBtn", function() {
+       $(document).on("click", ".formSarprasBtn", function() {
 
-            var layID = $(this).data("id");
+           var layID = $(this).data("id");
 
-            loadFormSarpras(layID);
+           loadFormSarpras(layID);
 
-        });
+       });
 
-        // =========================
-        // CLOSE TIKET
-        // =========================
+       // =========================
+       // CLOSE TIKET
+       // =========================
 
-        $(document).on("click", ".statusBtn", function() {
+       $(document).on("click", ".statusBtn", function() {
 
-            var nomor = $(this).data("id");
+           var nomor = $(this).data("id");
 
-            console.log("CLOSE TIKET :", nomor);
+           console.log("CLOSE TIKET :", nomor);
 
-            $.ajax({
+           $.ajax({
 
-                url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + nomor,
+               url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + nomor,
 
-                type: "GET",
+               type: "GET",
 
-                dataType: "JSON",
+               dataType: "JSON",
 
-                success: function(data) {
+               success: function(data) {
 
-                    console.log("DETAIL CLOSE :", data);
+                   console.log("DETAIL CLOSE :", data);
 
-                    let petugas = [];
+                   let petugas = [];
 
-                    // HANDLE ARRAY / STRING
-                    if (Array.isArray(data.petugas)) {
+                   // HANDLE ARRAY / STRING
+                   if (Array.isArray(data.petugas)) {
 
-                        petugas = data.petugas;
+                       petugas = data.petugas;
 
-                    } else if (typeof data.petugas === 'string' && data.petugas.trim() !== '') {
+                   } else if (typeof data.petugas === 'string' && data.petugas.trim() !== '') {
 
-                        petugas = data.petugas.split(',');
+                       petugas = data.petugas.split(',');
 
-                    }
+                   }
 
-                    let petugasValid = petugas.filter(function(p) {
+                   let petugasValid = petugas.filter(function(p) {
 
-                        return p != null && p.toString().trim() !== "";
+                       return p != null && p.toString().trim() !== "";
 
-                    });
+                   });
 
-                    // VALIDASI
-                    if (petugasValid.length <= 0) {
+                   // VALIDASI
+                   if (petugasValid.length <= 0) {
 
-                        alert("❌ Tidak bisa menutup layanan keluhan!\nSilakan pilih penanggung jawab terlebih dahulu.");
+                       alert("❌ Tidak bisa menutup layanan keluhan!\nSilakan pilih penanggung jawab terlebih dahulu.");
 
-                        return;
+                       return;
 
-                    }
+                   }
 
-                    if (confirm("Apakah Anda yakin ingin menutup keluhan ini?")) {
+                   if (confirm("Apakah Anda yakin ingin menutup keluhan ini?")) {
 
-                        $.ajax({
+                       $.ajax({
 
-                            url: "<?= base_url('Insert/close_sarpras/') ?>" + nomor,
+                           url: "<?= base_url('Insert/close_sarpras/') ?>" + nomor,
 
-                            type: "POST",
+                           type: "POST",
 
-                            success: function(res) {
+                           success: function(res) {
 
-                                console.log(res);
+                               console.log(res);
 
-                                alert("Tiket berhasil ditutup!");
+                               alert("Tiket berhasil ditutup!");
 
-                                getTiket_Sarpras();
+                               getTiket_Sarpras();
 
-                            },
+                           },
 
-                            error: function(xhr) {
+                           error: function(xhr) {
 
-                                console.log(xhr.responseText);
+                               console.log(xhr.responseText);
 
-                                alert("Gagal menutup tiket!");
+                               alert("Gagal menutup tiket!");
 
-                            }
+                           }
 
-                        });
+                       });
 
-                    }
+                   }
 
-                },
+               },
 
-                error: function(xhr) {
+               error: function(xhr) {
 
-                    console.log(xhr.responseText);
+                   console.log(xhr.responseText);
 
-                    alert("Gagal mengambil detail tiket!");
+                   alert("Gagal mengambil detail tiket!");
 
-                }
+               }
 
-            });
+           });
 
-        });
-        // =========================
-        // LOAD DETAIL
-        // =========================
+       });
+       // =========================
+       // LOAD DETAIL
+       // =========================
 
-        function loadDetailLay(layID) {
+       function loadDetailLay(layID) {
 
-            $.ajax({
+           $.ajax({
 
-                url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + layID,
+               url: "<?= base_url('Select/detail_tiket_sarpras/') ?>" + layID,
 
-                type: "GET",
+               type: "GET",
 
-                dataType: "JSON",
+               dataType: "JSON",
 
-                success: function(data) {
+               success: function(data) {
 
-                    console.log("DETAIL DATA :", data);
+                   console.log("DETAIL DATA :", data);
 
-                    // CEK jika data kosong
-                    if (!data || data == null) {
+                   // CEK jika data kosong
+                   if (!data || data == null) {
 
-                        alert("Data tiket tidak ditemukan!");
+                       alert("Data tiket tidak ditemukan!");
 
-                        return;
-                    }
+                       return;
+                   }
 
-                    var tanggal_db = new Date(data.layTanggal);
+                   var tanggal_db = new Date(data.layTanggal);
 
-                    var options = {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    };
+                   var options = {
+                       year: 'numeric',
+                       month: 'long',
+                       day: 'numeric'
+                   };
 
-                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
+                   var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
-                    $("#m_layID").text(data.layID || '-');
+                   $("#m_layID").text(data.layID || '-');
 
-                    $("#m_layTanggal").text(tanggal_benar || '-');
+                   $("#m_layTanggal").text(tanggal_benar || '-');
 
-                    $("#m_userNama").text(data.userNama || '-');
+                   $("#m_userNama").text(data.userNama || '-');
 
-                    $("#m_layHal").text(data.layHal || '-');
+                   $("#m_layHal").text(data.layHal || '-');
 
-                    // STATUS
-                    $("#m_layStatus").html(
+                   // STATUS
+                   $("#m_layStatus").html(
 
-                        data.layStatus == 'OPEN' ?
-                        '<span class="badge badge-success">OPEN</span>' :
-                        '<span class="badge badge-secondary">CLOSED</span>'
+                       data.layStatus == 'OPEN' ?
+                       '<span class="badge badge-success">OPEN</span>' :
+                       '<span class="badge badge-secondary">CLOSED</span>'
 
-                    );
+                   );
 
-                    $('#m_layDiskripsi').html(data.layDiskripsi || '-');
+                   $('#m_layDiskripsi').html(data.layDiskripsi || '-');
 
-                    $("#m_penanggungJawab").html(
-                        data.penanggungJawab ?
-                        data.penanggungJawab :
-                        '<span class="text-muted">Belum ditentukan</span>'
-                    );
+                   $("#m_penanggungJawab").html(
+                       data.penanggungJawab ?
+                       data.penanggungJawab :
+                       '<span class="text-muted">Belum ditentukan</span>'
+                   );
 
-                    // =========================
-                    // ADMIN PETUGAS
-                    // =========================
+                   // =========================
+                   // ADMIN PETUGAS
+                   // =========================
 
-                    if (admin == 'Y') {
+                   if (admin == 'Y') {
 
-                        let petugasDB = data.petugas || [];
+                       let petugasDB = data.petugas || [];
 
-                        $('select[name="petugas[]"]').each(function(index) {
+                       $('select[name="petugas[]"]').each(function(index) {
 
-                            let select = $(this);
+                           let select = $(this);
 
-                            if (petugasDB[index]) {
+                           if (petugasDB[index]) {
 
-                                select.val(petugasDB[index]);
+                               select.val(petugasDB[index]);
 
-                                select.prop('disabled', true);
+                               select.prop('disabled', true);
 
-                            } else {
+                           } else {
 
-                                select.val('');
+                               select.val('');
 
-                                select.prop('disabled', false);
+                               select.prop('disabled', false);
 
-                            }
+                           }
 
-                        });
+                       });
 
-                        preventDuplicatePetugas();
+                       preventDuplicatePetugas();
 
-                    }
+                   }
 
-                },
+               },
 
-                error: function(xhr, status, error) {
+               error: function(xhr, status, error) {
 
-                    console.log(xhr.responseText);
+                   console.log(xhr.responseText);
 
-                    alert("Gagal mengambil detail tiket!");
+                   alert("Gagal mengambil detail tiket!");
 
-                }
+               }
 
-            });
+           });
 
-        }
+       }
 
-        // =========================
-        // LOAD PETUGAS
-        // =========================
+       // =========================
+       // LOAD PETUGAS
+       // =========================
 
-        function loadPetugas(callback) {
+       function loadPetugas(callback) {
 
-            $.ajax({
+           $.ajax({
 
-                url: "<?= base_url('Select/get_petugas') ?>",
+               url: "<?= base_url('Select/get_petugas') ?>",
 
-                method: "GET",
+               method: "GET",
 
-                dataType: "JSON",
+               dataType: "JSON",
 
-                success: function(data) {
+               success: function(data) {
 
-                    $('select[name="petugas[]"]').each(function() {
+                   $('select[name="petugas[]"]').each(function() {
 
-                        var select = $(this);
+                       var select = $(this);
 
-                        select.empty();
+                       select.empty();
 
-                        select.append('<option value="">-- Pilih Petugas --</option>');
+                       select.append('<option value="">-- Pilih Petugas --</option>');
 
-                        $.each(data, function(i, p) {
+                       $.each(data, function(i, p) {
 
-                            select.append(
-                                '<option value="' + p.pegNoreg + '">' + p.pegNama + '</option>'
-                            );
+                           select.append(
+                               '<option value="' + p.pegNoreg + '">' + p.pegNama + '</option>'
+                           );
 
-                        });
+                       });
 
-                    });
+                   });
 
-                    if (callback) callback();
+                   if (callback) callback();
 
-                }
+               }
 
-            });
+           });
 
-        }
+       }
 
-        // =========================
-        // DUPLIKAT PETUGAS
-        // =========================
+       // =========================
+       // DUPLIKAT PETUGAS
+       // =========================
 
-        function preventDuplicatePetugas() {
+       function preventDuplicatePetugas() {
 
-            let selectedValues = [];
+           let selectedValues = [];
 
-            $('select[name="petugas[]"]').each(function() {
+           $('select[name="petugas[]"]').each(function() {
 
-                let val = $(this).val();
+               let val = $(this).val();
 
-                if (val !== "") {
+               if (val !== "") {
 
-                    selectedValues.push(val);
+                   selectedValues.push(val);
 
-                }
+               }
 
-            });
+           });
 
-            $('select[name="petugas[]"] option').prop('disabled', false);
+           $('select[name="petugas[]"] option').prop('disabled', false);
 
-            $('select[name="petugas[]"]').each(function() {
+           $('select[name="petugas[]"]').each(function() {
 
-                let currentSelect = $(this);
+               let currentSelect = $(this);
 
-                let currentVal = currentSelect.val();
+               let currentVal = currentSelect.val();
 
-                currentSelect.find('option').each(function() {
+               currentSelect.find('option').each(function() {
 
-                    let optionVal = $(this).val();
+                   let optionVal = $(this).val();
 
-                    if (selectedValues.includes(optionVal) && optionVal !== currentVal) {
+                   if (selectedValues.includes(optionVal) && optionVal !== currentVal) {
 
-                        $(this).prop('disabled', true);
+                       $(this).prop('disabled', true);
 
-                    }
+                   }
 
-                });
+               });
 
-            });
+           });
 
-        }
+       }
 
-        $(document).on('change', 'select[name="petugas[]"]', function() {
+       $(document).on('change', 'select[name="petugas[]"]', function() {
 
-            preventDuplicatePetugas();
+           preventDuplicatePetugas();
 
-        });
+       });
 
-        // =========================
-        // SIMPAN PETUGAS
-        // =========================
+       // =========================
+       // SIMPAN PETUGAS
+       // =========================
 
-        function simpanPetugas() {
+       function simpanPetugas() {
 
-            var petugas = [];
+           var petugas = [];
 
-            $('select[name="petugas[]"]').each(function() {
+           $('select[name="petugas[]"]').each(function() {
 
-                if ($(this).val() != '') {
+               if ($(this).val() != '') {
 
-                    petugas.push($(this).val());
+                   petugas.push($(this).val());
 
-                }
+               }
 
-            });
+           });
 
-            $.ajax({
+           $.ajax({
 
-                url: "<?= base_url('Insert/simpan_petugas') ?>",
+               url: "<?= base_url('Insert/simpan_petugas') ?>",
 
-                method: "POST",
+               method: "POST",
 
-                data: {
+               data: {
 
-                    layID: $('#m_layID').text(),
+                   layID: $('#m_layID').text(),
 
-                    petugas: petugas
+                   petugas: petugas
 
-                },
+               },
 
-                success: function(res) {
+               success: function(res) {
 
-                    alert("Pilihan Petugas Berhasil disimpan!");
+                   alert("Pilihan Petugas Berhasil disimpan!");
 
-                    $('#modalDetail').modal('hide');
+                   $('#modalDetail').modal('hide');
 
-                    getTiket_Sarpras();
+                   getTiket_Sarpras();
 
-                }
+               }
 
-            });
+           });
 
-        }
+       }
 
-        function konfirmasiSimpan() {
+       function konfirmasiSimpan() {
 
-            if (confirm("Apakah Anda yakin ingin menyimpan perubahan ini?")) {
+           if (confirm("Apakah Anda yakin ingin menyimpan perubahan ini?")) {
 
-                simpanPetugas();
+               simpanPetugas();
 
-            }
+           }
 
-        }
+       }
 
-        function loadFormSarpras(layID) {
+       function loadFormSarpras(layID) {
 
-            $.ajax({
-                url: "<?= base_url('Select/form_sarpras/') ?>" + layID,
-                type: "GET",
-                dataType: "JSON",
-                success: function(data) {
+           $.ajax({
+               url: "<?= base_url('Select/form_sarpras/') ?>" + layID,
+               type: "GET",
+               dataType: "JSON",
+               success: function(data) {
 
-                    var tanggal_db = new Date(data.layTanggal);
-                    var options = {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    };
-                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
+                   var tanggal_db = new Date(data.layTanggal);
+                   var options = {
+                       year: 'numeric',
+                       month: 'long',
+                       day: 'numeric'
+                   };
+                   var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
 
-                    var raw = ''; // Default value jika layTarget kosong atau null
+                   var raw = ''; // Default value jika layTarget kosong atau null
 
-                    if (data.layTarget) { // Cek apakah layTarget memiliki nilai
-                        raw = data.layTarget.split(' ')[0]; // Ambil bagian tanggal saja (sebelum spasi)
-                    }
+                   if (data.layTarget) { // Cek apakah layTarget memiliki nilai
+                       raw = data.layTarget.split(' ')[0]; // Ambil bagian tanggal saja (sebelum spasi)
+                   }
 
-                    var tgl_targetIdn = '-';
-                    if (raw != '') {
+                   var tgl_targetIdn = '-';
+                   if (raw != '') {
 
-                        var tanggal_db = new Date(raw);
+                       var tanggal_db = new Date(raw);
 
-                        tgl_targetIdn = tanggal_db.toLocaleDateString('id-ID', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                        });
+                       tgl_targetIdn = tanggal_db.toLocaleDateString('id-ID', {
+                           year: 'numeric',
+                           month: 'long',
+                           day: 'numeric'
+                       });
 
-                    }
+                   }
 
-                    $("#m_kepada, #m_kepada2").text(data.penanggungJawab);
-                    $("#m_dari, #m_dari2").text(data.userNama);
-                    $("#m_tanggal, #m_tanggal2").text(tanggal_benar);
-                    $("#m_hal, #m_hal2").text(data.layHal);
-                    $("#m_isi, #m_isi2").text(data.layDiskripsi);
-                    $("#m_target, #m_target2").text(tgl_targetIdn);
-                    $("#m_pic, #m_pic2").text(data.penanggungJawab);
-                }
-            });
-        }
+                   $("#m_kepada, #m_kepada2").text(data.penanggungJawab);
+                   $("#m_dari, #m_dari2").text(data.userNama);
+                   $("#m_tanggal, #m_tanggal2").text(tanggal_benar);
+                   $("#m_hal, #m_hal2").text(data.layHal);
+                   $("#m_isi, #m_isi2").text(data.layDiskripsi);
+                   $("#m_target, #m_target2").text(tgl_targetIdn);
+                   $("#m_pic, #m_pic2").text(data.penanggungJawab);
+               }
+           });
+       }
 
-        function printFormSarpras() {
-            // ambil elemen modal form sarpras yang sudah diisi datanya
-            var element = document.querySelector("#modalFormSarpras .print-wrapper").cloneNode(true);
+       function printFormSarpras() {
+           // ambil elemen modal form sarpras yang sudah diisi datanya
+           var element = document.querySelector("#modalFormSarpras .print-wrapper").cloneNode(true);
 
-            // hapus tombol
-            element.querySelectorAll("button").forEach(btn => btn.remove());
+           // hapus tombol
+           element.querySelectorAll("button").forEach(btn => btn.remove());
 
-            // hapus style modal bootstrap
-            element.querySelectorAll('.modal-content').forEach(el => {
-                el.style.boxShadow = 'none';
-                el.style.border = 'none';
-            });
+           // hapus style modal bootstrap
+           element.querySelectorAll('.modal-content').forEach(el => {
+               el.style.boxShadow = 'none';
+               el.style.border = 'none';
+           });
 
-            var no_layanan = document.getElementById("m_layID").textContent.trim();
-            var opt = {
-                margin: 0.3,
-                filename: 'SPU-ADM-36 FORM PERMOHONAN LAYANAN SARPRAS - ' + no_layanan + '.pdf',
-                image: {
-                    type: 'jpeg',
-                    quality: 1
-                },
-                html2canvas: {
-                    scale: 2
-                },
-                jsPDF: {
-                    unit: 'mm',
-                    format: 'a4',
-                    orientation: 'landscape' // gunakan landscape untuk kertas A4 horizontal
-                }
-            };
-            html2pdf().set(opt).from(element).save();
-        }
-    </script>
-    <!-- MODAL DETAIL -->
-    <div class="modal fade" id="modalDetail" tabindex="-1">
+           var no_layanan = document.getElementById("m_layID").textContent.trim();
+           var opt = {
+               margin: 0.3,
+               filename: 'SPU-ADM-36 FORM PERMOHONAN LAYANAN SARPRAS - ' + no_layanan + '.pdf',
+               image: {
+                   type: 'jpeg',
+                   quality: 1
+               },
+               html2canvas: {
+                   scale: 2
+               },
+               jsPDF: {
+                   unit: 'mm',
+                   format: 'a4',
+                   orientation: 'landscape' // gunakan landscape untuk kertas A4 horizontal
+               }
+           };
+           html2pdf().set(opt).from(element).save();
+       }
+   </script>
+   <!-- MODAL DETAIL -->
+   <div class="modal fade" id="modalDetail" tabindex="-1">
 
-        <div class="modal-dialog" style="max-width:65%; width:65%; margin:20px auto;">
+       <div class="modal-dialog" style="max-width:65%; width:65%; margin:20px auto;">
 
-            <div class="modal-content" style="border-radius:12px;">
+           <div class="modal-content" style="border-radius:12px;">
 
-                <!-- HEADER -->
-                <div class="modal-header bg-primary text-white py-2">
+               <!-- HEADER -->
+               <div class="modal-header bg-primary text-white py-2">
 
-                    <h4 class="modal-title text-center w-100" style="font-size:20px;">
-                        DATA LAYANAN SARPRAS
-                    </h4>
+                   <h4 class="modal-title text-center w-100" style="font-size:20px;">
+                       DATA LAYANAN SARPRAS
+                   </h4>
 
-                    <button type="button"
-                        class="close text-white"
-                        data-dismiss="modal"
-                        style="font-size:24px;">
+                   <button type="button"
+                       class="close text-white"
+                       data-dismiss="modal"
+                       style="font-size:24px;">
 
-                        &times;
+                       &times;
 
-                    </button>
+                   </button>
 
-                </div>
+               </div>
 
-                <!-- BODY -->
-                <div class="modal-body" style="font-size:14px; padding:20px;">
+               <!-- BODY -->
+               <div class="modal-body" style="font-size:14px; padding:20px;">
 
-                    <div class="container-fluid">
+                   <div class="container-fluid">
 
-                        <!-- NOMOR -->
-                        <div class="form-group row mb-3">
+                       <!-- NOMOR -->
+                       <div class="form-group row mb-3">
 
-                            <label class="col-md-3 font-weight-bold text-md-right">
-                                Nomor Tiket
-                            </label>
+                           <label class="col-md-3 font-weight-bold text-md-right">
+                               Nomor Tiket
+                           </label>
 
-                            <div class="col-md-9">
+                           <div class="col-md-9">
 
-                                <div id="m_layID"
-                                    class="form-control d-flex align-items-center"
-                                    style="height:38px;font-size:14px;">
-                                </div>
+                               <div id="m_layID"
+                                   class="form-control d-flex align-items-center"
+                                   style="height:38px;font-size:14px;">
+                               </div>
 
-                            </div>
+                           </div>
 
-                        </div>
+                       </div>
 
-                        <!-- TANGGAL -->
-                        <div class="form-group row mb-3">
+                       <!-- TANGGAL -->
+                       <div class="form-group row mb-3">
 
-                            <label class="col-md-3 font-weight-bold text-md-right">
-                                Tanggal
-                            </label>
+                           <label class="col-md-3 font-weight-bold text-md-right">
+                               Tanggal
+                           </label>
 
-                            <div class="col-md-9">
+                           <div class="col-md-9">
 
-                                <div id="m_layTanggal"
-                                    class="form-control d-flex align-items-center"
-                                    style="height:38px;font-size:14px;">
-                                </div>
+                               <div id="m_layTanggal"
+                                   class="form-control d-flex align-items-center"
+                                   style="height:38px;font-size:14px;">
+                               </div>
 
-                            </div>
+                           </div>
 
-                        </div>
+                       </div>
 
-                        <!-- USER -->
-                        <div class="form-group row mb-3">
+                       <!-- USER -->
+                       <div class="form-group row mb-3">
 
-                            <label class="col-md-3 font-weight-bold text-md-right">
-                                Penginput
-                            </label>
+                           <label class="col-md-3 font-weight-bold text-md-right">
+                               Penginput
+                           </label>
 
-                            <div class="col-md-9">
+                           <div class="col-md-9">
 
-                                <div id="m_userNama"
-                                    class="form-control d-flex align-items-center"
-                                    style="height:38px;font-size:14px;">
-                                </div>
+                               <div id="m_userNama"
+                                   class="form-control d-flex align-items-center"
+                                   style="height:38px;font-size:14px;">
+                               </div>
 
-                            </div>
+                           </div>
 
-                        </div>
+                       </div>
 
-                        <!-- STATUS -->
-                        <div class="form-group row mb-3">
+                       <!-- STATUS -->
+                       <div class="form-group row mb-3">
 
-                            <label class="col-md-3 font-weight-bold text-md-right">
-                                Status
-                            </label>
+                           <label class="col-md-3 font-weight-bold text-md-right">
+                               Status
+                           </label>
 
-                            <div class="col-md-9">
+                           <div class="col-md-9">
 
-                                <div id="m_layStatus"
-                                    class="d-flex align-items-center"
-                                    style="height:38px;font-size:16px;font-weight:bold;">
-                                </div>
+                               <div id="m_layStatus"
+                                   class="d-flex align-items-center"
+                                   style="height:38px;font-size:16px;font-weight:bold;">
+                               </div>
 
-                            </div>
+                           </div>
 
-                        </div>
+                       </div>
 
-                        <!-- KELUHAN -->
-                        <div class="form-group row mb-3">
+                       <!-- KELUHAN -->
+                       <div class="form-group row mb-3">
 
-                            <label class="col-md-3 font-weight-bold text-md-right pt-2">
-                                Keluhan
-                            </label>
+                           <label class="col-md-3 font-weight-bold text-md-right pt-2">
+                               Keluhan
+                           </label>
 
-                            <div class="col-md-9">
+                           <div class="col-md-9">
 
-                                <div id="m_layHal"
-                                    class="form-control"
-                                    style="font-size:14px;padding:10px;min-height:80px;">
-                                </div>
+                               <div id="m_layHal"
+                                   class="form-control"
+                                   style="font-size:14px;padding:10px;min-height:80px;">
+                               </div>
 
-                            </div>
+                           </div>
 
-                        </div>
+                       </div>
 
-                        <!-- DESKRIPSI -->
-                        <div class="form-group row mb-3">
+                       <!-- DESKRIPSI -->
+                       <div class="form-group row mb-3">
 
-                            <label class="col-md-3 font-weight-bold text-md-right pt-2">
-                                Deskripsi
-                            </label>
+                           <label class="col-md-3 font-weight-bold text-md-right pt-2">
+                               Deskripsi
+                           </label>
 
-                            <div class="col-md-9">
+                           <div class="col-md-9">
 
-                                <div id="m_layDiskripsi"
-                                    class="form-control"
-                                    style="font-size:14px;padding:10px;min-height:120px;">
-                                </div>
+                               <div id="m_layDiskripsi"
+                                   class="form-control"
+                                   style="font-size:14px;padding:10px;min-height:120px;">
+                               </div>
 
-                            </div>
+                           </div>
 
-                        </div>
+                       </div>
 
-                        <!-- PENANGGUNG JAWAB -->
-                        <div class="form-group row mb-3">
+                       <!-- PENANGGUNG JAWAB -->
+                       <div class="form-group row mb-3">
 
-                            <label class="col-md-3 font-weight-bold text-md-right pt-2">
-                                Penanggung Jawab
-                            </label>
+                           <label class="col-md-3 font-weight-bold text-md-right pt-2">
+                               Penanggung Jawab
+                           </label>
 
-                            <div class="col-md-9">
+                           <div class="col-md-9">
 
-                                <div id="m_penanggungJawab"
-                                    class="form-control"
-                                    style="font-size:14px;padding:10px;min-height:80px;">
-                                </div>
+                               <div id="m_penanggungJawab"
+                                   class="form-control"
+                                   style="font-size:14px;padding:10px;min-height:80px;">
+                               </div>
 
-                            </div>
+                           </div>
 
-                        </div>
+                       </div>
 
-                        <!-- KHUSUS ADMIN -->
-                        <?php if ($admin == 'Y') { ?>
+                       <!-- KHUSUS ADMIN -->
+                       <?php if ($admin == 'Y') { ?>
 
-                            <hr>
+                           <hr>
 
-                            <h5 class="text-primary font-weight-bold mb-3">
-                                Assign Petugas
-                            </h5>
+                           <h5 class="text-primary font-weight-bold mb-3">
+                               Assign Petugas
+                           </h5>
 
-                            <div class="form-group">
-                                <label>Petugas 1</label>
-                                <select name="petugas[]" class="form-control">
-                                    <option value="">-- Pilih Petugas --</option>
-                                </select>
-                            </div>
+                           <div class="form-group">
+                               <label>Petugas 1</label>
+                               <select name="petugas[]" class="form-control">
+                                   <option value="">-- Pilih Petugas --</option>
+                               </select>
+                           </div>
 
-                            <div class="form-group">
-                                <label>Petugas 2</label>
-                                <select name="petugas[]" class="form-control">
-                                    <option value="">-- Pilih Petugas --</option>
-                                </select>
-                            </div>
+                           <div class="form-group">
+                               <label>Petugas 2</label>
+                               <select name="petugas[]" class="form-control">
+                                   <option value="">-- Pilih Petugas --</option>
+                               </select>
+                           </div>
 
-                            <div class="form-group">
-                                <label>Petugas 3</label>
-                                <select name="petugas[]" class="form-control">
-                                    <option value="">-- Pilih Petugas --</option>
-                                </select>
-                            </div>
+                           <div class="form-group">
+                               <label>Petugas 3</label>
+                               <select name="petugas[]" class="form-control">
+                                   <option value="">-- Pilih Petugas --</option>
+                               </select>
+                           </div>
 
-                            <div class="text-right">
+                           <div class="text-right">
 
-                                <button type="button"
-                                    id="btnSimpan"
-                                    class="btn btn-success"
-                                    onclick="konfirmasiSimpan()">
+                               <button type="button"
+                                   id="btnSimpan"
+                                   class="btn btn-success"
+                                   onclick="konfirmasiSimpan()">
 
-                                    Simpan Petugas
+                                   Simpan Petugas
 
-                                </button>
+                               </button>
 
-                            </div>
+                           </div>
 
-                        <?php } ?>
+                       <?php } ?>
 
-                    </div>
+                   </div>
 
-                </div>
+               </div>
 
-                <!-- FOOTER -->
-                <div class="modal-footer justify-content-center py-2">
+               <!-- FOOTER -->
+               <div class="modal-footer justify-content-center py-2">
 
-                    <button type="button"
-                        class="btn btn-danger"
-                        style="font-size:14px;padding:6px 24px;"
-                        data-dismiss="modal">
+                   <button type="button"
+                       class="btn btn-danger"
+                       style="font-size:14px;padding:6px 24px;"
+                       data-dismiss="modal">
 
-                        Tutup
+                       Tutup
 
-                    </button>
+                   </button>
 
-                </div>
+               </div>
 
-            </div>
+           </div>
 
-        </div>
+       </div>
 
-    </div>
+   </div>
 
-    <!-- MODAL FORM SARPRAS -->
-    <div class="modal fade" id="modalFormSarpras" tabindex="-1">
-        <div class="modal-dialog" style="max-width:1000px;">
-            <div class="modal-content">
+   <!-- MODAL FORM SARPRAS -->
+   <div class="modal fade" id="modalFormSarpras" tabindex="-1">
+       <div class="modal-dialog" style="max-width:1000px;">
+           <div class="modal-content">
 
-                <!-- tombol close -->
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <!-- BODY -->
-                <div class="modal-body">
+               <!-- tombol close -->
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+               <!-- BODY -->
+               <div class="modal-body">
 
-                    <div class="print-wrapper">
+                   <div class="print-wrapper">
 
-                        <!-- KOLOM KIRI -->
-                        <div class="print-col">
-                            <div class="sarpras-form">
+                       <!-- KOLOM KIRI -->
+                       <div class="print-col">
+                           <div class="sarpras-form">
 
-                                <div class="sarpras-title">
-                                    FORM PERMOHONAN LAYANAN SARPRAS
-                                </div>
+                               <div class="sarpras-title">
+                                   FORM PERMOHONAN LAYANAN SARPRAS
+                               </div>
 
-                                <div class="sarpras-subtitle">
-                                    No. Dok. KNS/FORM/SPU/ADM/36/01/00
-                                </div>
+                               <div class="sarpras-subtitle">
+                                   No. Dok. KNS/FORM/SPU/ADM/36/01/00
+                               </div>
 
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">Kepada</div>
-                                    <div class="sarpras-line" id="m_kepada"></div>
-                                </div>
+                               <div class="sarpras-row">
+                                   <div class="sarpras-label">Kepada</div>
+                                   <div class="sarpras-line" id="m_kepada"></div>
+                               </div>
 
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">Dari</div>
-                                    <div class="sarpras-line" id="m_dari"></div>
-                                </div>
+                               <div class="sarpras-row">
+                                   <div class="sarpras-label">Dari</div>
+                                   <div class="sarpras-line" id="m_dari"></div>
+                               </div>
 
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">Tanggal</div>
-                                    <div class="sarpras-line" id="m_tanggal"></div>
-                                </div>
+                               <div class="sarpras-row">
+                                   <div class="sarpras-label">Tanggal</div>
+                                   <div class="sarpras-line" id="m_tanggal"></div>
+                               </div>
 
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">Hal</div>
-                                    <div class="sarpras-line" id="m_hal"></div>
-                                </div>
+                               <div class="sarpras-row">
+                                   <div class="sarpras-label">Hal</div>
+                                   <div class="sarpras-line" id="m_hal"></div>
+                               </div>
 
-                                <b>I. Isi Permohonan</b>
-                                <div class="sarpras-box" id="m_isi"></div>
+                               <b>I. Isi Permohonan</b>
+                               <div class="sarpras-box" id="m_isi"></div>
 
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">Target</div>
-                                    <div class="sarpras-line" id="m_target"></div>
-                                </div>
+                               <div class="sarpras-row">
+                                   <div class="sarpras-label">Target</div>
+                                   <div class="sarpras-line" id="m_target"></div>
+                               </div>
 
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">PIC</div>
-                                    <div class="sarpras-line" id="m_pic"></div>
-                                </div>
+                               <div class="sarpras-row">
+                                   <div class="sarpras-label">PIC</div>
+                                   <div class="sarpras-line" id="m_pic"></div>
+                               </div>
 
-                                <!-- TTD -->
-                                <div class="sarpras-ttd">
-                                    <div>Pemohon<br><br>(Kanit)</div>
-                                    <div>Diketahui<br><br>(Kabag)</div>
-                                    <div>Disetujui<br><br>(Manajer)</div>
-                                    <div>Diterima<br><br>(Sarpras)</div>
-                                </div>
+                               <!-- TTD -->
+                               <div class="sarpras-ttd">
+                                   <div>Pemohon<br><br>(Kanit)</div>
+                                   <div>Diketahui<br><br>(Kabag)</div>
+                                   <div>Disetujui<br><br>(Manajer)</div>
+                                   <div>Diterima<br><br>(Sarpras)</div>
+                               </div>
 
-                                <hr> <!-- Garis Pemisah -->
+                               <hr> <!-- Garis Pemisah -->
 
-                                <!-- Rencana Tindak Lanjut -->
-                                <div class="sarpras-rtl">
-                                    <b>II. Rencana Tindak Lanjut</b>
+                               <!-- Rencana Tindak Lanjut -->
+                               <div class="sarpras-rtl">
+                                   <b>II. Rencana Tindak Lanjut</b>
 
-                                    <div>Petugas : ____________</div>
+                                   <div>Petugas : ____________</div>
 
-                                    <div class="sarpras-rtl-row">
-                                        <div>Observasi : Sudah / Belum*</div>
-                                        <div>Tgl. Observasi : ____________</div>
-                                    </div>
+                                   <div class="sarpras-rtl-row">
+                                       <div>Observasi : Sudah / Belum*</div>
+                                       <div>Tgl. Observasi : ____________</div>
+                                   </div>
 
-                                    <div class="sarpras-rtl-row">
-                                        <div>Status Eksekusi: Sudah / Belum*</div>
-                                        <div>Tgl. Eksekusi : ____________</div>
-                                    </div>
+                                   <div class="sarpras-rtl-row">
+                                       <div>Status Eksekusi: Sudah / Belum*</div>
+                                       <div>Tgl. Eksekusi : ____________</div>
+                                   </div>
 
-                                    <div>
-                                        Catatan: **
-                                        <div class="sarpras-box" style="height:60px;"></div>
-                                    </div>
-                                    <div class="caKaki">
-                                        <div>(*) Coret yang tidak perlu</div>
-                                        <div>(**) Diisi oleh petugas setelah eksekusi</div>
-                                    </div>
-                                </div>
+                                   <div>
+                                       Catatan: **
+                                       <div class="sarpras-box" style="height:60px;"></div>
+                                   </div>
+                                   <div class="caKaki">
+                                       <div>(*) Coret yang tidak perlu</div>
+                                       <div>(**) Diisi oleh petugas setelah eksekusi</div>
+                                   </div>
+                               </div>
 
-                            </div>
-                        </div>
+                           </div>
+                       </div>
 
-                        <!-- KOLOM KANAN (DUPLIKAT) -->
-                        <div class="print-col">
-                            <div class="sarpras-form">
+                       <!-- KOLOM KANAN (DUPLIKAT) -->
+                       <div class="print-col">
+                           <div class="sarpras-form">
 
-                                <div class="sarpras-title">
-                                    FORM PERMOHONAN LAYANAN SARPRAS
-                                </div>
+                               <div class="sarpras-title">
+                                   FORM PERMOHONAN LAYANAN SARPRAS
+                               </div>
 
-                                <div class="sarpras-subtitle">
-                                    No. Dok. KNS/FORM/SPU/ADM/36/01/00
-                                </div>
+                               <div class="sarpras-subtitle">
+                                   No. Dok. KNS/FORM/SPU/ADM/36/01/00
+                               </div>
 
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">Kepada</div>
-                                    <div class="sarpras-line" id="m_kepada2"></div>
-                                </div>
+                               <div class="sarpras-row">
+                                   <div class="sarpras-label">Kepada</div>
+                                   <div class="sarpras-line" id="m_kepada2"></div>
+                               </div>
 
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">Dari</div>
-                                    <div class="sarpras-line" id="m_dari2"></div>
-                                </div>
+                               <div class="sarpras-row">
+                                   <div class="sarpras-label">Dari</div>
+                                   <div class="sarpras-line" id="m_dari2"></div>
+                               </div>
 
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">Tanggal</div>
-                                    <div class="sarpras-line" id="m_tanggal2"></div>
-                                </div>
+                               <div class="sarpras-row">
+                                   <div class="sarpras-label">Tanggal</div>
+                                   <div class="sarpras-line" id="m_tanggal2"></div>
+                               </div>
 
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">Hal</div>
-                                    <div class="sarpras-line" id="m_hal2"></div>
-                                </div>
+                               <div class="sarpras-row">
+                                   <div class="sarpras-label">Hal</div>
+                                   <div class="sarpras-line" id="m_hal2"></div>
+                               </div>
 
-                                <b>I. Isi Permohonan</b>
-                                <div class="sarpras-box" id="m_isi2"></div>
+                               <b>I. Isi Permohonan</b>
+                               <div class="sarpras-box" id="m_isi2"></div>
 
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">Target</div>
-                                    <div class="sarpras-line" id="m_target2"></div>
-                                </div>
+                               <div class="sarpras-row">
+                                   <div class="sarpras-label">Target</div>
+                                   <div class="sarpras-line" id="m_target2"></div>
+                               </div>
 
-                                <div class="sarpras-row">
-                                    <div class="sarpras-label">PIC</div>
-                                    <div class="sarpras-line" id="m_pic2"></div>
-                                </div>
+                               <div class="sarpras-row">
+                                   <div class="sarpras-label">PIC</div>
+                                   <div class="sarpras-line" id="m_pic2"></div>
+                               </div>
 
-                                <!-- TTD -->
-                                <div class="sarpras-ttd">
-                                    <div>Pemohon<br><br>(Kanit)</div>
-                                    <div>Diketahui<br><br>(Kabag)</div>
-                                    <div>Disetujui<br><br>(Manajer)</div>
-                                    <div>Diterima<br><br>(Sarpras)</div>
-                                </div>
+                               <!-- TTD -->
+                               <div class="sarpras-ttd">
+                                   <div>Pemohon<br><br>(Kanit)</div>
+                                   <div>Diketahui<br><br>(Kabag)</div>
+                                   <div>Disetujui<br><br>(Manajer)</div>
+                                   <div>Diterima<br><br>(Sarpras)</div>
+                               </div>
 
-                                <hr> <!-- Garis Pemisah -->
+                               <hr> <!-- Garis Pemisah -->
 
-                                <!-- Rencana Tindak Lanjut -->
-                                <div class="sarpras-rtl">
-                                    <b>II. Rencana Tindak Lanjut</b>
+                               <!-- Rencana Tindak Lanjut -->
+                               <div class="sarpras-rtl">
+                                   <b>II. Rencana Tindak Lanjut</b>
 
-                                    <div>Petugas : ____________</div>
+                                   <div>Petugas : ____________</div>
 
-                                    <div class="sarpras-rtl-row">
-                                        <div>Observasi : Sudah / Belum*</div>
-                                        <div>Tgl. Observasi : ____________</div>
-                                    </div>
+                                   <div class="sarpras-rtl-row">
+                                       <div>Observasi : Sudah / Belum*</div>
+                                       <div>Tgl. Observasi : ____________</div>
+                                   </div>
 
-                                    <div class="sarpras-rtl-row">
-                                        <div>Status Eksekusi : Sudah / Belum*</div>
-                                        <div>Tgl. Eksekusi : ____________</div>
-                                    </div>
+                                   <div class="sarpras-rtl-row">
+                                       <div>Status Eksekusi : Sudah / Belum*</div>
+                                       <div>Tgl. Eksekusi : ____________</div>
+                                   </div>
 
-                                    <div>
-                                        Catatan: **
-                                        <div class="sarpras-box" style="height:60px;"></div>
-                                    </div>
-                                    <div class="caKaki">
-                                        <div>(*) Coret yang tidak perlu</div>
-                                        <div>(**) Diisi oleh petugas setelah eksekusi</div>
-                                    </div>
-                                </div>
+                                   <div>
+                                       Catatan: **
+                                       <div class="sarpras-box" style="height:60px;"></div>
+                                   </div>
+                                   <div class="caKaki">
+                                       <div>(*) Coret yang tidak perlu</div>
+                                       <div>(**) Diisi oleh petugas setelah eksekusi</div>
+                                   </div>
+                               </div>
 
-                            </div>
-                        </div>
+                           </div>
+                       </div>
 
-                    </div>
+                   </div>
 
-                    <!-- BUTTON -->
-                    <div class="text-center mt-3">
-                        <button onclick="printFormSarpras()" class="btn btn-dark">
-                            Print / Save PDF
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+                   <!-- BUTTON -->
+                   <div class="text-center mt-3">
+                       <button onclick="printFormSarpras()" class="btn btn-dark">
+                           Print / Save PDF
+                       </button>
+                   </div>
+               </div>
+           </div>
+       </div>
 
 
-        </html> 
+       </html>

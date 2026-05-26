@@ -173,6 +173,9 @@
                         <a class="collapse-item" href="<?= base_url('tiket_sim') ?>">
                             Tiket SIM
                         </a>
+                          <a class="collapse-item" href="<?= base_url('tiket_sarpras') ?>">
+                            Tiket Sarpras
+                        </a>
 
                     <?php } ?>
 
@@ -181,6 +184,9 @@
 
                         <a class="collapse-item" href="<?= base_url('tiket_sarpras') ?>">
                             Tiket Sarpras
+                        </a>
+                        <a class="collapse-item" href="<?= base_url('tiket_sim') ?>">
+                            Tiket SIM
                         </a>
 
                     <?php } ?>

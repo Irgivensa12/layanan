@@ -148,11 +148,29 @@
 
         public function close_sarpras($layID)
         {
+            $admin   = $this->session->userdata('admin');
+            $sarpras = $this->session->userdata('sarpras');
+            $user    = $this->session->userdata('helpdesk_userId');
+
+            // hanya admin sarpras atau user biasa yang boleh
+            if ($admin == 'Y' && $sarpras != 'Y') {
+
+                echo json_encode([
+                    'status' => false,
+                    'pesan'  => 'Anda tidak memiliki akses!'
+                ]);
+                return;
+            }
+
             // ambil data layanan
             $layanan = $this->db->get_where('tb_layanan', ['layID' => $layID])->row();
 
             if (!$layanan) {
-                echo json_encode(['status' => 'error', 'message' => 'Data tidak ditemukan']);
+
+                echo json_encode([
+                    'status'  => 'error',
+                    'message' => 'Data tidak ditemukan'
+                ]);
                 return;
             }
 
@@ -168,28 +186,43 @@
             // filter yang tidak kosong
             $petugasValid = array_filter($petugas);
 
-            // kalau belum ada petugas
+            // validasi penanggung jawab
             if (count($petugasValid) == 0) {
+
                 echo json_encode([
-                    'status' => 'error',
+                    'status'  => 'error',
                     'message' => 'Penanggung jawab belum dipilih'
                 ]);
                 return;
             }
 
+            // USER BIASA hanya boleh close miliknya sendiri
+            if ($sarpras != 'Y') {
+
+                if ($layanan->layUserID != $user) {
+
+                    echo json_encode([
+                        'status' => false,
+                        'pesan'  => 'Anda tidak bisa close tiket ini!'
+                    ]);
+                    return;
+                }
+            }
+
             // lanjut close
             $data = [
-                'layStatus' => 'Y',
-                'layCloseUserID' => $this->session->userdata('helpdesk_userId'),
-                'layCloseTanggal' => date('Y-m-d H:i:s')
+                'layStatus'        => 'Y',
+                'layCloseUserID'   => $user,
+                'layCloseTanggal'  => date('Y-m-d H:i:s')
             ];
 
             $this->db->where('layID', $layID);
             $this->db->update('tb_layanan', $data);
 
-            echo json_encode(['status' => 'ok']);
+            echo json_encode([
+                'status' => 'ok'
+            ]);
         }
-
         public function simpan_petugas() // function untuk menyimpan petugas ke database
         {
             $layID   = $this->input->post('layID'); // ID layanan yang akan diupdate petugasnya
