@@ -19,12 +19,27 @@
     <link rel="stylesheet" href="<?= base_url('css/modal-login.css') ?>">
 
     <style>
-        textarea { resize: none; }
-        .form-control { color: black !important; border-color: gray !important; }
-        .form-group { color: black !important; }
-        thead, tbody { color: black; }
+        textarea {
+            resize: none;
+        }
 
-        table, th, td {
+        .form-control {
+            color: black !important;
+            border-color: gray !important;
+        }
+
+        .form-group {
+            color: black !important;
+        }
+
+        thead,
+        tbody {
+            color: black;
+        }
+
+        table,
+        th,
+        td {
             border: 1px solid gray !important;
             border-collapse: collapse !important;
         }
@@ -144,26 +159,29 @@ $isUserMode = ($as_user_biasa == true);
             <div id="collapseTiket" class="collapse" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
 
-                    <?php if (!$isUserMode) { ?>
+                    <?php if ($admin == 'Y' || $sim == 'Y' || $sarpras == 'Y') { ?>
 
-                        <?php if ($admin == 'Y' || $sim == 'Y' || $sarpras == 'Y') { ?>
-                            <a class="collapse-item" href="<?= base_url('tiket_sim') ?>">Tiket SIM</a>
-                            <a class="collapse-item" href="<?= base_url('tiket_sarpras') ?>">Tiket Sarpras</a>
-                        <?php } ?>
-
-                    <?php } else { ?>
-
-                        <!-- USER MODE -->
+                        <!-- ADMIN -->
                         <a class="collapse-item" href="<?= base_url('tiket_sim') ?>">
-                            Tiket SIM Saya
+                            Tiket SIM
                         </a>
 
                         <a class="collapse-item" href="<?= base_url('tiket_sarpras') ?>">
-                            Tiket Sarpras Saya
+                            Tiket Sarpras
+                        </a>
+
+                    <?php } else { ?>
+
+                        <!-- USER BIASA -->
+                        <a class="collapse-item" href="<?= base_url('tiket_sim') ?>">
+                            Tiket SIM 
+                        </a>
+
+                        <a class="collapse-item" href="<?= base_url('tiket_sarpras') ?>">
+                            Tiket Sarpras 
                         </a>
 
                     <?php } ?>
-
                 </div>
             </div>
         </li>
