@@ -281,8 +281,9 @@ class model extends CI_Model
     }
     public function tiket_sarpras()
     {
-        $admin = $this->session->userdata('admin');
-        $user  = $this->session->userdata('helpdesk_userId');
+        $admin    = $this->session->userdata('admin');
+        $sarpras  = $this->session->userdata('sarpras');
+        $user     = $this->session->userdata('helpdesk_userId');
 
         $status = $this->input->get('status');
 
@@ -296,8 +297,8 @@ class model extends CI_Model
             $filterStatus = " AND l.layStatus='Y' ";
         }
 
-        // ADMIN HAK AKSES ATAU ADMIN SARPRAS ASLI
-        if (($admin == 'Y' || $sarpras == 'Y' || $sarpras == 'Y') && !$as_user_biasa) {
+        // ADMIN HAK AKSES ATAU ADMIN SARPRAS
+        if ($admin == 'Y' || $sarpras == 'Y') {
 
             $query = $this->db->query("
             SELECT l.*, u.userNama
@@ -311,6 +312,8 @@ class model extends CI_Model
             ORDER BY l.layTanggal DESC
         ");
         } else {
+
+            // USER BIASA / ADMIN MODE USER
 
             $query = $this->db->query("
             SELECT l.*, u.userNama
