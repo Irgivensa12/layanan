@@ -115,4 +115,15 @@ class Controller extends CI_Controller
         $this->load->view('header');
         $this->load->view('menu_user', $data);
     }
+    public function switchToUser()
+    {
+        $this->session->set_userdata('as_user_biasa', true);
+        redirect('dashboard');
+    }
+
+    public function backToAdmin()
+    {
+        $this->session->unset_userdata('as_user_biasa');
+        redirect('dashboard');
+    }
 }
