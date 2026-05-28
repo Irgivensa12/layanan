@@ -266,74 +266,76 @@ if ($admin != 'Y') {
                             <b>Pilih Hak Akses</b>
                         </label>
 
+                        <!-- USER BIASA -->
                         <div class="mt-2">
 
-                            <input type="checkbox"
-                                name="sim"
-                                value="Y"
-                                id="sim">
+                            <input type="radio"
+                                name="role"
+                                value="user"
+                                id="role_user">
 
-                            <label for="sim">
+                            <label for="role_user">
+                                User 
+                            </label>
+
+                        </div>
+
+                        <!-- ADMIN SIM -->
+                        <div>
+
+                            <input type="radio"
+                                name="role"
+                                value="sim"
+                                id="role_sim">
+
+                            <label for="role_sim">
                                 Admin SIM
                             </label>
 
                         </div>
 
+                        <!-- ADMIN SARPRAS -->
                         <div>
 
-                            <input type="checkbox"
-                                name="sarpras"
-                                value="Y"
-                                id="sarpras">
+                            <input type="radio"
+                                name="role"
+                                value="sarpras"
+                                id="role_sarpras">
 
-                            <label for="sarpras">
+                            <label for="role_sarpras">
                                 Admin Sarpras
                             </label>
 
                         </div>
 
-                        <!-- <div>
-
-                            <input type="checkbox"
-                                name="admin"
-                                value="Y"
-                                id="admin">
-
-                            <label for="admin">
-                                Admin
-                            </label>
-
-                        </div> -->
-
                     </div>
-
                 </div>
 
-                <!-- FOOTER -->
-                <div class="modal-footer">
+        <!-- FOOTER -->
+        <div class="modal-footer">
 
-                    <button type="submit"
-                        class="btn btn-success">
+            <button type="submit"
+                class="btn btn-success">
 
-                        Simpan
+                Simpan
 
-                    </button>
+            </button>
 
-                    <button type="button"
-                        class="btn btn-secondary"
-                        data-dismiss="modal">
+            <button type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal">
 
-                        Batal
+                Batal
 
-                    </button>
-
-                </div>
-
-            </form>
+            </button>
 
         </div>
 
+        </form>
+
     </div>
+
+</div>
 
 </div>
 
@@ -369,34 +371,23 @@ if ($admin != 'Y') {
             $('#userId').val(userId);
             $('#userNama').val(userNama);
 
-            // RESET CHECKBOX
-            $('#sim').prop('checked', false);
-            $('#sarpras').prop('checked', false);
+            // RESET RADIO
+            $('input[name="role"]').prop('checked', false);
 
-            // ADMIN SEMENTARA DIKOMENTARI
-            // $('#admin').prop('checked', false);
-
-            // ISI CHECKBOX SESUAI DATABASE
+            // CEK ROLE DARI DATABASE
             if ($(this).data('tiket') == 'Y') {
 
-                $('#sim').prop('checked', true);
+                $('#role_sim').prop('checked', true);
+
+            } else if ($(this).data('sarpras') == 'Y') {
+
+                $('#role_sarpras').prop('checked', true);
+
+            } else {
+
+                $('#role_user').prop('checked', true);
 
             }
-
-            if ($(this).data('sarpras') == 'Y') {
-
-                $('#sarpras').prop('checked', true);
-
-            }
-
-            // ADMIN SEMENTARA DIKOMENTARI
-            /*
-            if ($(this).data('admin') == 'Y') {
-
-                $('#admin').prop('checked', true);
-
-            }
-            */
 
             $('#modalEdit').modal('show');
 
@@ -405,18 +396,9 @@ if ($admin != 'Y') {
         // VALIDASI FORM
         $('#formHakAkses').submit(function(e) {
 
-            let sim = $('#sim').is(':checked');
-            let sarpras = $('#sarpras').is(':checked');
+            let role = $('input[name="role"]:checked').val();
 
-            // ADMIN SEMENTARA DIKOMENTARI
-            // let admin = $('#admin').is(':checked');
-
-            // JIKA SEMUA KOSONG = USER BIASA
-            if (
-                !sim &&
-                !sarpras
-                // && !admin
-            ) {
+            if (role == 'user') {
 
                 let konfirmasiUser = confirm(
                     'User akan dijadikan user biasa. Lanjutkan?'
@@ -426,7 +408,9 @@ if ($admin != 'Y') {
 
                     e.preventDefault();
                     return false;
+
                 }
+
             }
 
             let konfirmasi = confirm(
@@ -437,6 +421,7 @@ if ($admin != 'Y') {
 
                 e.preventDefault();
                 return false;
+
             }
 
         });

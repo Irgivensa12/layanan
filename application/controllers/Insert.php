@@ -305,19 +305,20 @@
 
             // AMBIL DATA
             $userId = $this->input->post('userId');
+            $role   = $this->input->post('role');
 
-            // DEFAULT
-            $sim =
-                $this->input->post('sim')
-                ? 'Y' : 'N';
+            // DEFAULT SEMUA N
+            $sim = 'N';
+            $sarpras = 'N';
 
-            $sarpras =
-                $this->input->post('sarpras')
-                ? 'Y' : 'N';
+            // TENTUKAN ROLE
+            if ($role == 'sim') {
 
-            // $admin =
-            //     $this->input->post('admin')
-            //     ? 'Y' : 'N';
+                $sim = 'Y';
+            } else if ($role == 'sarpras') {
+
+                $sarpras = 'Y';
+            }
 
             // UPDATE ROLE SIM
             $this->Model->update_hak_akses(
@@ -331,13 +332,6 @@
                 $userId,
                 '25',
                 $sarpras
-            );
-
-            // UPDATE ROLE ADMIN
-            $this->Model->update_hak_akses(
-                $userId,
-                '24',
-                $admin
             );
 
             $_SESSION['pesan'] =
