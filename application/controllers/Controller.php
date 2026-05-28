@@ -118,12 +118,13 @@ class Controller extends CI_Controller
     public function switchToUser()
     {
         $this->session->set_userdata('as_user_biasa', true);
+
         redirect('dashboard');
     }
-
     public function backToAdmin()
     {
         $this->session->unset_userdata('as_user_biasa');
+
         redirect('dashboard');
     }
 }
