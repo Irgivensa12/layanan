@@ -62,7 +62,7 @@ $as_user_biasa = $this->session->userdata('as_user_biasa');
 
 // ROLE
 if ($as_user_biasa) {
-    $role = 'User (Mode Admin)';
+    $role = 'User';
 } elseif ($admin == 'Y') {
     $role = 'Admin Akses';
 } elseif ($sim == 'Y') {
@@ -154,11 +154,11 @@ $isUserMode = ($as_user_biasa == true);
                     <?php } else { ?>
 
                         <!-- USER MODE -->
-                        <a class="collapse-item" href="<?= base_url('tiket_saya_sim') ?>">
+                        <a class="collapse-item" href="<?= base_url('tiket_sim') ?>">
                             Tiket SIM Saya
                         </a>
 
-                        <a class="collapse-item" href="<?= base_url('tiket_saya_sarpras') ?>">
+                        <a class="collapse-item" href="<?= base_url('tiket_sarpras') ?>">
                             Tiket Sarpras Saya
                         </a>
 

@@ -224,18 +224,23 @@ class model extends CI_Model
         $sim   = $this->session->userdata('sim');
         $user  = $this->session->userdata('helpdesk_userId');
 
+        // PENTING
+        $as_user_biasa = $this->session->userdata('as_user_biasa');
+
         $status = $this->input->get('status');
 
         $filterStatus = "";
 
         if ($status == 'open') {
+
             $filterStatus = " AND t.tikStatus='N' ";
         } elseif ($status == 'close') {
+
             $filterStatus = " AND t.tikStatus='Y' ";
         }
 
-        // ADMIN HAK AKSES ATAU ADMIN SIM
-        if ($admin == 'Y' || $sim == 'Y') {
+        // ADMIN ASLI
+        if (($admin == 'Y' || $sim == 'Y') && !$as_user_biasa) {
 
             $query = $this->db->query("
             SELECT 
@@ -253,7 +258,8 @@ class model extends CI_Model
         ");
         } else {
 
-            // USER BIASA
+            // USER BIASA / ADMIN MODE USER
+
             $query = $this->db->query("
             SELECT 
                 t.*,
@@ -281,7 +287,6 @@ class model extends CI_Model
 
         $status = $this->input->get('status');
 
-        // FILTER STATUS
         $filterStatus = "";
 
         if ($status == 'open') {
@@ -298,7 +303,8 @@ class model extends CI_Model
             $query = $this->db->query("
             SELECT l.*, u.userNama
             FROM tb_layanan l
-            LEFT JOIN vUser u ON u.userId = l.layUserID
+            LEFT JOIN vUser u 
+                ON u.userId = l.layUserID
 
             WHERE 1=1
             $filterStatus
@@ -307,11 +313,13 @@ class model extends CI_Model
         ");
         } else {
 
-            // USER BIASA
+            // USER BIASA / ADMIN MODE USER
+
             $query = $this->db->query("
             SELECT l.*, u.userNama
             FROM tb_layanan l
-            LEFT JOIN vUser u ON u.userId = l.layUserID
+            LEFT JOIN vUser u 
+                ON u.userId = l.layUserID
 
             WHERE l.layUserID = '$user'
             $filterStatus
@@ -449,4 +457,11 @@ class model extends CI_Model
             $data
         );
     }
+    // public function getTiketSIMByUser($userId)
+    // {
+    //     return $this->db
+    //         ->where('tikUserID', $userId)
+    //         ->get('tb_tiket_sim')
+    //         ->result();
+    // }
 }
