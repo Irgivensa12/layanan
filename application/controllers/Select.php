@@ -73,10 +73,9 @@ class Select extends CI_Controller
             "tiket_sarpras_close" => $tiket_sarpras_close
         ]);
     }
-
     public function tiket_sarpras()
     {
-       $data = $this->Model->tiket_sarpras()->result_array(); // buka class tiket_sim di Model
+        $data = $this->Model->tiket_sarpras()->result_array(); // buka class tiket_sim di Model
         echo json_encode($data);
     }
 

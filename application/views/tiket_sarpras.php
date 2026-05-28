@@ -1,35 +1,17 @@
     <?php
-    defined('BASEPATH') or exit('No direct script access allowed');
-
     if (
-        !$this->session->userdata('helpdesk_userId') // Cek login
+        !$this->session->userdata('helpdesk_userId')
     ) {
-        $this->session->set_flashdata('type', 'alert-danger');
-        $this->session->set_flashdata(
-            'pesan',
-            '<strong>Error!</strong> Anda harus login terlebih dahulu!'
-        );
-
         redirect();
         exit;
     }
 
+    // SESSION
     $admin   = $this->session->userdata('admin');
+    $sim     = $this->session->userdata('sim');
     $sarpras = $this->session->userdata('sarpras');
+
     $userId  = $this->session->userdata('helpdesk_userId');
-
-    if ($admin != 'Y' && $sarpras != 'Y') {
-
-        $this->session->set_flashdata('type', 'alert-danger');
-
-        $this->session->set_flashdata(
-            'pesan',
-            '<strong>Error!</strong> Anda tidak memiliki akses ke halaman SARPRAS!'
-        );
-
-        redirect('dashboard');
-        exit;
-    }
     ?>
 
     <style id="stylePrintSarpras">
@@ -306,11 +288,8 @@
 
                                     <th>No</th>
                                     <th>Tanggal</th>
-
-                                    <?php if ($admin == 'Y' || $sarpras == 'Y') { ?>
-                                        <th>Penginput</th>
-                                    <?php } ?>
-
+                                    <th>Penginput</th>
+                                    <th>Nama</th>
                                     <th>Keluhan</th>
                                     <th>Deskripsi</th>
 
@@ -508,6 +487,7 @@
                                 data[i].layID,
                                 tanggal_benar,
                                 data[i].layUserID,
+                                data[i].userNama,
                                 data[i].layHal,
                                 data[i].layDiskripsi,
                                 detailBtn,
@@ -515,7 +495,6 @@
                                 actionBtn
 
                             ]);
-
                         }
 
                         // =========================
@@ -527,6 +506,8 @@
 
                                 data[i].layID,
                                 tanggal_benar,
+                                data[i].layUserID,
+                                data[i].userNama,
                                 data[i].layHal,
                                 data[i].layDiskripsi,
                                 statusText,
@@ -740,7 +721,7 @@
                     // LOAD PETUGAS DI SELECT (HANYA UNTUK ADMIN HAK AKSES & ADMIN SARPRAS)
                     // =========================
 
-                    if (role == 'admin' || role == 'sarpras') {
+                    if (admin == 'Y' || sarpras == 'Y') {
 
                         let petugasDB = data.petugas || [];
 
