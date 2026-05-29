@@ -16,50 +16,102 @@ class Select extends CI_Controller
     public function dashboard()
     {
         $userId = $this->session->userdata('helpdesk_userId');
-        $admin  = $this->session->userdata('admin');
+
+        $admin   = $this->session->userdata('admin');
+        $sim     = $this->session->userdata('sim');
+        $sarpras = $this->session->userdata('sarpras');
+
+        $as_user_biasa = $this->session->userdata('as_user_biasa');
 
         // ================= SIM =================
 
         $this->db->from('tb_tiket');
-        if ($admin != 'Y') {
+
+        // jika bukan admin asli
+        if (($admin == 'Y' || $sim == 'Y') && !$as_user_biasa) {
+
+            // tampil semua
+
+        } else {
+
             $this->db->where('tikUserID', $userId);
         }
+
         $tiket_sim_total = $this->db->count_all_results();
 
+        // OPEN
         $this->db->from('tb_tiket');
         $this->db->where('tikStatus', 'N');
-        if ($admin != 'Y') {
+
+        if (($admin == 'Y' || $sim == 'Y') && !$as_user_biasa) {
+
+            // tampil semua
+
+        } else {
+
             $this->db->where('tikUserID', $userId);
         }
+
         $tiket_sim_open = $this->db->count_all_results();
 
+        // CLOSE
         $this->db->from('tb_tiket');
         $this->db->where('tikStatus', 'Y');
-        if ($admin != 'Y') {
+
+        if (($admin == 'Y' || $sim == 'Y') && !$as_user_biasa) {
+
+            // tampil semua
+
+        } else {
+
             $this->db->where('tikUserID', $userId);
         }
+
         $tiket_sim_close = $this->db->count_all_results();
 
         // ================= SARPRAS =================
 
         $this->db->from('tb_layanan');
-        if ($admin != 'Y') {
+
+        if (($admin == 'Y' || $sarpras == 'Y') && !$as_user_biasa) {
+
+            // tampil semua
+
+        } else {
+
             $this->db->where('layUserID', $userId);
         }
+
         $tiket_sarpras_total = $this->db->count_all_results();
 
+        // OPEN
         $this->db->from('tb_layanan');
         $this->db->where('layStatus', 'N');
-        if ($admin != 'Y') {
+
+        if (($admin == 'Y' || $sarpras == 'Y') && !$as_user_biasa) {
+
+            // tampil semua
+
+        } else {
+
             $this->db->where('layUserID', $userId);
         }
+
         $tiket_sarpras_open = $this->db->count_all_results();
 
+        // CLOSE
         $this->db->from('tb_layanan');
         $this->db->where('layStatus', 'Y');
-        if ($admin != 'Y') {
+
+        if (($admin == 'Y' || $sarpras == 'Y') && !$as_user_biasa) {
+
+            // tampil semua
+
+        } else {
+
             $this->db->where('layUserID', $userId);
         }
+
         $tiket_sarpras_close = $this->db->count_all_results();
 
         echo json_encode([
@@ -71,10 +123,9 @@ class Select extends CI_Controller
             "tiket_sarpras_close" => $tiket_sarpras_close
         ]);
     }
-
     public function tiket_sarpras()
     {
-       $data = $this->Model->tiket_sarpras()->result_array(); // buka class tiket_sim di Model
+        $data = $this->Model->tiket_sarpras()->result_array(); // buka class tiket_sim di Model
         echo json_encode($data);
     }
 

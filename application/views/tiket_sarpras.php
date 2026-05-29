@@ -1,14 +1,17 @@
     <?php
-    defined('BASEPATH') or exit('No direct script access allowed');
-
-    if (!$this->session->userdata('helpdesk_userId')) {
-        $this->session->set_flashdata('type', 'alert-danger');
-        $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
+    if (
+        !$this->session->userdata('helpdesk_userId')
+    ) {
         redirect();
         exit;
     }
 
-    $admin = $this->session->userdata('admin');
+    // SESSION
+    $admin   = $this->session->userdata('admin');
+    $sim     = $this->session->userdata('sim');
+    $sarpras = $this->session->userdata('sarpras');
+
+    $userId  = $this->session->userdata('helpdesk_userId');
     ?>
 
     <style id="stylePrintSarpras">
@@ -228,8 +231,9 @@
 
                     <h1 class="h3 mb-0 text-gray-800">
 
-                        <?= ($admin == 'Y') ? 'Halaman keluhan SARPRAS' : 'List Semua Keluhan SARPRAS'; ?>
-
+                        <?= ($admin == 'Y' || $sarpras == 'Y')
+                            ? 'Halaman Keluhan SARPRAS'
+                            : 'List Semua Keluhan SARPRAS'; ?>
                     </h1>
 
                 </div>
@@ -284,21 +288,18 @@
 
                                     <th>No</th>
                                     <th>Tanggal</th>
-
-                                    <?php if ($admin == 'Y') { ?>
-                                        <th>Penginput</th>
-                                    <?php } ?>
-
+                                    <th>Penginput</th>
+                                    <th>Nama</th>
                                     <th>Keluhan</th>
                                     <th>Deskripsi</th>
 
-                                    <?php if ($admin != 'Y') { ?>
+                                    <?php if ($admin != 'Y' && $sarpras != 'Y') { ?>
                                         <th>Status</th>
                                     <?php } ?>
 
                                     <th>Detail</th>
 
-                                    <?php if ($admin == 'Y') { ?>
+                                    <?php if ($admin == 'Y' || $sarpras == 'Y') { ?>
                                         <th>Form Sarpras</th>
                                         <th>Status</th>
                                     <?php } ?>
@@ -367,6 +368,7 @@
     <script>
         var table;
         var admin = "<?= $admin ?>";
+        var sarpras = "<?= $sarpras ?>";
 
         $(document).ready(function() {
 
@@ -456,7 +458,7 @@
 
                         var actionBtn = '';
 
-                        if (admin == 'Y') {
+                        if (admin == 'Y' || sarpras == 'Y') {
 
                             if (data[i].layStatus == 'N') {
 
@@ -475,16 +477,17 @@
                         }
 
                         // =========================
-                        // ADMIN
+                        // ADMIN HAK AKSES & ADMIN SARPRAS
                         // =========================
 
-                        if (admin == 'Y') {
+                        if (admin == 'Y' || sarpras == 'Y') {
 
                             table.row.add([
 
                                 data[i].layID,
                                 tanggal_benar,
                                 data[i].layUserID,
+                                data[i].userNama,
                                 data[i].layHal,
                                 data[i].layDiskripsi,
                                 detailBtn,
@@ -492,7 +495,6 @@
                                 actionBtn
 
                             ]);
-
                         }
 
                         // =========================
@@ -504,6 +506,8 @@
 
                                 data[i].layID,
                                 tanggal_benar,
+                                data[i].layUserID,
+                                data[i].userNama,
                                 data[i].layHal,
                                 data[i].layDiskripsi,
                                 statusText,
@@ -531,7 +535,7 @@
 
             var layID = $(this).data("id");
 
-            if (admin == 'Y') {
+            if (admin == 'Y' || sarpras == 'Y') {
 
                 loadPetugas(() => {
 
@@ -714,10 +718,10 @@
                     );
 
                     // =========================
-                    // ADMIN PETUGAS
+                    // LOAD PETUGAS DI SELECT (HANYA UNTUK ADMIN HAK AKSES & ADMIN SARPRAS)
                     // =========================
 
-                    if (admin == 'Y') {
+                    if (admin == 'Y' || sarpras == 'Y') {
 
                         let petugasDB = data.petugas || [];
 
@@ -1142,13 +1146,13 @@
 
                         </div>
 
-                        <!-- KHUSUS ADMIN -->
-                        <?php if ($admin == 'Y') { ?>
+                        <!-- KHUSUS ADMIN SARPRAS DAN ADMIN HAK AKSES -->
+                        <?php if ($admin == 'Y' || $sarpras == 'Y') { ?>
 
                             <hr>
 
                             <h5 class="text-primary font-weight-bold mb-3">
-                                Assign Petugas
+                                Pilih Petugas
                             </h5>
 
                             <div class="form-group">

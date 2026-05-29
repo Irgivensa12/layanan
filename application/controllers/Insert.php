@@ -78,7 +78,7 @@
             if ($this->form_validation->run() == FALSE) {
                 $this->session->set_flashdata('type', 'alert-danger');
                 $this->session->set_flashdata('pesan', validation_errors());
-                redirect('Controller/tambah_tiket_sim'); 
+                redirect('Controller/tambah_tiket_sim');
                 return;
             }
 
@@ -103,6 +103,17 @@
 
         public function close_tiket($tikNomor)
         {
+            $admin = $this->session->userdata('admin');
+            $sim   = $this->session->userdata('sim');
+
+            if ($admin == 'Y' || $sim == 'Y') {
+
+                echo json_encode([
+                    'status' => false,
+                    'pesan' => 'Admin tidak boleh close tiket!'
+                ]);
+                return;
+            }
             // ambil data tiket
             $tiket = $this->db->get_where('tb_tiket', ['tikNomor' => $tikNomor])->row();
 
@@ -121,7 +132,7 @@
             if (empty(trim($tiket->tikTindakan))) {
                 echo json_encode(['status' => 'error', 'message' => 'Tindakan masih kosong']);
                 return;
-            }   
+            }
 
             // lanjut close 
             $data = [
@@ -264,5 +275,71 @@
                 $this->session->set_flashdata('type', 'alert-danger');
                 $this->session->set_flashdata('pesan', '<strong>Error!</strong> pesan error: <br><br>' . $this->email->print_debugger());
             }
+        }
+
+        public function updateHakAkses()
+        {
+            // VALIDASI LOGIN
+            if (
+                !$this->session->userdata('helpdesk_userId')
+            ) {
+
+                redirect();
+                exit;
+            }
+
+            // HANYA ADMIN
+            if (
+                $this->session->userdata('admin') != 'Y'
+            ) {
+
+                $_SESSION['pesan'] =
+                    'Anda tidak memiliki akses!';
+
+                $_SESSION['type'] =
+                    'alert-danger';
+
+                redirect('dashboard');
+                exit;
+            }
+
+            // AMBIL DATA
+            $userId = $this->input->post('userId');
+            $role   = $this->input->post('role');
+
+            // DEFAULT SEMUA N
+            $sim = 'N';
+            $sarpras = 'N';
+
+            // TENTUKAN ROLE
+            if ($role == 'sim') {
+
+                $sim = 'Y';
+            } else if ($role == 'sarpras') {
+
+                $sarpras = 'Y';
+            }
+
+            // UPDATE ROLE SIM
+            $this->Model->update_hak_akses(
+                $userId,
+                '1',
+                $sim
+            );
+
+            // UPDATE ROLE SARPRAS
+            $this->Model->update_hak_akses(
+                $userId,
+                '25',
+                $sarpras
+            );
+
+            $_SESSION['pesan'] =
+                'Hak akses berhasil diperbarui!';
+
+            $_SESSION['type'] =
+                'alert-success';
+
+            redirect('menu_user');
         }
     }

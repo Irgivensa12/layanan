@@ -1,12 +1,17 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
-if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
-    $this->session->set_flashdata('type', 'alert-danger');
-    $this->session->set_flashdata('pesan', '<strong>Error!</strong> Anda harus login terlebih dahulu');
-    redirect();
-    exit;
-}
+$admin   = $this->session->userdata('admin');
+$sim     = $this->session->userdata('sim');
+$sarpras = $this->session->userdata('sarpras');
 ?>
+
+<?php
+if (
+    $admin == 'Y' ||
+    $sim == 'Y' ||
+    ($sim != 'Y' && $sarpras != 'Y')
+) {
+?>
+<?php } ?>
 
 <div id="content-wrapper" class="d-flex flex-column">
 
@@ -204,6 +209,32 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
     </footer>
 
 </div>
+<!-- <div class="alert alert-info">
+
+    User ID :
+    <?= $this->session->userdata('helpdesk_userId') ?>
+
+    <br>
+
+    Nama :
+    <?= $this->session->userdata('helpdesk_userNama') ?>
+
+    <br>
+
+    Admin :
+    <?= $this->session->userdata('admin') ?>
+
+    <br>
+
+    SIM :
+    <?= $this->session->userdata('sim') ?>
+
+    <br>
+
+    Sarpras :
+    <?= $this->session->userdata('sarpras') ?>
+
+</div> -->
 
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
