@@ -284,6 +284,7 @@ class model extends CI_Model
         $admin    = $this->session->userdata('admin');
         $sarpras  = $this->session->userdata('sarpras');
         $user     = $this->session->userdata('helpdesk_userId');
+        $as_user_biasa = $this->session->userdata('as_user_biasa');
 
         $status = $this->input->get('status');
 
@@ -298,7 +299,7 @@ class model extends CI_Model
         }
 
         // ADMIN HAK AKSES ATAU ADMIN SARPRAS
-        if ($admin == 'Y' || $sarpras == 'Y') {
+        if (($admin == 'Y' || $sarpras == 'Y') && !$as_user_biasa) {
 
             $query = $this->db->query("
             SELECT l.*, u.userNama
