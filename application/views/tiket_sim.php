@@ -239,8 +239,8 @@ $userId  = $this->session->userdata('helpdesk_userId');
                             data[i].tikUserID,
                             data[i].userNama,
                             data[i].tikRingkasan,
-                            statusBtn,
-                            detailBtn
+                            detailBtn,
+                            statusBtn
                         ]);
 
                     }
@@ -288,6 +288,10 @@ $userId  = $this->session->userdata('helpdesk_userId');
                 let operator = data.tikOperator;
                 let tindakan = data.tikTindakan;
 
+                console.log("Data tiket:", data);
+                console.log("Operator:", "[" + data.tikOperator + "]"); 
+                console.log("Tindakan:", "[" + data.tikTindakan + "]");
+                console.log("Type Operator:", typeof data.tikOperator);
                 // validasi operator dan tindakan sebelum close tiket
                 if (!operator || operator === "") {
                     alert("❌ Tidak bisa menutup tiket!\nOperator belum dipilih.");
@@ -417,7 +421,7 @@ $userId  = $this->session->userdata('helpdesk_userId');
                 $("#m_tikRingkasan").text(data.tikRingkasan);
 
                 $("#m_tikStatus").html( // Jika status tiket 'OPEN' maka tampilkan badge hijau (Open), jika tidak tampilkan badge abu-abu (CLOSED)
-                    data.tikStatus === 'OPEN' ?
+                    data.tikStatus === 'N' ?
                     '<span class="badge badge-success">OPEN</span>' :
                     '<span class="badge badge-secondary">CLOSED</span>'
                 );
