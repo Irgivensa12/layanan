@@ -161,8 +161,6 @@
                 $layanan->layPetugas1,
                 $layanan->layPetugas2,
                 $layanan->layPetugas3,
-                $layanan->layPetugas4,
-                $layanan->layPetugas5
             ];
 
             // filter yang tidak kosong
