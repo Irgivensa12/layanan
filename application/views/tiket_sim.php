@@ -264,7 +264,7 @@ $userId  = $this->session->userdata('helpdesk_userId');
 
             }
         });
-    }
+    }   
 
     $(document).on("click", ".detailBtn", function() { // Event listener untuk tombol detail
 

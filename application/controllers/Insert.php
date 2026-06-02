@@ -30,8 +30,6 @@
             redirect('menu');
         }
 
-
-
         public function tambah_tiket_sarpras()
         {
             $this->load->library('form_validation');
@@ -160,9 +158,7 @@
             $petugas = [
                 $layanan->layPetugas1,
                 $layanan->layPetugas2,
-                $layanan->layPetugas3,
-                $layanan->layPetugas4,
-                $layanan->layPetugas5
+                $layanan->layPetugas3
             ];
 
             // filter yang tidak kosong
@@ -200,8 +196,7 @@
                 'layPetugas1' => null,
                 'layPetugas2' => null,
                 'layPetugas3' => null,
-                'layPetugas4' => null,
-                'layPetugas5' => null,
+                
             ];
 
             // isi sesuai urutan

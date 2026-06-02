@@ -212,11 +212,6 @@ class model extends CI_Model
         return $query->row()->no_layanan;
     }
 
-    public function delete_form_coba($no)
-    {
-        $this->db->where('no_buku', $no);
-        $this->db->delete('buku');
-    }
 
     public function tiket_sim()
     {
