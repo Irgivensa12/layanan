@@ -51,6 +51,7 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
                                 <th style="width:10px">No</th>
                                 <th>Tanggal</th>
                                 <th>Penginput</th>
+                                <th>Nama</th>
                                 <th>Ringkasan</th>
                                 <th>Status</th>
                             </tr>
@@ -165,6 +166,7 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
                         data[i].tikNomor,
                         tanggal_benar,
                         data[i].tikUserID,
+                        data[i].userNama,
                         data[i].tikRingkasan,
                         statusBtn
                     ]);

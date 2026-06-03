@@ -34,9 +34,11 @@
         {
             $this->load->library('form_validation');
 
-            $this->form_validation->set_rules('layTanggal', 'Tanggal', 'required');
+            $this->form_validation->set_rules('layTanggal', 'Tanggal', 'required'); 
             $this->form_validation->set_rules('layHal', 'Keluhan', 'required');
             $this->form_validation->set_rules('layDiskripsi', 'Deskripsi', 'required');
+            $this->form_validation->set_rules('layTarget', 'Target Selesai', 'required');
+            $this->form_validation->set_rules('layLokasi', 'Lokasi', 'required');
 
             if ($this->form_validation->run() == FALSE) {
                 $this->session->set_flashdata('type', 'alert-danger');
@@ -54,6 +56,7 @@
                 'layHal'        => trim($this->input->post('layHal')),
                 'layDiskripsi'  => trim($this->input->post('layDiskripsi')),
                 'layTarget'     => $this->input->post('layTarget'),
+                'layLokasi'     => trim($this->input->post('layLokasi')),
                 'layStatus'     => 'N'
             ];
 
@@ -158,7 +161,9 @@
             $petugas = [
                 $layanan->layPetugas1,
                 $layanan->layPetugas2,
-                $layanan->layPetugas3
+                $layanan->layPetugas3,
+                $layanan->layPetugas4,
+                $layanan->layPetugas5
             ];
 
             // filter yang tidak kosong

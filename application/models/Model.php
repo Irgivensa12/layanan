@@ -212,7 +212,6 @@ class model extends CI_Model
         return $query->row()->no_layanan;
     }
 
-
     public function tiket_sim()
     {
         $admin = $this->session->userdata('admin');
@@ -293,7 +292,7 @@ class model extends CI_Model
             $filterStatus = " AND l.layStatus='Y' ";
         }
 
-        // ADMIN HAK AKSES ATAU ADMIN SARPRAS
+        // ADMIN HAK AKSES ATAU ADMIN SARPRAS DAN BUKAN MODE USER BIASA
         if (($admin == 'Y' || $sarpras == 'Y') && !$as_user_biasa) {
 
             $query = $this->db->query("

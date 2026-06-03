@@ -122,6 +122,41 @@ if (!$this->session->userdata('helpdesk_userId')) {
 
                     </div>
 
+                    <!-- Tanggal Target -->
+                    <div class="form-group row mb-4 align-items-center">
+
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                            Tanggal Target
+                        </label>
+
+                        <div class="col-md-5">
+                            <input type="date"
+                                class="form-control"
+                                name="layTarget"
+                                placeholder="Tanggal Target"
+                                style="height:50px;font-size:16px;"
+                                required>
+                        </div>
+                    </div>
+
+                    <!-- Lokasi -->
+                    <div class="form-group row mb-4 align-items-center">
+
+                        <label class="col-md-3 font-weight-bold text-md-right pr-4">
+                            Lokasi
+                        </label>
+
+                        <div class="col-md-9">
+                            <input type="text"
+                                class="form-control"
+                                name="layLokasi"
+                                placeholder="Lokasi Keluhan"
+                                style="height:50px;font-size:16px;"
+                                required>
+                        </div>
+
+                    </div>
+
                     <!-- Deskripsi -->
                     <div class="form-group row mb-4">
 
@@ -184,18 +219,20 @@ if (!$this->session->userdata('helpdesk_userId')) {
 <script src="<?= base_url('js/sb-admin-2.js') ?>"></script>
 
 <script>
-    function validasiForm() {
+    function validasiForm() { // Fungsi untuk validasi form sebelum submit
 
         let ringkasan = document.getElementsByName('layHal')[0].value.trim();
         let deskripsi = document.getElementsByName('layDiskripsi')[0].value.trim();
         let tanggal = document.getElementsByName('layTanggal')[0].value;
+        let tanggalTarget = document.getElementsByName('layTarget')[0].value;
+        let lokasi = document.getElementsByName('layLokasi')[0].value.trim();
 
 
         if (
-            tanggal === '' ||
+            tanggalTarget === '' ||
             ringkasan === '' ||
-            deskripsi === ''
-
+            deskripsi === '' ||
+            lokasi === ''
         ) {
             alert('Mohon lengkapi keluhan anda!');
             return false;

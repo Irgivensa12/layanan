@@ -291,6 +291,8 @@
                                     <th>Penginput</th>
                                     <th>Nama</th>
                                     <th>Keluhan</th>
+                                    <th>Target Selesai</th>
+                                    <th>Lokasi</th>
                                     <th>Deskripsi</th>
 
                                     <?php if ($admin != 'Y' && $sarpras != 'Y') { ?>
@@ -423,6 +425,8 @@
                         };
 
                         var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
+                        var target_db = new Date(data[i].layTarget);
+                        var target_benar = target_db.toLocaleDateString('id-ID', options);
 
                         // STATUS
 
@@ -489,6 +493,8 @@
                                 data[i].layUserID,
                                 data[i].userNama,
                                 data[i].layHal,
+                                target_benar,
+                                data[i].layLokasi,
                                 data[i].layDiskripsi,
                                 detailBtn,
                                 formSarprasBtn,
@@ -509,6 +515,8 @@
                                 data[i].layUserID,
                                 data[i].userNama,
                                 data[i].layHal,
+                                target_benar,
+                                data[i].layLokasi,
                                 data[i].layDiskripsi,
                                 statusText,
                                 detailBtn
