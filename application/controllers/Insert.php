@@ -196,7 +196,7 @@
                 'layPetugas1' => null,
                 'layPetugas2' => null,
                 'layPetugas3' => null,
-                
+
             ];
 
             // isi sesuai urutan
@@ -228,6 +228,20 @@
             $this->kirimEmail("SIM", $tikNomor, "irgiv1204@gmail.com");
 
             echo json_encode(['status' => 'ok']);
+        }
+
+        public function update_tiket_sarpras()
+        {
+            $layID        = $this->input->post('layID');
+            $layHal       = $this->input->post('layHal');
+            $layDiskripsi = $this->input->post('layDiskripsi');
+
+            $this->db->where('layID', $layID);
+
+            $this->db->update('layanan', [
+                'layHal'        => $layHal,
+                'layDiskripsi'  => $layDiskripsi
+            ]);
         }
 
         public function kirimEmail($jenis, $nomor, $userEmail)

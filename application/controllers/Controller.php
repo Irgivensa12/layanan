@@ -53,7 +53,7 @@ class Controller extends CI_Controller
 
         if ($admin == 'Y') {
 
-            $data['role'] = 'Admin Hak Akses';
+            $data['role'] = '';
         } elseif ($sim == 'Y') {
 
             $data['role'] = 'Admin SIM';

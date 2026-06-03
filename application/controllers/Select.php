@@ -195,6 +195,7 @@ class Select extends CI_Controller
         $this->db->select("
         layID,
         layTanggal,
+        layCloseTanggal,
         layUserID,
         userNama,
         layHal,

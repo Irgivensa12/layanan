@@ -672,8 +672,10 @@
 
                 success: function(data) {
 
-                    console.log("DETAIL DATA :", data);
 
+
+                    console.log("DETAIL DATA :", data);
+                    console.log("LAY CLOSE :", data.layCloseTanggal);
                     // CEK jika data kosong
                     if (!data || data == null) {
 
@@ -698,7 +700,7 @@
 
                     $("#m_userNama").text(data.userNama || '-');
 
-                    $("#m_layHal").text(data.layHal || '-');
+                    $("#m_layHal").val(data.layHal || '');
 
                     // STATUS
                     $("#m_layStatus").html(
@@ -708,8 +710,31 @@
                         '<span class="badge badge-secondary">CLOSED</span>'
 
                     );
+                    // TANGGAL CLOSE
 
-                    $('#m_layDiskripsi').html(data.layDiskripsi || '-');
+                    if (data.layCloseTanggal &&
+                        data.layCloseTanggal != '0000-00-00' &&
+                        data.layCloseTanggal != null) {
+
+                        let closeDate = new Date(data.layCloseTanggal);
+
+                        let closeTanggal = closeDate.toLocaleDateString('id-ID', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+
+                        $("#m_layCloseTanggal").text(closeTanggal);
+
+                    } else {
+
+                        $("#m_layCloseTanggal").html(
+                            '<span class="text-muted">Belum Ditutup</span>'
+                        );
+
+                    }
+
+                    $("#m_layDiskripsi").val(data.layDiskripsi || '');
 
                     $("#m_penanggungJawab").html(
                         data.penanggungJawab ?
@@ -946,7 +971,7 @@
 
                     }
 
-                    $("#m_kepada, #m_kepada2").text(data.penanggungJawab);
+                    $("#m_kepada, #m_kepada2").text('Admin Sarpras');
                     $("#m_dari, #m_dari2").text(data.userNama);
                     $("#m_tanggal, #m_tanggal2").text(tanggal_benar);
                     $("#m_hal, #m_hal2").text(data.layHal);
@@ -988,6 +1013,44 @@
                 }
             };
             html2pdf().set(opt).from(element).save();
+        }
+
+        function updateKeluhan() {
+
+            if (!confirm("Simpan perubahan keluhan?")) {
+                return;
+            }
+
+            $.ajax({
+
+                url: "<?= base_url('Insert/update_tiket_sarpras') ?>",
+
+                type: "POST",
+
+                data: {
+                    layID: $("#m_layID").text(),
+                    layHal: $("#m_layHal").val(),
+                    layDiskripsi: $("#m_layDiskripsi").val()
+                },
+
+                success: function(res) {
+
+                    alert("Data berhasil diperbarui");
+
+                    $("#modalDetail").modal('hide');
+
+                    getTiket_Sarpras();
+
+                },
+
+                error: function() {
+
+                    alert("Gagal memperbarui data");
+
+                }
+
+            });
+
         }
     </script>
     <!-- MODAL DETAIL -->
@@ -1093,6 +1156,7 @@
                         </div>
 
                         <!-- KELUHAN -->
+
                         <div class="form-group row mb-3">
 
                             <label class="col-md-3 font-weight-bold text-md-right pt-2">
@@ -1101,15 +1165,14 @@
 
                             <div class="col-md-9">
 
-                                <div id="m_layHal"
+                                <textarea id="m_layHal"
                                     class="form-control"
-                                    style="font-size:14px;padding:10px;min-height:80px;">
-                                </div>
+                                    rows="3"
+                                    style="font-size:14px;padding:10px;resize:vertical;"></textarea>
 
                             </div>
 
                         </div>
-
                         <!-- DESKRIPSI -->
                         <div class="form-group row mb-3">
 
@@ -1119,10 +1182,10 @@
 
                             <div class="col-md-9">
 
-                                <div id="m_layDiskripsi"
+                                <textarea id="m_layDiskripsi"
                                     class="form-control"
-                                    style="font-size:14px;padding:10px;min-height:120px;">
-                                </div>
+                                    rows="6"
+                                    style="font-size:14px;padding:10px;resize:vertical;"></textarea>
 
                             </div>
 
@@ -1140,6 +1203,24 @@
                                 <div id="m_penanggungJawab"
                                     class="form-control"
                                     style="font-size:14px;padding:10px;min-height:80px;">
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- TANGGAL CLOSE -->
+                        <div class="form-group row mb-3">
+
+                            <label class="col-md-3 font-weight-bold text-md-right">
+                                Tanggal Close
+                            </label>
+
+                            <div class="col-md-9">
+
+                                <div id="m_layCloseTanggal"
+                                    class="form-control d-flex align-items-center"
+                                    style="height:38px;font-size:14px;">
                                 </div>
 
                             </div>
@@ -1187,6 +1268,8 @@
 
                                 </button>
 
+
+
                             </div>
 
                         <?php } ?>
@@ -1197,6 +1280,14 @@
 
                 <!-- FOOTER -->
                 <div class="modal-footer justify-content-center py-2">
+
+                    <button type="button"
+                        class="btn btn-warning"
+                        onclick="updateKeluhan()">
+
+                        Koreksi Keluhan
+
+                    </button>
 
                     <button type="button"
                         class="btn btn-danger"
