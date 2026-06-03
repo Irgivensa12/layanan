@@ -53,6 +53,8 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
                                 <th>Penginput</th>
                                 <th>Nama</th>
                                 <th>Keluhan</th>
+                                <th>Target</th>
+                                <th>Lokasi</th>
                                 <th>Deskripsi</th>
                                 <th>Status</th>
                             </tr>
@@ -171,13 +173,19 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
                         statusBtn = '<span class="badge badge-secondary">CLOSED</span>';
                     }
 
+                    var target_db = new Date(data[i].layTarget); // Mengubah string tanggal target dari database menjadi objek Date
                     var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia
+                    var target_benar = target_db.toLocaleDateString('id-ID', options); // Mengubah tanggal target menjadi format Indonesia
+                    var lokasi = data[i].layLokasi; // Mengambil lokasi dari data
+
                     table.row.add([
                         data[i].layID,
                         tanggal_benar,
                         data[i].layUserID,
                         data[i].userNama,
                         data[i].layHal,
+                        target_benar,
+                        lokasi,
                         data[i].layDiskripsi,
                         statusBtn,
                     ]);
