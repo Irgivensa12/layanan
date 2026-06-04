@@ -981,6 +981,7 @@
 
                     $("#m_kepada, #m_kepada2").text('Admin Sarpras');
                     $("#m_dari, #m_dari2").text(data.userNama);
+                    $("#m_bagian, #m_bagian2").text(data.layDivisiID);
                     $("#m_tanggal, #m_tanggal2").text(tanggal_benar);
                     $("#m_hal, #m_hal2").text(data.layHal);
                     $("#m_isi, #m_isi2").text(data.layDiskripsi);
@@ -1349,6 +1350,11 @@
                                 </div>
 
                                 <div class="sarpras-row">
+                                    <div class="sarpras-label">Bagian</div>
+                                    <div class="sarpras-line" id="m_bagian"></div>
+                                </div>
+
+                                <div class="sarpras-row">
                                     <div class="sarpras-label">Tanggal</div>
                                     <div class="sarpras-line" id="m_tanggal"></div>
                                 </div>
@@ -1410,7 +1416,7 @@
                             </div>
                         </div>
 
-                        <!-- KOLOM KANAN (DUPLIKAT) -->
+                        <!-- KOLOM KANAN -->
                         <div class="print-col">
                             <div class="sarpras-form">
 
@@ -1430,6 +1436,11 @@
                                 <div class="sarpras-row">
                                     <div class="sarpras-label">Dari</div>
                                     <div class="sarpras-line" id="m_dari2"></div>
+                                </div>
+
+                                <div class="sarpras-row">
+                                    <div class="sarpras-label">Bagian</div>
+                                    <div class="sarpras-line" id="m_bagian2"></div>
                                 </div>
 
                                 <div class="sarpras-row">

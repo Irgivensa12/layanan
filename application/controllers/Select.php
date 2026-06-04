@@ -271,6 +271,7 @@ class Select extends CI_Controller
         layTanggal,
         layUserID,
         userNama,
+        layDivisiID,
         layHal,
         layDiskripsi,
         layTarget,
