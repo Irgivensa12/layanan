@@ -43,6 +43,31 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
                 </div>
             </div>
 
+            <div class="row mb-3">
+
+                <div class="col-md-3">
+                    <label>Tanggal Awal</label>
+                    <input type="date" id="tanggal_awal" class="form-control">
+                </div>
+
+                <div class="col-md-3">
+                    <label>Tanggal Akhir</label>
+                    <input type="date" id="tanggal_akhir" class="form-control">
+                </div>
+
+                <div class="col-md-2 align-self-end">
+                    <button class="btn btn-primary" onclick="getTiket_Sarpras()">
+                        Cari
+                    </button>
+                </div>
+
+                <div class="col-md-2 align-self-end">
+                    <button class="btn btn-secondary" onclick="resetFilter()">
+                        Reset
+                    </button>
+                </div>
+
+            </div>
             <div class="row">
                 <div class="col">
                     <table id="tabel" class="display nowrap" style="width:100%">
@@ -63,6 +88,7 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
 
                         </tbody>
                     </table>
+                    <div class="text-center mt-3" id="excelContainer"></div>
                 </div>
             </div>
             <br>
@@ -132,17 +158,25 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
                 className: 'btn btn-success btn-lg'
             }]
         });
+        table.buttons().container() // Mengambil container tombol yang dibuat oleh DataTables
+            .appendTo('#excelContainer'); // Menambahkan tombol ke dalam div dengan id "excelContainer"
         getTiket_Sarpras(); // Memanggil function get
     });
 
     // menggunakan AJAX untuk membuat tabel dari data tabel
     // AJAX (View) -> Controller -> Model -> dapat hasil
     function getTiket_Sarpras() {
+        var tanggal_awal = $('#tanggal_awal').val();
+        var tanggal_akhir = $('#tanggal_akhir').val();
 
         $.ajax({
             url: "<?php echo base_url('Select/tiket_sarpras'); ?>",
             method: "POST",
             dataType: "JSON",
+            data: {
+                tanggal_awal: tanggal_awal,
+                tanggal_akhir: tanggal_akhir
+            },
             success: function(data) {
                 console.log(data);
 
@@ -151,7 +185,7 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
                     let numB = parseInt(b.layID.toString().split('-').pop()) || 0;
                     return numB - numA; // Mengurutkan dari yang terbesar ke terkecil (DESC) berdasarkan angka setelah strip (-)
                 });
-                
+
                 table.clear();
 
                 for (var i = 0; i < data.length; i++) {
@@ -196,37 +230,12 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
         });
     }
 
-    // kalau butuh input dari user
-    function getContoh2() {
-        var test = 'inputtan dari user';
-        // var test = $('#nama_input_id).val();
+    function resetFilter() {
 
-        var url = "<?php echo base_url('Insert/contoh2?'); ?>"; //Controller Insert.php, function contoh2()
-        var urlBaru = url + "inputAjax=" + test;
+        $('#tanggal_awal').val('');
+        $('#tanggal_akhir').val('');
 
-        var html = '';
-        var no = 1;
-
-        $.ajax({
-            url: urlBaru,
-            method: "POST",
-            dataType: "JSON",
-            async: false,
-            success: function(data) {
-                for (var i = 0; i < data.length; i++) {
-
-                    html += '<tr>';
-                    html += '<td>' + no + '</td>';
-                    html += '<td></td>';
-                    html += '<td></td>';
-                    html += '<td></td>';
-                    html += '</tr>';
-
-                    no++;
-                }
-                $("#tbody").html(html);
-            }
-        });
+        getTiket_Sarpras();
     }
 </script>
 

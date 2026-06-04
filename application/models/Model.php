@@ -212,7 +212,7 @@ class model extends CI_Model
         return $query->row()->no_layanan;
     }
 
-    public function tiket_sim()
+    public function tiket_sim($tanggal_awal = null, $tanggal_akhir = null)
     {
         $admin = $this->session->userdata('admin');
         $sim   = $this->session->userdata('sim');
@@ -224,6 +224,8 @@ class model extends CI_Model
         $status = $this->input->get('status');
 
         $filterStatus = "";
+        $filterTanggal = "";
+
 
         if ($status == 'open') {
 
@@ -231,6 +233,26 @@ class model extends CI_Model
         } elseif ($status == 'close') {
 
             $filterStatus = " AND t.tikStatus='Y' ";
+        }
+
+        // FILTER TANGGAL
+        if (!empty($tanggal_awal) && !empty($tanggal_akhir)) {
+
+            $filterTanggal .= "
+            AND DATE(t.tikTanggal)
+            BETWEEN '$tanggal_awal'
+            AND '$tanggal_akhir'
+        ";
+        } elseif (!empty($tanggal_awal)) {
+
+            $filterTanggal .= "
+            AND DATE(t.tikTanggal) = '$tanggal_awal'
+        ";
+        } elseif (!empty($tanggal_akhir)) {
+
+            $filterTanggal .= "
+            AND DATE(t.tikTanggal) = '$tanggal_akhir'
+        ";
         }
 
         // ADMIN ASLI
@@ -247,6 +269,7 @@ class model extends CI_Model
             WHERE t.tikNomor IS NOT NULL 
             AND t.tikNomor != ''
             $filterStatus
+            $filterTanggal
 
             ORDER BY CAST(SUBSTRING(t.tikNomor, 4) AS UNSIGNED) ASC
         ");
@@ -266,6 +289,7 @@ class model extends CI_Model
             AND t.tikNomor IS NOT NULL 
             AND t.tikNomor != ''
             $filterStatus
+            $filterTanggal
 
             ORDER BY CAST(SUBSTRING(t.tikNomor, 4) AS UNSIGNED) ASC
         ");
@@ -273,7 +297,7 @@ class model extends CI_Model
 
         return $query;
     }
-    public function tiket_sarpras()
+    public function tiket_sarpras($tanggal_awal = null, $tanggal_akhir = null)
     {
         $admin    = $this->session->userdata('admin');
         $sarpras  = $this->session->userdata('sarpras');
@@ -283,6 +307,7 @@ class model extends CI_Model
         $status = $this->input->get('status');
 
         $filterStatus = "";
+        $filterTanggal = "";
 
         if ($status == 'open') {
 
@@ -290,6 +315,26 @@ class model extends CI_Model
         } elseif ($status == 'close') {
 
             $filterStatus = " AND l.layStatus='Y' ";
+        }
+
+        // FILTER TANGGAL
+        if (!empty($tanggal_awal) && !empty($tanggal_akhir)) {
+
+            $filterTanggal .= "
+        AND DATE(l.layTanggal)
+        BETWEEN '$tanggal_awal'
+        AND '$tanggal_akhir'
+    ";
+        } elseif (!empty($tanggal_awal)) {
+
+            $filterTanggal .= "
+        AND DATE(l.layTanggal) = '$tanggal_awal'
+    ";
+        } elseif (!empty($tanggal_akhir)) {
+
+            $filterTanggal .= "
+        AND DATE(l.layTanggal) = '$tanggal_akhir'
+    ";
         }
 
         // ADMIN HAK AKSES ATAU ADMIN SARPRAS DAN BUKAN MODE USER BIASA
@@ -303,6 +348,7 @@ class model extends CI_Model
 
             WHERE 1=1
             $filterStatus
+            $filterTanggal
 
             ORDER BY l.layTanggal DESC
         ");
@@ -318,6 +364,7 @@ class model extends CI_Model
 
             WHERE l.layUserID = '$user'
             $filterStatus
+            $filterTanggal
 
             ORDER BY l.layTanggal DESC
         ");

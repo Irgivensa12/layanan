@@ -125,13 +125,27 @@ class Select extends CI_Controller
     }
     public function tiket_sarpras()
     {
-        $data = $this->Model->tiket_sarpras()->result_array(); // buka class tiket_sim di Model
+        $tanggal_awal  = $this->input->post('tanggal_awal');
+        $tanggal_akhir = $this->input->post('tanggal_akhir');
+
+        $data = $this->Model->tiket_sarpras(
+            $tanggal_awal,
+            $tanggal_akhir
+        )->result();
+
         echo json_encode($data);
     }
 
     public function tiket_sim() // Function untuk menampilkan data dari tabel tb_tiket ke halaman tiket_sim.php
     {
-        $data = $this->Model->tiket_sim()->result_array(); // buka class tiket_sim di Model
+        $tanggal_awal  = $this->input->post('tanggal_awal');
+        $tanggal_akhir = $this->input->post('tanggal_akhir');
+
+        $data = $this->Model->tiket_sim(
+            $tanggal_awal,
+            $tanggal_akhir
+        )->result();
+
         echo json_encode($data);
     }
 
