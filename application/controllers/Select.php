@@ -150,6 +150,16 @@ class Select extends CI_Controller
         $tanggal_awal  = $this->input->post('tanggal_awal');
         $tanggal_akhir = $this->input->post('tanggal_akhir');
 
+        // Validasi: tanggal akhir tidak boleh lebih kecil dari tanggal awal
+        if (!empty($tanggal_awal) && !empty($tanggal_akhir)) {
+
+            if (strtotime($tanggal_akhir) < strtotime($tanggal_awal)) {
+
+                echo json_encode([]);
+                return;
+            }
+        }
+
         $data = $this->Model->tiket_sim(
             $tanggal_awal,
             $tanggal_akhir
