@@ -163,9 +163,19 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
     // menggunakan AJAX untuk membuat tabel dari data tabel
     // AJAX (View) -> Controller -> Model -> dapat hasil
     function getTiket_SIM() {
+
         var tanggal_awal = $('#tanggal_awal').val();
         var tanggal_akhir = $('#tanggal_akhir').val();
 
+        // VALIDASI TANGGAL
+        if (
+            tanggal_awal &&
+            tanggal_akhir &&
+            tanggal_akhir < tanggal_awal
+        ) {
+            alert('Tanggal akhir tidak boleh lebih kecil dari tanggal awal!');
+            return;
+        }
 
         $.ajax({
             url: "<?php echo base_url('Select/tiket_sim'); ?>",
@@ -180,10 +190,10 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
                 table.clear();
 
                 for (var i = 0; i < data.length; i++) {
-                    // Membuat tanggal format Indonesia
-                    var tanggal_db = new Date(data[i].tikTanggal); // Mengubah string tanggal dari database menjadi objek Date
 
-                    var options = { // Opsi untuk format tanggal Indonesia
+                    var tanggal_db = new Date(data[i].tikTanggal);
+
+                    var options = {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric'
@@ -196,7 +206,9 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
                     } else {
                         statusBtn = '<span class="badge badge-secondary">CLOSED</span>';
                     }
-                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options); // Mengubah tanggal menjadi format Indonesia
+
+                    var tanggal_benar = tanggal_db.toLocaleDateString('id-ID', options);
+
                     table.row.add([
                         data[i].tikNomor,
                         tanggal_benar,
@@ -212,9 +224,34 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
         });
     }
 
+    $('#tanggal_awal').on('change', function() {
+
+        let tanggalAwal = $(this).val();
+
+        $('#tanggal_akhir').attr('min', tanggalAwal);
+
+        if ($('#tanggal_akhir').val() < tanggalAwal) {
+            $('#tanggal_akhir').val('');
+        }
+    });
+
+    $('#tanggal_akhir').on('change', function() {
+
+        let tanggalAwal = $('#tanggal_awal').val();
+        let tanggalAkhir = $(this).val();
+
+        if (tanggalAwal && tanggalAkhir < tanggalAwal) {
+
+            alert('Tanggal akhir tidak boleh lebih kecil dari tanggal awal!');
+            $(this).val('');
+        }
+    });
+
     function resetFilter() {
         $('#tanggal_awal').val('');
         $('#tanggal_akhir').val('');
+        $('#tanggal_akhir').removeAttr('min');
+
         getTiket_SIM();
     }
 </script>
