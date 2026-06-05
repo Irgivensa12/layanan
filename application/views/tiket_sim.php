@@ -23,7 +23,6 @@ $userId  = $this->session->userdata('helpdesk_userId');
             <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                 <i class="fa fa-bars"></i>
             </button>
-
             <ul class="navbar-nav ml-auto">
                 <img src="<?= base_url('img/kanisius.png') ?>">
             </ul>
@@ -264,7 +263,7 @@ $userId  = $this->session->userdata('helpdesk_userId');
 
             }
         });
-    }   
+    }
 
     $(document).on("click", ".detailBtn", function() { // Event listener untuk tombol detail
 
@@ -289,7 +288,7 @@ $userId  = $this->session->userdata('helpdesk_userId');
                 let tindakan = data.tikTindakan;
 
                 console.log("Data tiket:", data);
-                console.log("Operator:", "[" + data.tikOperator + "]"); 
+                console.log("Operator:", "[" + data.tikOperator + "]");
                 console.log("Tindakan:", "[" + data.tikTindakan + "]");
                 console.log("Type Operator:", typeof data.tikOperator);
                 // validasi operator dan tindakan sebelum close tiket
