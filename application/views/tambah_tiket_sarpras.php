@@ -133,6 +133,7 @@ if (!$this->session->userdata('helpdesk_userId')) {
                             <input type="date"
                                 class="form-control"
                                 name="layTarget"
+                                id="layTarget"
                                 placeholder="Tanggal Target"
                                 style="height:50px;font-size:16px;"
                                 required>
@@ -240,4 +241,18 @@ if (!$this->session->userdata('helpdesk_userId')) {
 
         return confirm('Apakah Anda yakin ingin menyimpan data ini?');
     }
+    $(document).ready(function() { // Set tanggal target minimal ke tanggal hari ini
+
+        let today = new Date(); // Mendapatkan tanggal hari ini
+
+        let yyyy = today.getFullYear(); // Mendapatkan tahun dengan 4 digit
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); // Mendapat bulan (0-11) dan menambahkan 1, lalu pad dengan 0 jika kurang dari 10
+        let dd = String(today.getDate()).padStart(2, '0'); // Mendapatkan tanggal (1-31) dan pad dengan 0 jika kurang dari 10
+
+        let tanggalHariIni = yyyy + '-' + mm + '-' + dd; // Format tanggal menjadi YYYY-MM-DD
+
+        $('#layTarget').attr('min', tanggalHariIni); // Set atribut min pada input tanggal target
+
+    });
+</script>
 </script>

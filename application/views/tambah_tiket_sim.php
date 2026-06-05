@@ -58,7 +58,7 @@ if (!$this->session->userdata('helpdesk_userId')) {
                         </label>
 
                         <div class="col-md-5">
-                           <input type="date"
+                            <input type="date"
                                 class="form-control"
                                 value="<?= date('Y-m-d') ?>"
                                 disabled>
