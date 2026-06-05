@@ -229,11 +229,31 @@ if (!$this->session->userdata('helpdesk_userId')) { //jika tidak ada id
             }
         });
     }
+    $('#tanggal_awal').on('change', function() {
+        let tanggalAwal = $(this).val();
+
+        $('#tanggal_akhir').attr('min', tanggalAwal);
+
+        if ($('#tanggal_akhir').val() < tanggalAwal) {
+            $('#tanggal_akhir').val('');
+        }
+    });
+
+    $('#tanggal_akhir').on('change', function() {
+        let tanggalAwal = $('#tanggal_awal').val();
+        let tanggalAkhir = $(this).val();
+
+        if (tanggalAwal && tanggalAkhir < tanggalAwal) {
+            alert('Tanggal akhir tidak boleh lebih kecil dari tanggal awal!');
+            $(this).val('');
+        }
+    });
 
     function resetFilter() {
 
         $('#tanggal_awal').val('');
         $('#tanggal_akhir').val('');
+        $('#tanggal_akhir').removeAttr('min');
 
         getTiket_Sarpras();
     }

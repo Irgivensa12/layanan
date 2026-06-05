@@ -2,70 +2,7 @@
 
 class model extends CI_Model
 {
-    // contoh login
-    // public function login()
-    // {
-    //     $id = $this->input->post('id');
-    //     $password = $this->input->post('password');
-
-    //     $query = "
-    // SELECT 
-    //     a.*,
-
-    //     IFNULL(MAX(CASE WHEN p.privMenuId='1' 
-    //     THEN p.privAkses END),'N') AS sim,
-
-    //     IFNULL(MAX(CASE WHEN p.privMenuId='25' 
-    //     THEN p.privAkses END),'N') AS sarpras,
-
-    //     IFNULL(MAX(CASE WHEN p.privMenuId='24' 
-    //     THEN p.privAkses END),'N') AS admin
-
-    // FROM vUser a
-    // LEFT JOIN tb_user_priv p 
-    //     ON p.privUserId = a.userId
-
-    // WHERE a.userId = '$id'
-    // GROUP BY a.userId
-    // ";
-
-    //     $user = $this->db->query($query)->row_array();
-
-    //     if ($user) {
-
-    //         if (md5($password) == $user['userPass']) {
-
-    //             $this->session->set_userdata('helpdesk_login', true);
-    //             $this->session->set_userdata('helpdesk_userId', $user['userId']);
-    //             $this->session->set_userdata('helpdesk_userNama', $user['userNama']);
-
-    //             // ROLE
-    //             $this->session->set_userdata('admin', $user['admin']);
-    //             $this->session->set_userdata('sim', $user['sim']);
-    //             $this->session->set_userdata('sarpras', $user['sarpras']);
-
-    //             redirect('dashboard');
-    //         } else {
-
-    //             $this->session->set_flashdata('type', 'alert-danger');
-    //             $this->session->set_flashdata(
-    //                 'pesan',
-    //                 '<strong>Gagal!</strong> Password salah'
-    //             );
-
-    //             redirect();
-    //         }
-    //     } else {
-
-    //         $this->session->set_flashdata('type', 'alert-danger');
-    //         $this->session->set_flashdata(
-    //             'pesan',
-    //             'User tidak ditemukan'
-    //         );
-
-    //         redirect();
-    //     }
-    // }
+    
 
     public function login()
     {
@@ -271,7 +208,7 @@ class model extends CI_Model
             $filterStatus
             $filterTanggal
 
-            ORDER BY CAST(SUBSTRING(t.tikNomor, 4) AS UNSIGNED) ASC
+            ORDER BY CAST(SUBSTRING(t.tikNomor, 4) AS UNSIGNED) DESC
         ");
         } else {
 
@@ -291,7 +228,7 @@ class model extends CI_Model
             $filterStatus
             $filterTanggal
 
-            ORDER BY CAST(SUBSTRING(t.tikNomor, 4) AS UNSIGNED) ASC
+            ORDER BY CAST(SUBSTRING(t.tikNomor, 4) AS UNSIGNED) DESC
         ");
         }
 

@@ -128,6 +128,15 @@ class Select extends CI_Controller
         $tanggal_awal  = $this->input->post('tanggal_awal');
         $tanggal_akhir = $this->input->post('tanggal_akhir');
 
+        if (!empty($tanggal_awal) && !empty($tanggal_akhir)) {
+
+            if (strtotime($tanggal_akhir) < strtotime($tanggal_awal)) {
+
+                echo json_encode([]);
+                return;
+            }
+        }
+
         $data = $this->Model->tiket_sarpras(
             $tanggal_awal,
             $tanggal_akhir
@@ -271,7 +280,7 @@ class Select extends CI_Controller
         layTanggal,
         layUserID,
         userNama,
-        layDivisiID,
+        divNama,
         layHal,
         layDiskripsi,
         layTarget,
@@ -280,10 +289,10 @@ class Select extends CI_Controller
         layPetugas3,
         layPetugas4,
         layPetugas5,
-        (CASE 
-            WHEN layStatus='Y' THEN 'CLOSE' 
-            ELSE 'OPEN' 
-        END) AS layStatus
+        CASE
+            WHEN layStatus = 'Y' THEN 'CLOSE'
+            ELSE 'OPEN'
+        END AS layStatus
     ");
 
         $this->db->from('tb_layanan');
@@ -292,7 +301,6 @@ class Select extends CI_Controller
 
         $data = $this->db->get()->row_array();
 
-        // ambil nama petugas satu per satu (TETAP)
         $petugas = [];
 
         $listPetugas = [
@@ -318,7 +326,6 @@ class Select extends CI_Controller
             }
         }
 
-        // tetap gabung jadi 1 baris + tetap ada default
         $data['penanggungJawab'] = !empty($petugas)
             ? implode(', ', $petugas)
             : 'Belum ditentukan';

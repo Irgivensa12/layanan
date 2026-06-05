@@ -981,7 +981,7 @@
 
                     $("#m_kepada, #m_kepada2").text('Admin Sarpras');
                     $("#m_dari, #m_dari2").text(data.userNama);
-                    $("#m_bagian, #m_bagian2").text(data.layDivisiID);
+                    $("#m_bagian, #m_bagian2").text(data.divNama);
                     $("#m_tanggal, #m_tanggal2").text(tanggal_benar);
                     $("#m_hal, #m_hal2").text(data.layHal);
                     $("#m_isi, #m_isi2").text(data.layDiskripsi);
